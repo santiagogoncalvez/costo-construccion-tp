@@ -11,6 +11,11 @@
 *.layout
 *.autosave
 *.save
+*.workspace
 
 # VSCode
 **/.vscode/
+
+# Archivos de sistema (macOS / Windows)
+.DS_Store
+Thumbs.db
