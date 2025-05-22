@@ -50,7 +50,7 @@ Estudio y entendimiento del código para la defensa oral.
 
 ## 📌 Reglas y Requerimientos
 
--  Cada función va a tener su propio archivo separado: `nombre-funcion.c` y los prototipos de cada una van a estar dentro de `/lib-costo-construccion`. Estas van a estar incluidas dentro de `/lib-costo-construccion/costo-construccion.h`
+-  Cada función va a tener su propio archivo separado: `nombre-funcion.c` y los prototipos de cada una van a estar dentro de `/lib-costo-construccion`. Estas van a estar incluidas dentro de `/lib-costo-construccion/costo-construccion.h`.
 -  Las funciones tienen que funcionar mínimo para todos los casos de prueba que presentan.
 -  Vectores y cadenas de texto deberán ser manipulados utilizando aritmética de punteros.
 -  Las soluciones tienen que ser eficientes:
