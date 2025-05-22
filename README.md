@@ -1,4 +1,4 @@
-# costo-construccion-tp
+# Costo de la Construcción - TP de Tópicos (2025)
 
 ## Estructura del proyecto
 
@@ -12,27 +12,49 @@ La carpeta /pruebas va a contener las funciones y códigos que prueben y examine
 
 ## Qué hace la librería
 
-Permite ver índices y variaciones del indicador económico de Costo de la Construcción.
+Permite **ver índices y variaciones** del indicador económico de **Costo de la Construcción**.
+
+@ ## Cómo usar
+
+@ ## Pruebas
 
 ## Cómo compilar en Code::Blocks
 
 Abrir `proyecto.cbp` y presionar F9.
 
-**No subas archivos personales o temporales**
 
-Evitá subir cosas como:
 
+## 🚫 Qué no subir al repositorio
+
+Evita subir:
 -  Rutas absolutas (como C:/Users/...). Usá rutas relativas al proyecto: `#include "../include/mis_funciones.h"`
 -  `.cbp` con rutas específicas
 -  Archivos temporales del compilador
+-  Archivos personales
 -  Tu configuración de entorno
 -  Ejecutables para Windows (.exe)
 
-## Consignas del trabajo
+## 📅 Cronograma y fechas
 
 Fecha de inicio: 18/05/2025  
 Fecha de entrega: 20/06/2025  
 Fecha de defensa: 26/05/2025
+
+Semana 1:
+Creación del repositorio de github.
+Desarrollo de las funciones de la 1 a la 5, una por cada integrante.
+
+Semana 2:
+Desarrollo de las funciones 6 a 12
+
+Semana 3:
+Testeo de todas las funciones.
+
+Semana 4:
+Estudio y entendimiento del código para la defensa oral.
+
+
+## 📌 Reglas y Requerimientos
 
 -  Las funciones tienen que funcionar mínimo para todos los casos de prueba que presentan.
 -  Vectores y cadenas de texto deberán ser manipulados utilizando aritmética de punteros.
@@ -47,3 +69,7 @@ Fecha de defensa: 26/05/2025
 -  Las soluciones tienen que estar desarrolladas en ANSI C para garantizar tanto como sea posible compatibilidad multiplataforma.
 -  Nunca mezclar funciones de manipulación de archivos de texto con funciones de operación de archivos binarios.
 -  Las funciones no deben tener errores ni warnings.
+
+
+**Grupo:** LOS CIBERNÉTICOS  
+**Cátedra:** Tópicos de Programación - 1C 2025 - Miércoles
