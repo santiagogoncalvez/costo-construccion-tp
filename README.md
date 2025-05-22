@@ -14,9 +14,6 @@ La carpeta /pruebas va a contener las funciones y códigos que prueben y examine
 
 Permite **ver índices y variaciones** del indicador económico de **Costo de la Construcción**.
 
-@ ## Cómo usar
-
-@ ## Pruebas
 
 ## Cómo compilar en Code::Blocks
 
