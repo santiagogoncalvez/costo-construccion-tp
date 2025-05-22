@@ -1,0 +1,16 @@
+# Compilación
+**/bin/
+**/obj/
+*.o
+*.exe
+*.bin
+*.log
+
+# Code::Blocks temporales
+*.depend
+*.layout
+*.autosave
+*.save
+
+# VSCode
+**/.vscode/
