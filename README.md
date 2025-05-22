@@ -8,7 +8,7 @@ Los archivos de datos del trabajo van a estar dentro de la carpeta /datos.
 
 Las consignas y documentos van a estar dentro de la carpeta /documentos.
 
-La carpeta /pruebas va a contener las funciones y códigos que prueben y examinen la librería lib-costo-construccion
+La carpeta /pruebas va a contener las funciones y códigos que prueben y examinen la librería lib-costo-construccion.
 
 ## Qué hace la librería
 
@@ -17,7 +17,7 @@ Permite **ver índices y variaciones** del indicador económico de **Costo de la
 
 ## Cómo compilar en Code::Blocks
 
-Abrir `proyecto.cbp` y presionar F9.
+Abrir `costo-construccion-consola/costo-construccion-consola.cbp` y presionar F9.
 
 
 

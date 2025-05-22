@@ -1,4 +1,4 @@
 void ejemploFuncion()
 {
-    printf("Ejemplo de funcion ejecutandose!!");
+    printf("Ejemplo de funcion de lib-costo-construccion ejecutandose!!");
 }

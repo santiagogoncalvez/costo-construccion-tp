@@ -6,6 +6,8 @@
 int main()
 {
     printf("Hola mundo\n");
+
+    // Función de lib-costo-construccion
 	ejemploFuncion();
 
     return 0;
