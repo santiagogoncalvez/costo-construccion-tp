@@ -4,26 +4,24 @@
 
 El repositorio va a contener 2 proyectos: uno que es la librería lib-costo-construccion que es el programa principal y costo-construccion-consola, que es el que va a consumir esta librería.
 
-Los archivos de datos del trabajo van a estar dentro de la carpeta /datos.
+Los archivos de datos del trabajo van a estar dentro de la carpeta `/datos`.
 
-Las consignas y documentos van a estar dentro de la carpeta /documentos.
+Las consignas y documentos van a estar dentro de la carpeta `/documentos`.
 
-La carpeta /pruebas va a contener las funciones y códigos que prueben y examinen la librería lib-costo-construccion.
+La carpeta `/pruebas` va a contener las funciones y códigos que prueben y examinen la librería lib-costo-construccion.
 
 ## Qué hace la librería
 
 Permite **ver índices y variaciones** del indicador económico de **Costo de la Construcción**.
 
-
 ## Cómo compilar en Code::Blocks
 
 Abrir `costo-construccion-consola/costo-construccion-consola.cbp` y presionar F9.
 
-
-
 ## 🚫 Qué no subir al repositorio
 
 Evita subir:
+
 -  Rutas absolutas (como C:/Users/...). Usá rutas relativas al proyecto: `#include "../include/mis_funciones.h"`
 -  `.cbp` con rutas específicas
 -  Archivos temporales del compilador
@@ -50,7 +48,6 @@ Testeo de todas las funciones.
 Semana 4:
 Estudio y entendimiento del código para la defensa oral.
 
-
 ## 📌 Reglas y Requerimientos
 
 -  Las funciones tienen que funcionar mínimo para todos los casos de prueba que presentan.
@@ -66,7 +63,6 @@ Estudio y entendimiento del código para la defensa oral.
 -  Las soluciones tienen que estar desarrolladas en ANSI C para garantizar tanto como sea posible compatibilidad multiplataforma.
 -  Nunca mezclar funciones de manipulación de archivos de texto con funciones de operación de archivos binarios.
 -  Las funciones no deben tener errores ni warnings.
-
 
 **Grupo:** LOS CIBERNÉTICOS  
 **Cátedra:** Tópicos de Programación - 1C 2025 - Miércoles
