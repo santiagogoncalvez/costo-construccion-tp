@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "../lib-costo-construccion/ejemplo.h"
+#include "../lib-costo-construccion/costo-construccion.h"
 
 int main()
 {

@@ -50,6 +50,7 @@ Estudio y entendimiento del código para la defensa oral.
 
 ## 📌 Reglas y Requerimientos
 
+-  Cada función va a tener su propio archivo separado: `nombre-funcion.c` y los prototipos de cad una van a estar dentro de 
 -  Las funciones tienen que funcionar mínimo para todos los casos de prueba que presentan.
 -  Vectores y cadenas de texto deberán ser manipulados utilizando aritmética de punteros.
 -  Las soluciones tienen que ser eficientes:
