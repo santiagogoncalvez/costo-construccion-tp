@@ -7,25 +7,25 @@
 
 typedef struct
 {
-    const char *input;
-    const char *expected;
+    const char *entrada;
+    const char *esperado;
 } CasoPrueba;
 
-void testFormatearFecha();
-void testNormalizar();
+void pruebaFormatearFecha();
+void pruebaNormalizar();
 
 int main()
 {
     system("chcp 65001");
 
 
-    testFormatearFecha();
-    testNormalizar();
+    pruebaFormatearFecha();
+    pruebaNormalizar();
 
     return 0;
 }
 
-void testFormatearFecha()
+void pruebaFormatearFecha()
 {
     CasoPrueba fechas[] =
     {
@@ -43,28 +43,28 @@ void testFormatearFecha()
     int total = sizeof(fechas) / sizeof(fechas[0]);
     int errores = 0;
 
-    printf("\nEjecutando tests para formatearFecha...\n");
+    printf("\nEjecutando pruebas para formatearFecha...\n");
 
     for (int i = 0; i < total; i++)
     {
-        convertirFecha(salida, fechas[i].input);
-        if (strcmp(salida, fechas[i].expected) != 0)
+        convertirFecha(salida, fechas[i].entrada);
+        if (strcmp(salida, fechas[i].esperado) != 0)
         {
-            printf("Test %d fallo: entrada='%s' --> salida='%s' (esperado='%s')\n",
-                   i + 1, fechas[i].input, salida, fechas[i].expected);
+            printf("prueba %d fallo: entrada='%s' --> salida='%s' (esperado='%s')\n",
+                   i + 1, fechas[i].entrada, salida, fechas[i].esperado);
             errores++;
         }
         else
         {
-            printf("Test %d paso: %s --> %s\n", i + 1, fechas[i].input, salida);
+            printf("prueba %d paso: %s --> %s\n", i + 1, fechas[i].entrada, salida);
         }
     }
 
     printf("\nResumen: %d pasaron, %d fallaron.\n", total - errores, errores);
-    assert(errores == 0 && "Al menos un test fallo en formatear_fecha.");
+    assert(errores == 0 && "Al menos un prueba fallo en formatear_fecha.");
 }
 
-void testNormalizar()
+void pruebaNormalizar()
 {
     CasoPrueba casos[] =
     {
@@ -83,28 +83,28 @@ void testNormalizar()
         {"componentes_Industrializados",   "Componentes industrializados"},
     };
 
-    char salida[60]; // AAAA/MM/DD + '\0'
+    char salida[60];
     int total = sizeof(casos) / sizeof(casos[0]);
     int errores = 0;
 
-    printf("\n\nEjecutando tests para normalizar...\n");
+    printf("\n\nEjecutando pruebas para normalizar...\n");
 
     for (int i = 0; i < total; i++)
     {
-        strcpy(salida, casos[i].input);
+        strcpy(salida, casos[i].entrada);
         normalizar(salida);
-        if (strcmp(salida, casos[i].expected) != 0)
+        if (strcmp(salida, casos[i].esperado) != 0)
         {
-            printf("Test %d fallo: entrada='%s' --> salida='%s' (esperado='%s')\n",
-                   i + 1, casos[i].input, salida, casos[i].expected);
+            printf("prueba %d fallo: entrada='%s' --> salida='%s' (esperado='%s')\n",
+                   i + 1, casos[i].entrada, salida, casos[i].esperado);
             errores++;
         }
         else
         {
-            printf("Test %d paso: %s --> %s\n", i + 1, casos[i].input, salida);
+            printf("prueba %d paso: %s --> %s\n", i + 1, casos[i].entrada, salida);
         }
     }
 
     printf("\nResumen: %d pasaron, %d fallaron.\n", total - errores, errores);
-    assert(errores == 0 && "Al menos un test fallo en normalizar.");
+    assert(errores == 0 && "Al menos un prueba fallo en normalizar.");
 }
