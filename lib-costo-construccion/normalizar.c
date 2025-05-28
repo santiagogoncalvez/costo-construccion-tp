@@ -1,9 +1,7 @@
-#include <ctype.h>
 #include "costo-construccion.h"
 
-char* normalizarelcampo(char* cadorigen)
+char* normalizar(char* cadorigen)
 {
-    char vacio=' ';
     char*inicio=cadorigen;
     *cadorigen=toupper(*cadorigen);
     cadorigen++;
@@ -11,7 +9,7 @@ char* normalizarelcampo(char* cadorigen)
     {
         if('_'==*cadorigen)
         {
-            *cadorigen=vacio;
+            *cadorigen=' ';
         }
         else
         {
@@ -19,6 +17,6 @@ char* normalizarelcampo(char* cadorigen)
         }
         cadorigen++;
     }
-    return inicio ;
 
+    return inicio ;
 }

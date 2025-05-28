@@ -41,6 +41,9 @@
 		<Unit filename="ejemplo-funcion.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="normalizar.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>
