@@ -6,7 +6,6 @@
 #include <ctype.h>
 #include <stdbool.h>
 
-void ejemploFuncion();
 void convertirFecha(char *cadDestino, const char *cadOrigen);
 char *normalizar(char *cadorigen);
 bool espalabra(char cadcopia);

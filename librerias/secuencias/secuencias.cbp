@@ -40,9 +40,6 @@
 		<Unit filename="desencriptar.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="ejemplo-funcion.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="normalizar.c">
 			<Option compilerVar="CC" />
 		</Unit>

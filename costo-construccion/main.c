@@ -5,10 +5,7 @@
 
 int main()
 {
-    printf("Hola mundo\n");
 
-    // Funcion de secuencias
-    ejemploFuncion();
 
     return 0;
 }
