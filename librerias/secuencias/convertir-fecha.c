@@ -1,4 +1,4 @@
-#include "costo-construccion.h"
+#include "secuencias.h"
 
 void convertirFecha(char *cadDestino, const char *cadOrigen) {
     const char *pCadOrigen = cadOrigen;

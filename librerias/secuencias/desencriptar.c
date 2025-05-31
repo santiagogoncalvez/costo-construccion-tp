@@ -1,10 +1,7 @@
 #include <stdbool.h>
-#include<locale.h>
+#include <locale.h>
 
-
-bool espalabra(char cadcopia);
-char abcdario(char cad,int posicion);
-char siesletra15(char cad,int pos);
+#include "secuencias.h"
 
 char* encriptado(char* cadoriginal)
 {
@@ -22,14 +19,14 @@ char* encriptado(char* cadoriginal)
 
 bool espalabra(char cadcopia)
 {
-    return((cadcopia>='a' && cadcopia<='z') || (cadcopia>='A' && cadcopia<='Z')) || ('Ã±'==cadcopia ||'Ã‘'==cadcopia);
+    return((cadcopia>='a' && cadcopia<='z') || (cadcopia>='A' && cadcopia<='Z')) || ('ñ'==cadcopia ||'Ñ'==cadcopia);
 }
 
 char abcdario(char cad,int pos)
 {
-    char abc[28] = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','Ã±','o','p','q','r','s','t','u','v','w','x','y','z','\0'};
+    char abc[28] = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','ñ','o','p','q','r','s','t','u','v','w','x','y','z','\0'};
     int num=0;
-    if(('Ã±'==cad||'Ã‘'==cad))
+    if(('ñ'==cad||'Ñ'==cad))
     {
 
         return siesletra15(cad,pos);
@@ -70,9 +67,9 @@ char abcdario(char cad,int pos)
     }
     else
     {
-        if(abc[num]=='Ã±')
+        if(abc[num]=='ñ')
         {
-            return 'Ã‘';
+            return 'Ñ';
         }
         return toupper(abc[num]);
     }
@@ -83,18 +80,18 @@ char siesletra15(char cad,int pos)
 {
     if(pos%2==0)
     {
-        if('Ã±'==cad)
+        if('ñ'==cad)
         {
             return 'r';
         }
         return 'R';
-        
+
     }
-    if('Ã±'==cad)
+    if('ñ'==cad)
     {
          return 'p';
     }
     return 'P';
-   
+
 
 }

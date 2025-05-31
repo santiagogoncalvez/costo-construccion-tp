@@ -3,7 +3,7 @@
 #include <string.h>
 #include <assert.h>
 
-#include "../../lib-costo-construccion/costo-construccion.h"
+#include "../../librerias/secuencias/secuencias.h"
 
 typedef struct
 {

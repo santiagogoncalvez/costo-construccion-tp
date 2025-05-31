@@ -15,7 +15,7 @@
 					<Add option="-g" />
 				</Compiler>
 				<Linker>
-					<Add library="../lib-costo-construccion/bin/Debug/lib-costo-construccion.a" />
+					<Add library="../librerias/secuencias/bin/Debug/secuencias.a" />
 				</Linker>
 			</Target>
 			<Target title="Release">

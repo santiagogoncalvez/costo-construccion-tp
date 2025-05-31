@@ -1,4 +1,4 @@
-#include "costo-construccion.h"
+#include "secuencias.h"
 
 char* normalizar(char* cadorigen)
 {

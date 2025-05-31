@@ -2,7 +2,7 @@
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="6" />
 	<Project>
-		<Option title="lib-costo-construccion" />
+		<Option title="secuencias" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
 		<Build>
@@ -37,13 +37,16 @@
 		<Unit filename="convertir-fecha.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="costo-construccion.h" />
+		<Unit filename="desencriptar.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="ejemplo-funcion.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="normalizar.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="secuencias.h" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>
