@@ -11,5 +11,6 @@ char *normalizar(char *cadorigen);
 bool espalabra(char cadcopia);
 char abcdario(char cad,int posicion);
 char siesletra15(char cad,int pos);
+void convertirComa(char *cad);
 
 #endif // SECUENCIAS_H_INCLUDED

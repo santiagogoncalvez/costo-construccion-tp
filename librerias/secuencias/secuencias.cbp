@@ -34,6 +34,9 @@
 				</Linker>
 			</Target>
 		</Build>
+		<Unit filename="convertir-coma.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="convertir-fecha.c">
 			<Option compilerVar="CC" />
 		</Unit>
