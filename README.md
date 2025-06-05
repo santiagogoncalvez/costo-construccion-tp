@@ -2,21 +2,23 @@
 
 ## Estructura del proyecto
 
-El repositorio va a contener 2 proyectos: uno que es la librería lib-costo-construccion que es el programa principal y costo-construccion-consola, que es el que va a consumir esta librería.
+El repositorio va a contener al proyecto 'costo-contruccion' que se encarga de procesar el archivo y la librería 'secuencias'.
 
 Los archivos de datos del trabajo van a estar dentro de la carpeta `/datos`.
 
 Las consignas y documentos van a estar dentro de la carpeta `/documentos`.
 
-La carpeta `/pruebas` va a contener las funciones y códigos que prueben y examinen la librería lib-costo-construccion.
+La carpeta `/librerias` va a contener las librerías que se utilicen.
 
-## Qué hace la librería
+La carpeta `/pruebas` va a contener las funciones y códigos que prueben y examinen el proyecto principal y las librerías.
 
-Permite **ver índices y variaciones** del indicador económico de **Costo de la Construcción**.
+## Qué hace el proyecto
+
+Permite **procesar índices y variaciones** del indicador económico de **Costo de la Construcción**.
 
 ## Cómo compilar en Code::Blocks
 
-Abrir `costo-construccion-consola/costo-construccion-consola.cbp` y presionar F9.
+Abrir `costo-construccion-consola/costo-construccion.cbp` y presionar F9.
 
 ## 🚫 Qué no subir al repositorio
 
@@ -50,7 +52,7 @@ Estudio y entendimiento del código para la defensa oral.
 
 ## 📌 Reglas y Requerimientos
 
--  Cada función va a tener su propio archivo separado: `nombre-funcion.c` y los prototipos de cada una van a estar dentro de `/lib-costo-construccion`. Estas van a estar incluidas dentro de `/lib-costo-construccion/costo-construccion.h`.
+-  Cada función va a tener su propio archivo separado: `nombre-funcion.c`. Estas van a estar incluidas dentro de un archivo `proyecto.h`.
 -  Las funciones tienen que funcionar mínimo para todos los casos de prueba que presentan.
 -  Vectores y cadenas de texto deberán ser manipulados utilizando aritmética de punteros.
 -  Las soluciones tienen que ser eficientes:
