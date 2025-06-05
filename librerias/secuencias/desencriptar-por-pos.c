@@ -3,35 +3,29 @@
 
 #include "secuencias.h"
 
-char* encriptado(char* cadoriginal)
+void desencriptarPorPos(char* cadoriginal)
 {
     char* cadcopia=cadoriginal;
     while(*cadcopia!='\0')
     {
         if(espalabra(*cadcopia))
         {
-            *cadcopia=abcdario(*cadcopia,(cadcopia-cadoriginal)+1);
+            *cadcopia=abcdario(*cadcopia,(cadcopia-cadoriginal));
         }
         cadcopia++;
     }
-    return cadoriginal;
 }
 
 bool espalabra(char cadcopia)
 {
-    return((cadcopia>='a' && cadcopia<='z') || (cadcopia>='A' && cadcopia<='Z')) || ('ñ'==cadcopia ||'Ñ'==cadcopia);
+    return (cadcopia>='a' && cadcopia<='z') || (cadcopia>='A' && cadcopia<='Z');
 }
 
 char abcdario(char cad,int pos)
 {
-    char abc[28] = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','ñ','o','p','q','r','s','t','u','v','w','x','y','z','\0'};
+    char abc[27] = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','\0'};
     int num=0;
-    if(('ñ'==cad||'Ñ'==cad))
-    {
 
-        return siesletra15(cad,pos);
-
-    }
     while(tolower(cad)!=abc[num])
     {
         num++;
@@ -43,7 +37,7 @@ char abcdario(char cad,int pos)
             num++;
             if(abc[num]=='\0')
             {
-                num=0;;
+                num=0;
             }
 
         }
@@ -60,6 +54,7 @@ char abcdario(char cad,int pos)
 
         }
     }
+
     if(islower(cad))
     {
         return abc[num];
@@ -67,31 +62,7 @@ char abcdario(char cad,int pos)
     }
     else
     {
-        if(abc[num]=='ñ')
-        {
-            return 'Ñ';
-        }
         return toupper(abc[num]);
     }
-
-}
-
-char siesletra15(char cad,int pos)
-{
-    if(pos%2==0)
-    {
-        if('ñ'==cad)
-        {
-            return 'r';
-        }
-        return 'R';
-
-    }
-    if('ñ'==cad)
-    {
-         return 'p';
-    }
-    return 'P';
-
 
 }

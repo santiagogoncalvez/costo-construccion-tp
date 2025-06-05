@@ -7,10 +7,13 @@
 #include <stdbool.h>
 
 void convertirFecha(char *cadDestino, const char *cadOrigen);
-char *normalizar(char *cadorigen);
+void convertirComa(char *cad);
+void normalizar(char *cad);
 bool espalabra(char cadcopia);
 char abcdario(char cad,int posicion);
 char siesletra15(char cad,int pos);
-void convertirComa(char *cad);
+void desencriptarPorPos(char* cad);
+void desencriptarPorCaso(char *cad);
+void sacarAntYNormalizar(char *cad);
 
 #endif // SECUENCIAS_H_INCLUDED

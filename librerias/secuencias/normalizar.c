@@ -1,22 +1,20 @@
 #include "secuencias.h"
 
-char* normalizar(char* cadorigen)
+void normalizar(char* cad)
 {
-    char*inicio=cadorigen;
-    *cadorigen=toupper(*cadorigen);
-    cadorigen++;
-    while(*cadorigen!='\0')
+    char* iCad = cad;
+    *iCad=toupper(*iCad);
+    iCad++;
+    while(*iCad!='\0')
     {
-        if('_'==*cadorigen)
+        if('_'==*iCad)
         {
-            *cadorigen=' ';
+            *iCad=' ';
         }
         else
         {
-            *cadorigen=tolower(*cadorigen);
+            *iCad=tolower(*iCad);
         }
-        cadorigen++;
+        iCad++;
     }
-
-    return inicio ;
 }
