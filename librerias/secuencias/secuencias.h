@@ -15,5 +15,6 @@ char siesletra15(char cad,int pos);
 void desencriptarPorPos(char* cad);
 void desencriptarPorCaso(char *cad);
 void sacarAntYNormalizar(char *cad);
+void generarClasificador(char *clasificador);
 
 #endif // SECUENCIAS_H_INCLUDED

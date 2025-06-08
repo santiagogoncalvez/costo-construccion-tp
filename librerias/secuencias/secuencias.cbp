@@ -54,6 +54,10 @@
 			<Option compilerVar="CC" />
 			<Option glob="1957770431" />
 		</Unit>
+		<Unit filename="generar-clasificador.c">
+			<Option compilerVar="CC" />
+			<Option glob="1957770431" />
+		</Unit>
 		<Unit filename="normalizar.c">
 			<Option compilerVar="CC" />
 			<Option glob="1957770431" />
