@@ -2,7 +2,6 @@
 
 void agregarClasificador(Indice indices[], int ce)
 {
-
     char text[]="Nivel general";
     char text2[]="Capitulos";
 
