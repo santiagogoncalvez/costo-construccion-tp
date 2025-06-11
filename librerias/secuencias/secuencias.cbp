@@ -38,11 +38,19 @@
 			<Option target="Debug" />
 			<Option target="Release" />
 		</UnitsGlob>
+		<Unit filename="comparar.c">
+			<Option compilerVar="CC" />
+			<Option glob="1957770431" />
+		</Unit>
 		<Unit filename="convertir-coma.c">
 			<Option compilerVar="CC" />
 			<Option glob="1957770431" />
 		</Unit>
 		<Unit filename="convertir-fecha.c">
+			<Option compilerVar="CC" />
+			<Option glob="1957770431" />
+		</Unit>
+		<Unit filename="copiar.c">
 			<Option compilerVar="CC" />
 			<Option glob="1957770431" />
 		</Unit>
@@ -63,6 +71,14 @@
 			<Option glob="1957770431" />
 		</Unit>
 		<Unit filename="secuencias.h">
+			<Option glob="1957770431" />
+		</Unit>
+		<Unit filename="to-lower-prop.c">
+			<Option compilerVar="CC" />
+			<Option glob="1957770431" />
+		</Unit>
+		<Unit filename="to-upper-prop.c">
+			<Option compilerVar="CC" />
 			<Option glob="1957770431" />
 		</Unit>
 		<Extensions>

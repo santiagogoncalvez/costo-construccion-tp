@@ -1,4 +1,4 @@
-void agregar(void* espacio,FILE* archivo2)
+void agregarApertura()
 {
     estructura* es=espacio;
     newestructura* nuevo;
@@ -6,7 +6,7 @@ void agregar(void* espacio,FILE* archivo2)
     nuevo->numro=es->numro;
     trasladar(nuevo->palabra,es->palabra);
     char tex[31]="Nivel general";
-    char tex2[31]="capitulos";
+    char tex2[31]="Capitulos";
     if(comparar(nuevo->palabra,tex))
     {
         trasladar(nuevo->clasificador,tex);

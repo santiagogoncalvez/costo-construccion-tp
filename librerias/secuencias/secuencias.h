@@ -15,5 +15,9 @@ char siesletra15(char cad,int pos);
 void desencriptarPorPos(char* cad);
 void desencriptarPorCaso(char *cad);
 void sacarAntYNormalizar(char *cad);
+char toUpperProp(char c);
+char toLowerProp(char c);
+bool comparar(char* cad1,char* cad2);
+void copiar(char* cadDestinio,char* cadOrigen);
 
 #endif // SECUENCIAS_H_INCLUDED
