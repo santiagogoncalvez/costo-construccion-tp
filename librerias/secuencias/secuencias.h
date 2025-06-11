@@ -19,5 +19,6 @@ char toUpperProp(char c);
 char toLowerProp(char c);
 bool comparar(char* cad1,char* cad2);
 void copiar(char* cadDestinio,char* cadOrigen);
+void generarClasificador(char *clasificador);
 
 #endif // SECUENCIAS_H_INCLUDED
