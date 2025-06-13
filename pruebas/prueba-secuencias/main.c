@@ -15,7 +15,6 @@ void pruebaFormatearFecha();
 void pruebaNormalizar();
 void pruebaConvertirComa();
 void pruebaDesencriptarPorPos();
-void pruebaGenerarCamp_clasificador();
 
 int main()
 {
@@ -26,7 +25,6 @@ int main()
     pruebaNormalizar();
     pruebaConvertirComa();
     pruebaDesencriptarPorPos();
-    pruebaGenerarCamp_clasificador();
 
     return 0;
 }
@@ -39,7 +37,10 @@ void pruebaFormatearFecha()
         {"1/2/2022", "2022-02-01"},
         {"1/3/2022", "2022-03-01"},
         {"1/4/2022", "2022-04-01"},
-        {"1/5/2022", "2022-05-01"}
+        {"1/5/2022", "2022-05-01"},
+        {"10/4/2022", "2022-04-10"},
+        {"1/12/2022", "2022-12-01"},
+        {"20/10/2022", "2022-10-20"}
     };
 
     char salida[100]; // AAAA/MM/DD + '\0'

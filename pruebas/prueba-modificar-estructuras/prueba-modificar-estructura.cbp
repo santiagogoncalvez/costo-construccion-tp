@@ -17,6 +17,7 @@
 				<Linker>
 					<Add library="../../librerias/modificar-estructura/bin/Debug/modificar-estructura.a" />
 					<Add library="../../librerias/secuencias/bin/Debug/secuencias.a" />
+					<Add library="../../librerias/TDA-fecha/bin/Debug/libTDA-fecha.a" />
 				</Linker>
 			</Target>
 			<Target title="Release">

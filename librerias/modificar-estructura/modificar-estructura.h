@@ -18,6 +18,7 @@ typedef struct
 
 void agregarClasificador(Indice indices[], int ce);
 void agregarClasificadorItems(Indice indices[], int ce);
+void ordenarPorPerYClas(Indice indices[], int ce);
 
 
 #endif // MODIFICAR_ESTRUCTURA_H_INCLUDED

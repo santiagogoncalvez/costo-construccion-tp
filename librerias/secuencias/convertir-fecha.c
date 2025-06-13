@@ -83,4 +83,6 @@ void convertirFecha(char *cadOrigen)
         pCadOrigen++;
         pCadDestino++;
     }
+
+    *pCadOrigen = '\0';
 }

@@ -16,8 +16,10 @@ void desencriptarPorCaso(char *cad);
 void sacarAntYNormalizar(char *cad);
 char toUpperProp(char c);
 char toLowerProp(char c);
-bool comparar(char* cad1,char* cad2);
+bool comparar(const char* cad1, const char* cad2);
 void copiar(char* cadDestinio,char* cadOrigen);
+int buscarMatriz (const char matriz[][14], const char *cadBuscar, int ce);
+int compararClasificador(const char* cadClas1, const char* cadClas2);
 
 
 #endif // SECUENCIAS_H_INCLUDED
