@@ -13,12 +13,13 @@ typedef struct
     char nivelGeneralAperturas[30];
     float indice;
     char clasificador[20];
+    float variacion_mensual;
 } Indice;
 
 
 void agregarClasificador(Indice indices[], int ce);
 void agregarClasificadorItems(Indice indices[], int ce);
 void ordenarPorPerYClas(Indice indices[], int ce);
-
+void calcularVarMensual(Indice indices[], int ce);
 
 #endif // MODIFICAR_ESTRUCTURA_H_INCLUDED

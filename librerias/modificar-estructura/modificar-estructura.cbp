@@ -43,6 +43,9 @@
 		<Unit filename="agregar-clasificador.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="agregar-variacion_mensual.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="modificar-estructura.h" />
 		<Unit filename="ordenar-por-per-y-clas.c">
 			<Option compilerVar="CC" />
