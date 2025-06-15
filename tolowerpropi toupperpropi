@@ -1,0 +1,19 @@
+char tolowerpropi(char c)//mayuscula en minuscula
+{
+    if(c>='A' && c<='Z')
+    {
+         c+=32;
+         return c;
+    }
+    return c;
+}
+
+char toupperpropi(char c)
+{
+     if(c>='a' && c<='z')
+    {
+         c-=32;
+         return c;
+    }
+    return c;
+}
