@@ -66,6 +66,10 @@
 			<Option compilerVar="CC" />
 			<Option glob="1957770431" />
 		</Unit>
+		<Unit filename="eliminar-todas-las-comillas.c">
+			<Option compilerVar="CC" />
+			<Option glob="1957770431" />
+		</Unit>
 		<Unit filename="normalizar.c">
 			<Option compilerVar="CC" />
 			<Option glob="1957770431" />

@@ -11,11 +11,14 @@
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
+				<Option parameters="../datos/indices_icc_general_capitulos.csv" />
 				<Compiler>
 					<Add option="-g" />
 				</Compiler>
 				<Linker>
-					<Add library="../librerias/secuencias/bin/Debug/lib-secuencias.a" />
+					<Add library="../librerias/TDA-fecha/bin/Debug/libTDA-fecha.a" />
+					<Add library="../librerias/modificar-estructura/bin/Debug/modificar-estructura.a" />
+					<Add library="../librerias/secuencias/bin/Debug/secuencias.a" />
 				</Linker>
 			</Target>
 			<Target title="Release">

@@ -20,7 +20,8 @@ typedef struct
 } Indice;
 
 
-void agregarClasificador(Indice indices[], int ce);
+void agregarClasificadores(Indice indices[], int ce);
+void agregarClasificador(Indice *indice);
 void agregarClasificadorItems(Indice indices[], int ce);
 void ordenarPorPerYClas(Indice indices[], int ce);
 void agregarVarMensual(Indice indices[], int ce);

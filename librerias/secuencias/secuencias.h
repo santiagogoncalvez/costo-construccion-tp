@@ -20,6 +20,7 @@ bool comparar(const char* cad1, const char* cad2);
 void copiar(char* cadDestinio,char* cadOrigen);
 int buscarMatriz (const char matriz[][14], const char *cadBuscar, int ce);
 int compararClasificador(const char* cadClas1, const char* cadClas2);
+void eliminarTodasLasComillas(char *cad);
 
 
 #endif // SECUENCIAS_H_INCLUDED
