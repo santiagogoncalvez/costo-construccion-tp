@@ -43,7 +43,10 @@
 		<Unit filename="agregar-clasificador.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="agregar-variacion_mensual.c">
+		<Unit filename="agregar-variacion-mensual.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="ind-por-interanual.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="modificar-estructura.h" />

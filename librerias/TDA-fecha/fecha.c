@@ -160,6 +160,45 @@ tFecha fechaRestarDias(const tFecha *f, int dias)
     return fResta;
 }
 
+tFecha fechaSumarMeses(const tFecha *f, int meses)
+{
+    tFecha fSuma = *f;
+
+    // Convertimos año y mes a meses desde año 0
+    int totalMeses = f->a * 12 + (f->m - 1) + meses;
+
+    // Volvemos a año y mes
+    fSuma.a = totalMeses / 12;
+    fSuma.m = (totalMeses % 12) + 1;
+
+    // Ajustamos día si no existe en el nuevo mes
+    int cdm = cantDiasMes(fSuma.m, fSuma.a);
+    if (fSuma.d > cdm)
+        fSuma.d = cdm;
+
+    return fSuma;
+}
+
+tFecha fechaRestarMeses(const tFecha *f, int meses)
+{
+    tFecha fResta = *f;
+
+    // Convertimos año y mes a meses desde año 0, y restamos
+    int totalMeses = f->a * 12 + (f->m - 1) - meses;
+
+    // Volvemos a año y mes
+    fResta.a = totalMeses / 12;
+    fResta.m = (totalMeses % 12) + 1;
+
+    // Ajustamos día si no existe en el nuevo mes
+    int cdm = cantDiasMes(fResta.m, fResta.a);
+    if (fResta.d > cdm)
+        fResta.d = cdm;
+
+    return fResta;
+}
+
+
 int fechaDiasEntre2Fechas(const tFecha *f1, const tFecha *f2)
 {
     int cantDias = 0, cdm;

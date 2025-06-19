@@ -21,6 +21,8 @@ bool esBisiesto(int a);
 tFecha fechaSumarUnDia(const tFecha *f);
 tFecha fechaSumarDias(const tFecha *f, int dias);
 tFecha fechaRestarDias(const tFecha *f, int dias);
+tFecha fechaSumarMeses(const tFecha *f, int meses);
+tFecha fechaRestarMeses(const tFecha *f, int meses);
 int fechaDiasEntre2Fechas(const tFecha *f1, const tFecha *f2);
 int fechaDiaDeLaSemana(const tFecha *f);
 int fechaComparar(const tFecha *f1, const tFecha *f2);
