@@ -12,7 +12,7 @@
 typedef struct
 {
     tFecha periodo;
-    char nivelGeneralAperturas[30];
+    char nivelGeneralAperturas[40];
     float indice;
     char clasificador[20];
     float varMensual;
@@ -23,6 +23,7 @@ typedef struct
 void agregarClasificadores(Indice indices[], int ce);
 void agregarClasificador(Indice *indice);
 void agregarClasificadorItems(Indice indices[], int ce);
+void agregarClasificadorItem(Indice *indice);
 void ordenarPorPerYClas(Indice indices[], int ce);
 void agregarVarMensual(Indice indices[], int ce);
 void calcIndVarInteranual(Indice indices[], int ce);

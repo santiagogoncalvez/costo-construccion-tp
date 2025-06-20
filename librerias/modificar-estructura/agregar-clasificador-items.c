@@ -7,3 +7,8 @@ void agregarClasificadorItems(Indice indices[], int ce)
         copiar(indices[i].clasificador, "Items");
     }
 }
+
+void agregarClasificadorItem(Indice *indice)
+{
+    copiar(indice->clasificador, "Items");
+}

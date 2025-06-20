@@ -11,7 +11,7 @@
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
-				<Option parameters="../datos/indices_icc_general_capitulos.csv" />
+				<Option parameters="../datos/indices_icc_general_capitulos.csv ../datos/Indices_items_obra.csv" />
 				<Compiler>
 					<Add option="-g" />
 				</Compiler>
@@ -19,6 +19,7 @@
 					<Add library="../librerias/TDA-fecha/bin/Debug/libTDA-fecha.a" />
 					<Add library="../librerias/modificar-estructura/bin/Debug/modificar-estructura.a" />
 					<Add library="../librerias/secuencias/bin/Debug/secuencias.a" />
+					<Add library="../librerias/TDA-vector/bin/Debug/libTDAVector.a" />
 				</Linker>
 			</Target>
 			<Target title="Release">
