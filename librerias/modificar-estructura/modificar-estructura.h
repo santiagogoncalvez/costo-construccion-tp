@@ -20,14 +20,14 @@ typedef struct
 } Indice;
 
 
-void agregarClasificadores(Indice indices[], int ce);
 void agregarClasificador(Indice *indice);
-void agregarClasificadorItems(Indice indices[], int ce);
 void agregarClasificadorItem(Indice *indice);
-void ordenarPorPerYClas(Indice indices[], int ce);
-void agregarVarMensual(Indice indices[], int ce);
-void calcIndVarInteranual(Indice indices[], int ce);
-float buscarIndAnterior(Indice *indices, Indice *actIndice, int ce);
+int compararIndices(const void *a, const void *b);
+int compararIndicesIgualdad(const void *a, const void *b);
+void calcVarMensual(void* ind, void* vInd);
+void calcVarInteranual(void* ind, void* vInd);
+void calcVariaciones(void* ind, void* vInd);
+int cmpInd12MesesAntes(const void* a, const void* b);
 float redondear2decimales(float valor);
 
 #endif // MODIFICAR_ESTRUCTURA_H_INCLUDED

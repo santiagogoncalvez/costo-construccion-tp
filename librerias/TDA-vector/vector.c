@@ -81,7 +81,7 @@ int vectorGrabar(Vector* vector, const char* nomArch)
 }
 
 
-int vectorOrdInsertar(Vector* vector, const void* elem, Cmp cmp)
+int vectorOrdInsertar(Vector* vector, const void* elem, Cmp cmp, Cmp cmpIgualdad)
 {
     if(vector->ce == vector->cap)
     {
@@ -99,10 +99,12 @@ int vectorOrdInsertar(Vector* vector, const void* elem, Cmp cmp)
         i += vector->tamElem;
     }
 
-    if(i <= ult && cmp(elem, i) == 0) // Duplicado
+
+    if(i <= ult && cmpIgualdad(elem, i) == 0) // Duplicado
     {
         return DUPLICADO;
     }
+
 
     void* posIns = i;
 
@@ -173,26 +175,71 @@ int vectorOrdBuscar(const Vector* vector, void* elem, Cmp cmp)
     return (m - vector->vec) / vector->tamElem;
 }
 
+int vectorBuscarPorPos(const Vector* vector, void* elem, int posBuscar)
+{
+    int pos = -1;
+    int cantElem = 0;
+    void* ult = vector->vec + (vector->ce - 1) * vector->tamElem;
+    void* i = vector->vec;
+
+    while(pos < 0&& i <= ult)
+    {
+        if(cantElem == posBuscar)
+        {
+            memcpy(elem, i, vector->tamElem);
+            pos = cantElem;
+        }
+        i += vector->tamElem;
+        cantElem++;
+    }
+
+    return pos;
+}
+
+int vectorBuscarSecuencial(const Vector* vector, void* elem, Cmp cmp)
+{
+    if(vector->ce == 0)
+        return -1;
+
+    void* i = vector->vec;
+    void* fin = vector->vec + vector->ce * vector->tamElem;
+    int pos = 0;
+
+    while(i < fin)
+    {
+        if(cmp(elem, i) == 0)
+        {
+            memcpy(elem, i, vector->tamElem);
+            return pos;
+        }
+
+        i += vector->tamElem;
+        pos++;
+    }
+
+    return -1;
+}
+
 
 void vectorOrdenar(Vector* vector, int metodo, Cmp cmp)
 {
     switch(metodo)
     {
-        case BURBUJEO:
-            // ordenarBurbujeo(vector);
-            break;
+    case BURBUJEO:
+        // ordenarBurbujeo(vector);
+        break;
 
-        case SELECCION:
-            ordenarSeleccion(vector, cmp);
-            break;
+    case SELECCION:
+        ordenarSeleccion(vector, cmp);
+        break;
 
-        case INSERCION:
-            // ordenarInsercion(vector);
-            break;
+    case INSERCION:
+        // ordenarInsercion(vector);
+        break;
 
-        case QSORT:
-            qsort(vector->vec, vector->ce, vector->tamElem, cmp);
-            break;
+    case QSORT:
+        qsort(vector->vec, vector->ce, vector->tamElem, cmp);
+        break;
     }
 }
 
@@ -217,7 +264,7 @@ bool redimensionarVector(Vector* vector, int operacion)
         return false;
     }
 
-    printf("Redimension de %u, a %u\n", vector->cap, nuevaCap);
+    //printf("Redimension de %u, a %u\n", vector->cap, nuevaCap);
 
     vector->vec = nVec;
     vector->cap = nuevaCap;

@@ -19,6 +19,8 @@
 				</Compiler>
 				<Linker>
 					<Add library="../secuencias/bin/Debug/secuencias.a" />
+					<Add library="../TDA-fecha/bin/Debug/libTDA-fecha.a" />
+					<Add library="../TDA-vector/bin/Debug/libTDAVector.a" />
 				</Linker>
 			</Target>
 			<Target title="Release">
@@ -43,16 +45,19 @@
 		<Unit filename="agregar-clasificador.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="agregar-variacion-mensual.c">
+		<Unit filename="calc-var-interanual.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="ind-por-interanual.c">
+		<Unit filename="calc-var-mensual.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="calc-variaciones.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="comparar-indices.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="modificar-estructura.h" />
-		<Unit filename="ordenar-por-per-y-clas.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Extensions />
 	</Project>
 </CodeBlocks_project_file>

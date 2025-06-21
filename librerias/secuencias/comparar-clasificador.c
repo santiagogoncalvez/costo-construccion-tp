@@ -1,22 +1,8 @@
 #include "secuencias.h"
 
-int buscarMatriz (const char matriz[][14], const char *cadBuscar, int ce)
-{
-    int pos = -1;
-    for (int i = 0; i < ce; i++)
-    {
-        if(comparar(cadBuscar, matriz[i]))
-        {
-            pos = i;
-        }
-    }
-
-    return pos;
-}
-
 int compararClasificador(const char* cadClas1, const char* cadClas2)
 {
-    char clasificadores[3][14] = {{"Items"}, {"Capitulos"}, {"Nivel general"}};
+    char clasificadores[3][15] = {{"Items\0"}, {"Capitulos\0"}, {"Nivel general\0"}};
 
     int posCadClas1 = buscarMatriz(clasificadores, cadClas1, 3);
     int posCadClas2 = buscarMatriz(clasificadores, cadClas2, 3);
@@ -33,3 +19,18 @@ int compararClasificador(const char* cadClas1, const char* cadClas2)
 
     return 0;
 }
+
+int buscarMatriz (const char matriz[][15], const char *cadBuscar, int ce)
+{
+    int pos = -1;
+    for (int i = 0; i < ce; i++)
+    {
+        if(comparar(cadBuscar, matriz[i]) == 0)
+        {
+            pos = i;
+        }
+    }
+
+    return pos;
+}
+

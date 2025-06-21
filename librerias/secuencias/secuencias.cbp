@@ -42,6 +42,10 @@
 			<Option compilerVar="CC" />
 			<Option glob="1957770431" />
 		</Unit>
+		<Unit filename="comparar-tipo-variable.c">
+			<Option compilerVar="CC" />
+			<Option glob="1957770431" />
+		</Unit>
 		<Unit filename="comparar.c">
 			<Option compilerVar="CC" />
 			<Option glob="1957770431" />

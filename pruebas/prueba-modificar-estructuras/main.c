@@ -24,7 +24,6 @@ bool verificarOrden(const Indice datos[], int ce);
 bool verificarOrden(const Indice datos[], int ce);
 void pruebaOrdenarPorPerYClas();
 void pruebaVariacionMensual();
-void pruebaIndPorInteranual();
 void pruebaCalcIndVarInteranual();
 void pruebaAgregarVarMensual();
 
@@ -36,15 +35,15 @@ int main()
     /*
     pruebaAgregarClasificador();
     pruebaAgregarClasificadorItems();
-    pruebaOrdenarPorPerYClas();
     pruebaVariacionMensual();
     probarFechaSumarMeses();
     probarFechaRestarMeses();
     pruebaIndPorInteranual();
     pruebaCalcIndVarInteranual();
+    pruebaAgregarVarMensual();
     */
 
-    pruebaAgregarVarMensual();
+    pruebaOrdenarPorPerYClas();
 
 
     return 0;
@@ -70,7 +69,13 @@ void pruebaAgregarClasificador()
 
     int total = sizeof(indices) / sizeof(indices[0]);
 
-    agregarClasificador(indices, total);
+    Indice* p;
+    Indice* fin = indices + total;
+
+    for (p = indices; p < fin; p++)
+    {
+       agregarClasificador(p);
+    }
 
     int errores = 0;
 
@@ -108,7 +113,13 @@ void pruebaAgregarClasificadorItems()
 
     int total = sizeof(indices) / sizeof(indices[0]);
 
-    agregarClasificadorItems(indices, total);
+    Indice* p;
+    Indice* fin = indices + total;
+
+    for (p = indices; p < fin; p++)
+    {
+       agregarClasificadorItem(p);
+    }
 
     int errores = 0;
 
@@ -238,16 +249,16 @@ void pruebaOrdenarPorPerYClas()
     printf("\nAntes de orden\n");
     for(int i = 0; i < total; i++)
     {
-        printf("%-2d %-2d %-4d\t", indices[i].periodo.d, indices[i].periodo.m, indices[i].periodo.a);
+        printf("%02d-%02d-%4d\t", indices[i].periodo.d, indices[i].periodo.m, indices[i].periodo.a);
         printf("%-20s\n",indices[i].clasificador);
     }
 
-    ordenarPorPerYClas(indices, total);
+    //ordenarPorPerYClas(indices, total);
 
     printf("\nDespues de orden\n");
     for(int i = 0; i < total; i++)
     {
-        printf("%-2d %-2d %-4d\t", indices[i].periodo.d, indices[i].periodo.m, indices[i].periodo.a);
+        printf("%02d-%02d-%4d\t", indices[i].periodo.d, indices[i].periodo.m, indices[i].periodo.a);
         printf("%-20s\n",indices[i].clasificador);
     }
 
@@ -265,83 +276,6 @@ void pruebaOrdenarPorPerYClas()
 void doubleToStr(double val, char *str, int size)
 {
     snprintf(str, size, "%.2f", val);
-}
-
-void pruebaVariacionMensual()
-{
-    printf("\nEjecutando pruebas para calcularVariacionMensual...\n");
-
-    CasoVarMensual casos[] = //valores sacados de la pagina que calcula las variaciones
-    {
-        {"2022-01-01", "Nivel General", "100", "0.00"},
-        {"2022-01-01", "Materiales", "100", "0.00"},
-        {"2022-01-01", "Mano de Obra", "100", "0.00"},
-        {"2022-01-01", "Gastos generales", "100", "0.00"},
-        {"2022-01-01", "Movimiento de tierras", "100", "0.00"},
-        {"2022-01-01", "Estructura", "100", "0.00"},
-        {"2022-01-01", "Albanileria", "100", "0.00"},
-        {"2022-01-01", "Yeseria", "100", "0.00"},
-        {"2022-01-01", "Instalacion sanitaria y contraincendio", "100", "0.00"},
-        {"2022-01-01", "Instalacionde gas", "100", "0.00"},
-        {"2022-01-01", "Instalacion electrica", "100", "0.00"},
-        {"2022-01-01", "Carpinteria metalica y herreria", "100", "0.00"},
-        {"2022-01-01", "Carpinteria de madera", "100", "0.00"},
-        {"2022-01-01", "Ascensores", "100", "0.00"},
-        {"2022-01-01", "Vidrios", "100", "0.00"},
-        {"2022-01-01", "Pinturas", "100", "0.00"},
-        {"2022-01-01", "Otros trabajos y gastos", "100", "0.00"},
-        {"2022-02-01", "Nivel General", "103.809636", "3.81"},
-        {"2022-02-01", "Materiales", "103.461974", "3.46"},
-        {"2022-02-01", "Mano de Obra", "104.209035", "4.21"},
-        {"2022-02-01", "Gastos generales", "103.622083", "3.62"},
-        {"2022-02-01", "Movimiento de tierras", "103.812933254688", "3.81"},
-        {"2022-02-01", "Estructura", "104.410773484463", "4.41"},
-        {"2022-02-01", "Albanileria", "103.927129746759", "3.93"},
-        {"2022-02-01", "Yeseria", "104.401086250664", "4.40"},
-        {"2022-02-01", "Instalacion sanitaria y contraincendio", "103.745420563839", "3.75"},
-        {"2022-02-01", "Instalacionde gas", "101.542653418102", "1.54"},
-        {"2022-02-01", "Instalacion electrica", "103.949007322413", "3.95"},
-        {"2022-02-01", "Carpinteria metalica y herreria", "105.61061404405", "5.61"},
-        {"2022-02-01", "Carpinteria de madera", "104.348301581399", "4.35"},
-        {"2022-02-01", "Ascensores", "100.573196712996", "0.57"},
-        {"2022-02-01", "Vidrios", "102.077324810975", "2.08"},
-        {"2022-02-01", "Pinturas", "101.735606808807", "1.74"},
-        {"2022-02-01", "Otros trabajos y gastos", "103.472367445486", "3.47"}
-    };
-
-    int total = sizeof(casos) / sizeof(casos[0]);
-    Indice indices[34];
-
-    for(int i = 0; i < total; i++)
-    {
-        strcpy(indices[i].nivelGeneralAperturas, casos[i].nivelGeneralAperturas);
-        indices[i].indice = atof(casos[i].indice);
-        indices[i].varMensual = 0;
-    }
-
-    agregarVarMensual(indices, total);
-
-    int errores = 0;
-    char salida[20];
-
-    for (int i = 0; i < total; i++)
-    {
-        doubleToStr(indices[i].varMensual, salida, sizeof(salida));
-
-        if (strcmp(salida, casos[i].variacionMensual) != 0)
-        {
-            printf("prueba %d fallo: periodo='%s', nivel='%s' --> salida='%s' (esperado='%s')\n",
-                   i + 1, casos[i].periodo, casos[i].nivelGeneralAperturas, salida, casos[i].variacionMensual);
-            errores++;
-        }
-        else
-        {
-            printf("prueba %d paso: periodo='%s', nivel='%s' --> salida='%s'  (esperado='%s')  \n", i + 1, casos[i].periodo, casos[i].nivelGeneralAperturas, salida,casos[i].variacionMensual);
-        }
-    }
-
-    printf("\nResumen: %d pasaron, %d fallaron.\n", total - errores, errores);
-    assert(errores == 0 && "Al menos un prueba fallo en calcularVarMensual.");
 }
 
 void pruebaIndPorInteranual()
@@ -366,7 +300,13 @@ void pruebaIndPorInteranual()
 
     int total = sizeof(indices) / sizeof(indices[0]);
 
-    calcIndVarInteranual(indices, total);
+    Indice* p;
+    Indice* fin = indices + total;
+
+    for (p = indices; p < fin; p++)
+    {
+       calcVarInteranual(p, indices);
+    }
 
     int errores = 0;
 
@@ -455,7 +395,13 @@ void pruebaCalcIndVarInteranual()
     int total = sizeof(indicesBase) / sizeof(indicesBase[0]);
 
     // Ejecuta la función a probar
-    calcIndVarInteranual(indicesBase, total);
+    Indice* p;
+    Indice* fin = indicesBase + total;
+
+    for (p = indicesBase; p < fin; p++)
+    {
+       calcVarInteranual(p, indicesBase);
+    }
 
     printf("\nEjecutando pruebas para pruebaCalcIndVarInteranual...\n");
     int errores = 0;
@@ -548,7 +494,13 @@ void pruebaAgregarVarMensual()
     int total = sizeof(indicesBase) / sizeof(indicesBase[0]);
 
     // Llamamos a la función que llena varMensual
-    agregarVarMensual(indicesBase, total);
+    Indice* p;
+    Indice* fin = indicesBase + total;
+
+    for (p = indicesBase; p < fin; p++)
+    {
+       calcVarMensual(p, indicesBase);
+    }
 
     printf("\nEjecutando pruebas para pruebaAgregarVarMensual...\n");
     int errores = 0;

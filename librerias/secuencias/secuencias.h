@@ -16,10 +16,11 @@ void desencriptarPorCaso(char *cad);
 void sacarAntYNormalizar(char *cad);
 char toUpperProp(char c);
 char toLowerProp(char c);
-bool comparar(const char* cad1, const char* cad2);
+int comparar(const char* cad1, const char* cad2);
 void copiar(char* cadDestinio,char* cadOrigen);
-int buscarMatriz (const char matriz[][14], const char *cadBuscar, int ce);
+int buscarMatriz (const char matriz[][15], const char *cadBuscar, int ce);
 int compararClasificador(const char* cadClas1, const char* cadClas2);
+int compararTipoVariable(const char* cadClas1, const char* cadClas2);
 void eliminarTodasLasComillas(char *cad);
 
 

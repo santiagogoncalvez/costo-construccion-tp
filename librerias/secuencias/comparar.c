@@ -1,16 +1,12 @@
 #include "secuencias.h"
 
-bool comparar(const char* cad1, const char* cad2)
+int comparar(const char* cad1, const char* cad2)
 {
-    const char*i=cad1;
-    while(*i!='\0' && *cad2!='\0')
+    while (*cad1 && *cad2 && *cad1 == *cad2)
     {
-        if(*i!=*cad2)
-        {
-            return false;
-        }
-        i++;
+        cad1++;
         cad2++;
     }
-    return true;
+
+    return (unsigned char)*cad1 - (unsigned char)*cad2;
 }
