@@ -55,6 +55,12 @@ bool fechaSetDesdeString(tFecha* f, const char *cadFecha)
     return true;
 }
 
+void fechaAString(const tFecha* f, char* dest)
+{
+    // Escribe en el buffer destino el string con formato "aaaa-mm-dd"
+    sprintf(dest, "%04d-%02d-%02d", f->a, f->m, f->d);
+}
+
 void fechaMostrar(const tFecha* f)
 {
     printf("\n\nDia: %i", f -> d);

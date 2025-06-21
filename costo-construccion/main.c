@@ -16,12 +16,12 @@
 
 typedef struct
 {
-    tFecha periodo;
+    //tFecha periodo;
+    char periodo[11];
     char clasificador[20];
     char nivelGeneralAperturas[40];
     char tipoVariable[15];
-    float valor;
-    bool valorExiste;
+    char valor[20];
 } IndiceBin;
 
 typedef int (*IndiceTxt)(char *linea, void *reg);
@@ -253,7 +253,7 @@ void genVIndicesBin(void* ind, void* vIndBin)
 
 void pasarIndAIndB(IndiceBin *indiceBin, Indice *indice, char *tipoVariable)
 {
-    indiceBin->periodo = indice->periodo;
+    fechaAString(&indice->periodo, indiceBin->periodo);
     copiar(indiceBin->clasificador, indice->clasificador);
     copiar(indiceBin->nivelGeneralAperturas, indice->nivelGeneralAperturas);
 
@@ -262,8 +262,7 @@ void pasarIndAIndB(IndiceBin *indiceBin, Indice *indice, char *tipoVariable)
     if(comparar(tipoVariable, tiposVariables[2]) == 0)
     {
         copiar(indiceBin->tipoVariable, tiposVariables[2]);
-        indiceBin->valor = indice->indice;
-        indiceBin->valorExiste = true;
+        sprintf(indiceBin->valor, "%.2f", indice->indice);
     }
 
     if(comparar(tipoVariable, tiposVariables[1]) == 0)
@@ -271,12 +270,11 @@ void pasarIndAIndB(IndiceBin *indiceBin, Indice *indice, char *tipoVariable)
         copiar(indiceBin->tipoVariable, tiposVariables[1]);
         if(indice->varMensualExiste)
         {
-            indiceBin->valor = indice->varMensual;
-            indiceBin->valorExiste = true;
+            sprintf(indiceBin->valor, "%.2f", indice->varMensual);
         }
         else
         {
-            indiceBin->valorExiste = false;
+            copiar(indiceBin->valor, "NA");
         }
     }
 
@@ -285,12 +283,11 @@ void pasarIndAIndB(IndiceBin *indiceBin, Indice *indice, char *tipoVariable)
         copiar(indiceBin->tipoVariable, tiposVariables[0]);
         if(indice->varInteranualExiste)
         {
-            indiceBin->valor = indice->varInteranual;
-            indiceBin->valorExiste = true;
+            sprintf(indiceBin->valor, "%.2f", indice->varInteranual);
         }
         else
         {
-            indiceBin->valorExiste = false;
+            copiar(indiceBin->valor, "NA");
         }
     }
 }
@@ -299,18 +296,27 @@ int compararIndicesBin(const void *a, const void *b)
 {
     const IndiceBin *indA = (const IndiceBin *)a;
     const IndiceBin *indB = (const IndiceBin *)b;
+    int cmpTipoVar, cmpPer, cmpClas;
+    tFecha periodoA, periodoB;
 
-    int cmpPer = fechaComparar(&indA->periodo, &indB->periodo);
+    fechaSetDesdeString(&periodoA, indA->periodo);
+    fechaSetDesdeString(&periodoB, indB->periodo);
+
+    /*
+    Se siguio este orden para poder cumplir con la imagen de muestra de salida del punto final, ya que en el punto 10 se menciona un orden y se muestra de esa manera, pero en el punto final no. Se pide un orden periodo-clasificador-tipoVariable pero en la imagen de muestra se aplica un orden tipoVariable-periodo-clasificador. Si el orden hubiera tenido que ser estrictamente periodo-clasificador-tipoVariable solo se tiene que desplazar la comparacon 'cmpTipoVar' como tercera comparacion.
+    */
+    cmpTipoVar = compararTipoVariable(indA->tipoVariable, indB->tipoVariable);
+    if (cmpTipoVar != 0)
+        return -cmpTipoVar;
+
+    cmpPer = fechaComparar(&periodoA, &periodoB);
     if (cmpPer != 0)
         return cmpPer;  // Fecha ascendente
 
-    int cmpClas = compararClasificador(indA->clasificador, indB->clasificador);
+    cmpClas = compararClasificador(indA->clasificador, indB->clasificador);
     if (cmpClas != 0)
         return -cmpClas;  // Clasificador descendente
 
-    int cmpTipoVar = compararTipoVariable(indA->tipoVariable, indB->tipoVariable);
-    if (cmpTipoVar != 0)
-        return -cmpTipoVar;
 
     return 0;  // Son iguales
 }
@@ -319,12 +325,17 @@ int compararIndicesBinIgualdad(const void *a, const void *b)
 {
     const IndiceBin *indA = (const IndiceBin *)a;
     const IndiceBin *indB = (const IndiceBin *)b;
+    int cmpPer, cmpClas, cmpNivGen, cmpTipoVar, cmpValor;
+    tFecha periodoA, periodoB;
 
-    int cmpPer = fechaComparar(&indA->periodo, &indB->periodo);
-    int cmpClas = compararClasificador(indA->clasificador, indB->clasificador);
-    int cmpNivGen = comparar(indA->nivelGeneralAperturas, indB->nivelGeneralAperturas);
-    int cmpTipoVar = compararTipoVariable(indA->tipoVariable, indB->tipoVariable);
-    int cmpValor = ((indA->valor) == (indB->valor));
+    fechaSetDesdeString(&periodoA, indA->periodo);
+    fechaSetDesdeString(&periodoB, indB->periodo);
+
+    cmpPer = fechaComparar(&periodoA, &periodoB);
+    cmpClas = compararClasificador(indA->clasificador, indB->clasificador);
+    cmpNivGen = comparar(indA->nivelGeneralAperturas, indB->nivelGeneralAperturas);
+    cmpTipoVar = compararTipoVariable(indA->tipoVariable, indB->tipoVariable);
+    cmpValor = ((indA->valor) == (indB->valor));
 
     if(cmpPer == 0 && cmpNivGen == 0 && cmpValor == 0 && cmpTipoVar == 0 && cmpClas == 0) return 0;
 
@@ -336,17 +347,11 @@ void imprimirIndiceBin(const void* a)
     const IndiceBin* indiceBin = (const IndiceBin *)a;
 
     // Se muestra la estructura IndiceBin
-    printf("\n%02d-%02d-%04d",
-           indiceBin->periodo.d,
-           indiceBin->periodo.m,
-           indiceBin->periodo.a
-          );
+    printf("\n%10s", indiceBin->periodo);
     printf("\t%-13s", indiceBin->clasificador);
     printf("\t%-40s", indiceBin->nivelGeneralAperturas);
     printf("\t%-15s", indiceBin->tipoVariable);
-
-    if(indiceBin->valorExiste) printf("\t%-.2f", indiceBin->valor);
-    else printf("\tNA");
+    printf("\t%-10s", indiceBin->valor);
 }
 
 

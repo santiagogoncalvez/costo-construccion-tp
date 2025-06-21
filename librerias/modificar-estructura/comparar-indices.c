@@ -14,10 +14,11 @@ int compararIndices(const void *a, const void *b)
     if (cmpClas != 0)
         return -cmpClas;  // Clasificador descendente
 
+    /*
     int cmpNivel = comparar(indA->nivelGeneralAperturas, indB->nivelGeneralAperturas);
     if (cmpNivel != 0)
         return cmpNivel;
-
+    */
     return 0;  // Son iguales
 }
 

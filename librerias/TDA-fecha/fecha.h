@@ -14,6 +14,7 @@ typedef struct
 
 bool fechaSet(tFecha* f, int d, int m, int a);
 bool fechaSetDesdeString(tFecha* f, const char *cadFecha);
+void fechaAString(const tFecha* f, char* dest);
 void fechaMostrar(const tFecha* f);
 bool esFechaValida(int d, int m, int a);
 int cantDiasMes(int m, int a);

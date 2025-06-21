@@ -94,7 +94,7 @@ int vectorOrdInsertar(Vector* vector, const void* elem, Cmp cmp, Cmp cmpIgualdad
     void* i = vector->vec;
     void* ult = vector->vec + (vector->ce - 1) * vector->tamElem;
 
-    while(i <= ult && cmp(elem, i) > 0)
+    while(i <= ult && cmp(elem, i) >= 0)
     {
         i += vector->tamElem;
     }
