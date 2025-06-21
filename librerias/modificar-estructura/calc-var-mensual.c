@@ -14,7 +14,7 @@ void calcVarMensual(void* ind, void* vInd)
     vectorBuscarPorPos(vInd,  &menorMesIndice, 0);
 
     // Para variacion mensual, el primer mes no se calcula
-    if(indiceAct->periodo.m <= menorMesIndice.periodo.m) return;
+    if(indiceAct->periodo.m <= menorMesIndice.periodo.m && indiceAct->periodo.a <= menorMesIndice.periodo.a) return;
 
     // Buscar el elemento Indice correspondiente a 12 messes atrás
     indiceAntMes = *indiceAct;
@@ -23,7 +23,9 @@ void calcVarMensual(void* ind, void* vInd)
     // Calcular variacion
     vectorBuscarSecuencial(vIndices, &indiceAntMes, cmpInd12MesesAntes);
     varMensual = redondear2decimales(((indiceAct->indice / indiceAntMes.indice) - 1) * 100);
+
     indiceAct->varMensual = varMensual;
+    indiceAct->varMensualExiste = true;
 }
 
 float redondear2decimales(float valor)

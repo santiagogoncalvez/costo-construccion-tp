@@ -24,7 +24,9 @@ void calcVarInteranual(void* ind, void* vInd)
     // Calcular variacion
     vectorBuscarSecuencial(vIndices, &indiceAntAnio, cmpInd12MesesAntes);
     varInteranual = redondear2decimales(((indiceAct->indice / indiceAntAnio.indice) - 1) * 100);
+
     indiceAct->varInteranual = varInteranual;
+    indiceAct->varInteranualExiste = true;
 }
 
 int cmpInd12MesesAntes(const void* a, const void* b)

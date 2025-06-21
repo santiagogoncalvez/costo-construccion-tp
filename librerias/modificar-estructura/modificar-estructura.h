@@ -16,7 +16,9 @@ typedef struct
     float indice;
     char clasificador[20];
     float varMensual;
+    bool varMensualExiste;
     float varInteranual;
+    bool varInteranualExiste;
 } Indice;
 
 

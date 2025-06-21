@@ -21,6 +21,7 @@ typedef struct
     char nivelGeneralAperturas[40];
     char tipoVariable[15];
     float valor;
+    bool valorExiste;
 } IndiceBin;
 
 typedef int (*IndiceTxt)(char *linea, void *reg);
@@ -58,6 +59,8 @@ int main(int argc, char* argv[])
     // Insertar en un mismo vector
     leerTxtIndices(argv[ARG_TXT], sizeof(Indice), convIndiceTxt, esErrorFatalIndice, &vIndices);
     leerTxtIndices(argv[ARG_TXT_ITEMS], sizeof(Indice), indiceItemsTxtV, esErrorFatalIndice, &vIndices);
+
+    // Calcular variaciones.
     vectorRecorrer(&vIndices, calcVariaciones, &vIndices);
 
     printf("\n\nVector union de los 2 archivos base:\n");
@@ -153,8 +156,8 @@ int convIndiceTxt(char* linea, void* reg)
     *act = '\0';
     sscanf(linea, "%2d/%2d/%4d", &indice->periodo.d, &indice->periodo.m, &indice->periodo.a);
 
-    indice->varMensual = 0.0;
-    indice->varInteranual = 0.0;
+    indice->varMensualExiste = false;
+    indice->varInteranualExiste = false;
 
     //Procesar elemento. Aplicar procesos restantes a los campos.
     agregarClasificador(indice);
@@ -192,8 +195,8 @@ int indiceItemsTxtV(char* linea, void* reg)
     *act = '\0';
     sscanf(linea, "%2d/%2d/%4d", &indice->periodo.d, &indice->periodo.m, &indice->periodo.a);
 
-    indice->varMensual = 0.0;
-    indice->varInteranual = 0.0;
+    indice->varMensualExiste = false;
+    indice->varInteranualExiste = false;
 
     //Procesar elemento. Aplicar procesos restantes a los campos.
     agregarClasificadorItem(indice);
@@ -218,16 +221,20 @@ void imprimirIndice(const void* a)
     const Indice* indice = (const Indice *)a;
     // Se muestra la estructura Indice
 
-    printf("\n%02d-%02d-%04d\t%-40s\t%-.2f\t%-13s\t%-.2f\t%-.2f",
+    printf("\n%02d-%02d-%04d",
            indice->periodo.d,
            indice->periodo.m,
-           indice->periodo.a,
-           indice->nivelGeneralAperturas,
-           indice->indice,
-           indice->clasificador,
-           indice->varMensual,
-           indice->varInteranual
+           indice->periodo.a
           );
+    printf("\t%-40s", indice->nivelGeneralAperturas);
+    printf("\t%-.2f", indice->indice);
+    printf("\t%-13s", indice->clasificador);
+
+    if(indice->varMensualExiste) printf("\t%-.2f", indice->varMensual);
+    else printf("\tNA");
+
+    if(indice->varInteranualExiste) printf("\t%-.2f", indice->varInteranual);
+    else printf("\tNA");
 }
 
 // IndiceBin
@@ -256,18 +263,35 @@ void pasarIndAIndB(IndiceBin *indiceBin, Indice *indice, char *tipoVariable)
     {
         copiar(indiceBin->tipoVariable, tiposVariables[2]);
         indiceBin->valor = indice->indice;
+        indiceBin->valorExiste = true;
     }
 
     if(comparar(tipoVariable, tiposVariables[1]) == 0)
     {
         copiar(indiceBin->tipoVariable, tiposVariables[1]);
-        indiceBin->valor = indice->varMensual;
+        if(indice->varMensualExiste)
+        {
+            indiceBin->valor = indice->varMensual;
+            indiceBin->valorExiste = true;
+        }
+        else
+        {
+            indiceBin->valorExiste = false;
+        }
     }
 
     if(comparar(tipoVariable, tiposVariables[0]) == 0)
     {
         copiar(indiceBin->tipoVariable, tiposVariables[0]);
-        indiceBin->valor = indice->varInteranual;
+        if(indice->varInteranualExiste)
+        {
+            indiceBin->valor = indice->varInteranual;
+            indiceBin->valorExiste = true;
+        }
+        else
+        {
+            indiceBin->valorExiste = false;
+        }
     }
 }
 
@@ -310,19 +334,19 @@ int compararIndicesBinIgualdad(const void *a, const void *b)
 void imprimirIndiceBin(const void* a)
 {
     const IndiceBin* indiceBin = (const IndiceBin *)a;
+
     // Se muestra la estructura IndiceBin
-
-    //printf("\n%30s", indiceBin->clasificador);
-
-    printf("\n%02d-%02d-%04d\t%-15s\t%-40s\t%-15s\t%-.2f",
+    printf("\n%02d-%02d-%04d",
            indiceBin->periodo.d,
            indiceBin->periodo.m,
-           indiceBin->periodo.a,
-           indiceBin->clasificador,
-           indiceBin->nivelGeneralAperturas,
-           indiceBin->tipoVariable,
-           indiceBin->valor
+           indiceBin->periodo.a
           );
+    printf("\t%-13s", indiceBin->clasificador);
+    printf("\t%-40s", indiceBin->nivelGeneralAperturas);
+    printf("\t%-15s", indiceBin->tipoVariable);
+
+    if(indiceBin->valorExiste) printf("\t%-.2f", indiceBin->valor);
+    else printf("\tNA");
 }
 
 
