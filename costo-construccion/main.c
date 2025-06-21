@@ -10,6 +10,7 @@
 
 #define ARG_TXT 1
 #define ARG_TXT_ITEMS 2
+#define ARG_SALIDA_BIN 3
 #define ARG_BIN 3
 #define TAM_LINEA 501
 
@@ -39,21 +40,27 @@ int compararIndicesBin(const void *a, const void *b);
 int compararIndicesBinIgualdad(const void *a, const void *b);
 void imprimirIndiceBin(const void* a);
 
+//Archivo binario
+int convVIndBinABin(const char* nomArchBin, Vector *vIndBin);
+int mostrarArchivoBinario(const char* nomArchBin);
+
 
 // Argumentos enviados a main desde el proyecto:
-// '../datos/indices-icc-general-capitulos.csv' '../datos/Indices_items_obra.csv'
+// Archivo base indices general-capitulos, Archivo base indices items, Ruta del archivo binario de salida
+// '../datos/indices-icc-general-capitulos.csv' '../datos/Indices_items_obra.csv' '../salida/indices-procesados.bin'
 int main(int argc, char* argv[])
 {
     Vector vIndices, vIndicesBin;
 
     vectorCrear(&vIndices, sizeof(Indice));
 
+    printf("\nProcesando archivos base...");
     // Insertar en un mismo vector
     leerTxtIndices(argv[ARG_TXT], sizeof(Indice), convIndiceTxt, esErrorFatalIndice, &vIndices);
     leerTxtIndices(argv[ARG_TXT_ITEMS], sizeof(Indice), indiceItemsTxtV, esErrorFatalIndice, &vIndices);
     vectorRecorrer(&vIndices, calcVariaciones, &vIndices);
 
-    printf("Vector union de los 2 archivos base\n");
+    printf("\n\nVector union de los 2 archivos base:\n");
     vectorMostrar(&vIndices, imprimirIndice);
     printf("\nCantidad de elementos: %d \n", vIndices.ce);
 
@@ -61,9 +68,15 @@ int main(int argc, char* argv[])
     vectorCrear(&vIndicesBin, sizeof(IndiceBin));
     vectorRecorrer(&vIndices, genVIndicesBin, &vIndicesBin);
 
-    printf("\n\nVector final que se va a exportar al archivo binario\n");
+    printf("\n\nVector final que se va a exportar a un archivo binario:\n");
     vectorMostrar(&vIndicesBin, imprimirIndiceBin);
     printf("\nCantidad de elementos: %d \n", vIndicesBin.ce);
+
+    //DESTRUIR VECTORES AL FINAL PARA LIBERAR MEMORIA
+
+    // Exportar datos a un archivo binario
+    convVIndBinABin(argv[ARG_SALIDA_BIN], &vIndicesBin);
+    mostrarArchivoBinario(argv[ARG_SALIDA_BIN]);
 
     return 0;
 }
@@ -313,11 +326,61 @@ void imprimirIndiceBin(const void* a)
 }
 
 
+//Archivo binario
+int convVIndBinABin(const char* nomArchBin, Vector *vIndBin)
+{
+    printf("\n\nCreando archivo binario...");
 
+    FILE* arch = fopen(nomArchBin, "wb");
+    if (!arch)
+    {
+        return ERR_ARCHIVO;
+    }
 
+    fwrite(vIndBin->vec, vIndBin->tamElem, vIndBin->ce, arch);
+    fclose(arch);
 
+    printf("\n\nArchivo binario '%s' creado de forma exitosa.\n", nomArchBin);
 
+    return TODO_OK;
+}
 
+int mostrarArchivoBinario(const char* nomArchBin)
+{
+    FILE* arch = fopen(nomArchBin, "rb");
+    if (!arch)
+    {
+        perror("Error al abrir archivo binario");
+        return ERR_ARCHIVO;
+    }
+
+    Vector vIndBin;
+    if (!vectorCrear(&vIndBin, sizeof(IndiceBin)))
+    {
+        fclose(arch);
+        return ERR_ARCHIVO;
+    }
+
+    IndiceBin aux;
+    while (fread(&aux, sizeof(IndiceBin), 1, arch) == 1)
+    {
+        if (vectorInsertarAlFinal(&vIndBin, &aux)!=TODO_OK)
+        {
+            vectorDestruir(&vIndBin);
+            fclose(arch);
+            return ERR_ARCHIVO;
+        }
+    }
+
+    printf("\n\nLectura del archivo binario creado '%s':\n", nomArchBin);
+    vectorMostrar(&vIndBin, imprimirIndiceBin);
+
+    vectorDestruir(&vIndBin);
+
+    fclose(arch);
+
+    return TODO_OK;
+}
 
 
 
