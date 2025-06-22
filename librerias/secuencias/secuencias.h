@@ -22,6 +22,8 @@ int buscarMatriz (const char matriz[][15], const char *cadBuscar, int ce);
 int compararClasificador(const char* cadClas1, const char* cadClas2);
 int compararTipoVariable(const char* cadClas1, const char* cadClas2);
 void eliminarTodasLasComillas(char *cad);
+char *strrchrProp(const char *str, int c);
+char *strchrProp(const char *str, int c);
 
 
 #endif // SECUENCIAS_H_INCLUDED

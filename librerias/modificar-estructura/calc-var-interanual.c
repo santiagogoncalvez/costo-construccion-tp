@@ -34,7 +34,28 @@ int cmpInd12MesesAntes(const void* a, const void* b)
     const Indice* indA = (const Indice*)a;
     const Indice* indB = (const Indice*)b;
 
-    return !(fechaComparar(&indA->periodo, &indB->periodo) == 0 &&
-             compararClasificador(indA->clasificador, indB->clasificador) == 0 &&
-             strcmp(indA->nivelGeneralAperturas, indB->nivelGeneralAperturas) == 0);
+    return !(fechaComparar(&indA->periodo, &indB->periodo) == 0
+             && compararClasificador(indA->clasificador, indB->clasificador) == 0
+             && comparar(indA->nivelGeneralAperturas, indB->nivelGeneralAperturas) == 0
+            );
+}
+
+int compararIndicesVar(const void *a, const void *b)
+{
+    const Indice *indA = (const Indice *)a;
+    const Indice *indB = (const Indice *)b;
+
+    int cmpPer = fechaComparar(&indA->periodo, &indB->periodo);
+    if (cmpPer != 0)
+        return cmpPer;  // Fecha ascendente
+
+    int cmpClas = compararClasificador(indA->clasificador, indB->clasificador);
+    if (cmpClas != 0)
+        return -cmpClas;  // Clasificador descendente
+
+    int cmpNivel = comparar(indA->nivelGeneralAperturas, indB->nivelGeneralAperturas);
+    if (cmpNivel != 0)
+        return cmpNivel;
+
+    return 0;  // Son iguales
 }

@@ -13,7 +13,7 @@ typedef struct
 {
     tFecha periodo;
     char nivelGeneralAperturas[40];
-    float indice;
+    double indice;
     char clasificador[20];
     float varMensual;
     bool varMensualExiste;
@@ -30,6 +30,7 @@ void calcVarMensual(void* ind, void* vInd);
 void calcVarInteranual(void* ind, void* vInd);
 void calcVariaciones(void* ind, void* vInd);
 int cmpInd12MesesAntes(const void* a, const void* b);
-float redondear2decimales(float valor);
+int compararIndicesVar(const void *a, const void *b);
+float redondear2decimales(double valor);
 
 #endif // MODIFICAR_ESTRUCTURA_H_INCLUDED

@@ -22,13 +22,14 @@ void calcVarMensual(void* ind, void* vInd)
 
     // Calcular variacion
     vectorBuscarSecuencial(vIndices, &indiceAntMes, cmpInd12MesesAntes);
+    //vectorOrdBuscar(vIndices, &indiceAntMes, compararIndicesVar);
     varMensual = redondear2decimales(((indiceAct->indice / indiceAntMes.indice) - 1) * 100);
 
     indiceAct->varMensual = varMensual;
     indiceAct->varMensualExiste = true;
 }
 
-float redondear2decimales(float valor)
+float redondear2decimales(double valor)
 {
-    return roundf(valor * 100.0f) / 100.0f;
+    return (float)(round(valor * 100.0) / 100.0);
 }

@@ -75,12 +75,14 @@ int main(int argc, char* argv[])
     vectorMostrar(&vIndicesBin, imprimirIndiceBin);
     printf("\nCantidad de elementos: %d \n", vIndicesBin.ce);
 
-    //DESTRUIR VECTORES AL FINAL PARA LIBERAR MEMORIA
 
     // Exportar datos a un archivo binario
     convVIndBinABin(argv[ARG_SALIDA_BIN], &vIndicesBin);
     mostrarArchivoBinario(argv[ARG_SALIDA_BIN]);
 
+    //DESTRUIR VECTORES AL FINAL PARA LIBERAR MEMORIA
+    vectorDestruir(&vIndices);
+    vectorDestruir(&vIndicesBin);
     return 0;
 }
 
@@ -128,7 +130,7 @@ int leerTxtIndices(const char* nomArchTxt, size_t tamReg, IndiceTxt convIndiceTx
 int convIndiceTxt(char* linea, void* reg)
 {
     Indice* indice = reg;
-    char* act = strchr(linea, '\n');
+    char* act = strchrProp(linea, '\n');
 
     char campIndice[100];
 
@@ -140,14 +142,14 @@ int convIndiceTxt(char* linea, void* reg)
     eliminarTodasLasComillas(linea);
 
     *act = '\0';
-    act = strrchr(linea, ';');
+    act = strrchrProp(linea, ';');
     sscanf(act + 1, "%s", campIndice);
     //Procesar campo
     convertirComa(campIndice);
-    indice->indice = strtof(campIndice, NULL);
+    indice->indice = atof(campIndice);
 
     *act = '\0';
-    act = strrchr(linea, ';');
+    act = strrchrProp(linea, ';');
     sscanf(act + 1, "%s", indice->nivelGeneralAperturas);
     //Procesar campo
     desencriptarPorPos(indice->nivelGeneralAperturas);
@@ -168,7 +170,7 @@ int convIndiceTxt(char* linea, void* reg)
 int indiceItemsTxtV(char* linea, void* reg)
 {
     Indice* indice = reg;
-    char* act = strchr(linea, '\n');
+    char* act = strchrProp(linea, '\n');
     char campIndice[100];
 
     if(!act)
@@ -179,14 +181,14 @@ int indiceItemsTxtV(char* linea, void* reg)
     eliminarTodasLasComillas(linea);
 
     *act = '\0';
-    act = strrchr(linea, ';');
+    act = strrchrProp(linea, ';');
     sscanf(act + 1, "%s", campIndice);
     //Procesar campo
     convertirComa(campIndice);
-    indice->indice = strtof(campIndice, NULL);
+    indice->indice = atof(campIndice);
 
     *act = '\0';
-    act = strrchr(linea, ';');
+    act = strrchrProp(linea, ';');
     sscanf(act + 1, "%s", indice->nivelGeneralAperturas);
     //Procesar campo
     desencriptarPorCaso(indice->nivelGeneralAperturas);
@@ -221,13 +223,13 @@ void imprimirIndice(const void* a)
     const Indice* indice = (const Indice *)a;
     // Se muestra la estructura Indice
 
-    printf("\n%02d-%02d-%04d",
+    printf("\n%02d-%02d-%4d",
            indice->periodo.d,
            indice->periodo.m,
            indice->periodo.a
           );
-    printf("\t%-40s", indice->nivelGeneralAperturas);
-    printf("\t%-.2f", indice->indice);
+    printf("\t%-38s", indice->nivelGeneralAperturas);
+    printf("\t%-.4f", indice->indice);
     printf("\t%-13s", indice->clasificador);
 
     if(indice->varMensualExiste) printf("\t%-.2f", indice->varMensual);
@@ -262,7 +264,7 @@ void pasarIndAIndB(IndiceBin *indiceBin, Indice *indice, char *tipoVariable)
     if(comparar(tipoVariable, tiposVariables[2]) == 0)
     {
         copiar(indiceBin->tipoVariable, tiposVariables[2]);
-        sprintf(indiceBin->valor, "%.2f", indice->indice);
+        sprintf(indiceBin->valor, "%f", indice->indice);
     }
 
     if(comparar(tipoVariable, tiposVariables[1]) == 0)
@@ -351,7 +353,7 @@ void imprimirIndiceBin(const void* a)
     printf("\t%-13s", indiceBin->clasificador);
     printf("\t%-40s", indiceBin->nivelGeneralAperturas);
     printf("\t%-15s", indiceBin->tipoVariable);
-    printf("\t%-10s", indiceBin->valor);
+    printf("\t%10s\t", indiceBin->valor);
 }
 
 
