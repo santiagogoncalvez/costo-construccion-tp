@@ -39,22 +39,7 @@
 				</Linker>
 			</Target>
 		</Build>
-		<Unit filename="agregar_clasificador.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="agregar_clasificador_items.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="calc_var_interanual.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="calc_var_mensual.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="calc_variaciones.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="comparar_indices.c">
+		<Unit filename="estructura_indice.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="estructura_indice.h" />

@@ -22,39 +22,20 @@ El repositorio va a contener al proyecto 'gen_indices_bin' que se encarga de pro
 
 Permite **procesar índices y variaciones** del indicador económico de **Costo de la Construcción**.
 
-## Cómo compilar en Code::Blocks
+# Cómo compilar en Code::Blocks
 
-Abrir `src/gen_indices_bin.cbp` y presionar F9.
+## Opción recomendada: Usar el workspace
 
-## 🚫 Qué no subir al repositorio
+1. Abrí el archivo `gen_indice_bin.workspace` con Code::Blocks.
+2. Hacé **Click derecho en Workspace → Build Workspace** para compilar todos los proyectos (librerías y proyecto principal) en orden.
+3. Ejecutá el proyecto `gen_indice_bin` desde el workspace (clic derecho → **Run project** o botón Run).
 
-Evita subir:
+## Opción alternativa: Compilar proyectos individualmente
 
--  Rutas absolutas (como C:/Users/...). Usá rutas relativas al proyecto: `#include "../include/mis_funciones.h"`
--  `.cbp` con rutas específicas
--  Archivos temporales del compilador
--  Archivos personales
--  Tu configuración de entorno
--  Ejecutables para Windows (.exe)
+1. Abrí los archivos `.cbp` de cada librería y del proyecto principal uno por uno.
+2. Hacé build a cada proyecto por separado, respetando el orden de las dependencias (primero las librerías, después el proyecto principal).
+3. Ejecutá el proyecto `gen_indice_bin` después de compilar todo.
 
-## 📅 Cronograma y fechas
-
-Fecha de inicio: 18/05/2025  
-Fecha de entrega: 20/06/2025  
-Fecha de defensa: 26/05/2025
-
-Semana 1:
-Creación del repositorio de github.
-Desarrollo de las funciones de la 1 a la 5, una por cada integrante.
-
-Semana 2:
-Desarrollo de las funciones 6 a 12
-
-Semana 3:
-Testeo de todas las funciones.
-
-Semana 4:
-Estudio y entendimiento del código para la defensa oral.
 
 ## 📌 Reglas y Requerimientos
 
