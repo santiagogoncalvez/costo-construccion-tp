@@ -1,8 +1,10 @@
 # Indices del costo de la contrucción - TP de Tópicos (2025)
 
-## Estructura del proyecto
+## Qué hace el proyecto
 
-El repositorio va a contener al proyecto 'gen_indices_bin' que se encarga de procesar el archivo y la librería 'secuencias'.
+Permite **procesar índices y variaciones** del indicador económico de **Costo de la Construcción**, generando un archivo binario final con los datos procesados.
+
+## Estructura del proyecto
 
 `/src`: va a contener el proyecto principal encargado de procesar los datos y generar el archivo binario.
 
@@ -16,11 +18,16 @@ El repositorio va a contener al proyecto 'gen_indices_bin' que se encarga de pro
 
 `/pruebas`: va a contener las funciones y códigos que prueben y examinen el proyecto principal y las librerías.
 
+## Librerías
 
+- `estructura_indice`: contiene la estructura Indice y las funciones que se encargan de modificar esta estructura.
 
-## Qué hace el proyecto
+- `secuencias`: contiene funciones de modificación y manejo de cadenas.
 
-Permite **procesar índices y variaciones** del indicador económico de **Costo de la Construcción**.
+- `TDA_fecha`: contiene el TDA para manejo de fechas.
+
+- `TDA_fecha`: contiene el TDA para manejo de vectores mediante memoria dinámica.
+
 
 # Cómo compilar en Code::Blocks
 
