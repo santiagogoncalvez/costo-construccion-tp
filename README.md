@@ -26,7 +26,7 @@ Permite **procesar índices y variaciones** del indicador económico de **Costo 
 
 - `TDA_fecha`: contiene el TDA para manejo de fechas.
 
-- `TDA_fecha`: contiene el TDA para manejo de vectores mediante memoria dinámica.
+- `TDA_vector`: contiene el TDA para manejo de vectores mediante memoria dinámica.
 
 
 # Cómo compilar en Code::Blocks
