@@ -1,5 +1,5 @@
-#ifndef MODIFICAR_ESTRUCTURA_H_INCLUDED
-#define MODIFICAR_ESTRUCTURA_H_INCLUDED
+#ifndef ESTRUCTURA_INDICE_H_INCLUDED
+#define ESTRUCTURA_INDICE_H_INCLUDED
 
 #include "../secuencias/secuencias.h"
 #include "../TDA_fecha/fecha.h"
@@ -33,4 +33,4 @@ int cmpInd12MesesAntes(const void* a, const void* b);
 int compararIndicesVar(const void *a, const void *b);
 float redondear2decimales(double valor);
 
-#endif // MODIFICAR_ESTRUCTURA_H_INCLUDED
+#endif // ESTRUCTURA_INDICE_H_INCLUDED

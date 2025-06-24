@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stddef.h>
 
-#include "../librerias/Comun/CodigosRet.h"
+#include "../librerias/Comun/codigos_ret.h"
 #include "../librerias/secuencias/secuencias.h"
 #include "../librerias/TDA_fecha/fecha.h"
 #include "../librerias/estructura_indice/estructura_indice.h"

@@ -1,10 +1,10 @@
-#ifndef VECTOR_H
-#define VECTOR_H
+#ifndef VECTOR_H_INCLUDED
+#define VECTOR_H_INCLUDED
 
 #include <stddef.h>
 #include <stdbool.h>
 
-#include "../Comun/CodigosRet.h"
+#include "../Comun/codigos_ret.h"
 
 
 #define TAM 10
