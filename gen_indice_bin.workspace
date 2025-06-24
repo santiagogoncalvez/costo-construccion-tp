@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_workspace_file>
 	<Workspace title="Workspace">
-		<Project filename="src/gen_ingices_bin.cbp">
-			<Depends filename="librerias/estructura_indice/estructura_indice.cbp" />
-			<Depends filename="librerias/secuencias/secuencias.cbp" />
-			<Depends filename="librerias/TDA_fecha/TDA_fecha.cbp" />
-			<Depends filename="librerias/TDA_vector/TDA_vector.cbp" />
-		</Project>
 		<Project filename="librerias/estructura_indice/estructura_indice.cbp">
 			<Depends filename="librerias/secuencias/secuencias.cbp" />
 			<Depends filename="librerias/TDA_fecha/TDA_fecha.cbp" />
@@ -14,5 +8,6 @@
 		<Project filename="librerias/secuencias/secuencias.cbp" />
 		<Project filename="librerias/TDA_fecha/TDA_fecha.cbp" />
 		<Project filename="librerias/TDA_vector/TDA_vector.cbp" />
+		<Project filename="src/gen_indices_bin.cbp" />
 	</Workspace>
 </CodeBlocks_workspace_file>
