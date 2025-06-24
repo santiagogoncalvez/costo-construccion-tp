@@ -48,7 +48,7 @@ int mostrarArchivoBinario(const char* nomArchBin);
 
 // Argumentos enviados a main desde el proyecto:
 // Archivo base indices general-capitulos, Archivo base indices items, Ruta del archivo binario de salida
-// '../datos/indices-icc-general-capitulos.csv' '../datos/Indices_items_obra.csv' '../salida/indices-procesados.bin'
+// '../datos/entrada/indices-icc-general-capitulos.csv' '../datos/entrada/Indices_items_obra.csv' '../salida/indices-procesados.bin'
 int main(int argc, char* argv[])
 {
     Vector vIndices, vIndicesBin;

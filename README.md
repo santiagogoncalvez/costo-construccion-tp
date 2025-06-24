@@ -20,14 +20,13 @@ Permite **procesar índices y variaciones** del indicador económico de **Costo 
 
 ## Librerías
 
-- `estructura_indice`: contiene la estructura Indice y las funciones que se encargan de modificar esta estructura.
+-  `estructura_indice`: contiene la estructura Indice y las funciones que se encargan de modificar esta estructura.
 
-- `secuencias`: contiene funciones de modificación y manejo de cadenas.
+-  `secuencias`: contiene funciones de modificación y manejo de cadenas.
 
-- `TDA_fecha`: contiene el TDA para manejo de fechas.
+-  `TDA_fecha`: contiene el TDA para manejo de fechas.
 
-- `TDA_vector`: contiene el TDA para manejo de vectores mediante memoria dinámica.
-
+-  `TDA_vector`: contiene el TDA para manejo de vectores mediante memoria dinámica.
 
 # Cómo compilar en Code::Blocks
 
@@ -42,7 +41,6 @@ Permite **procesar índices y variaciones** del indicador económico de **Costo 
 1. Abrí los archivos `.cbp` de cada librería y del proyecto principal uno por uno.
 2. Hacé build a cada proyecto por separado, respetando el orden de las dependencias (primero las librerías, después el proyecto principal).
 3. Ejecutá el proyecto `gen_indice_bin` después de compilar todo.
-
 
 ## 📌 Reglas y Requerimientos
 
@@ -62,4 +60,4 @@ Permite **procesar índices y variaciones** del indicador económico de **Costo 
 -  Las funciones no deben tener errores ni warnings.
 
 **Grupo:** LOS CIBERNÉTICOS  
-**Cátedra:** Tópicos de Programación - 1C 2025 - Miércoles
+**Cátedra:** Tópicos de Programación - 1C 2025 - Jueves

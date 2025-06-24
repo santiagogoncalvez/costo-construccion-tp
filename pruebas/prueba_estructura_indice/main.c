@@ -3,7 +3,7 @@
 #include <string.h>
 #include <assert.h>
 
-#include "../../librerias/modificar_estructura/modificar_estructura.h"
+#include "../../librerias/estructura_indice/estructura_indice.h"
 #include "../../librerias/TDA_fecha/fecha.h"
 #include "../../librerias/secuencias/secuencias.h"
 

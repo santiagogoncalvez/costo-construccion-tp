@@ -15,10 +15,10 @@
 					<Add option="-g" />
 				</Compiler>
 				<Linker>
-					<Add library="../../librerias/modificar-estructura/bin/Debug/modificar-estructura.a" />
+					<Add library="../../librerias/estructura_indice/bin/Debug/estructura_indice.a" />
 					<Add library="../../librerias/secuencias/bin/Debug/secuencias.a" />
-					<Add library="../../librerias/TDA-fecha/bin/Debug/libTDA-fecha.a" />
-					<Add library="../../librerias/TDA-vector/bin/Debug/libTDAVector.a" />
+					<Add library="../../librerias/TDA_fecha/bin/Debug/TDA_fecha.a" />
+					<Add library="../../librerias/TDA_vector/bin/Debug/TDA_vector.a" />
 				</Linker>
 			</Target>
 			<Target title="Release">
