@@ -1,5 +1,5 @@
-#include "modificar-estructura.h"
-#include "../TDA-vector/vector.h"
+#include "estructura_indice.h"
+#include "../TDA_vector/vector.h"
 
 #include "math.h"
 
@@ -16,7 +16,7 @@ void calcVarMensual(void* ind, void* vInd)
     // Para variacion mensual, el primer mes no se calcula
     if(indiceAct->periodo.m <= menorMesIndice.periodo.m && indiceAct->periodo.a <= menorMesIndice.periodo.a) return;
 
-    // Buscar el elemento Indice correspondiente a 12 messes atrás
+    // Buscar el elemento Indice correspondiente a 12 messes atrï¿½s
     indiceAntMes = *indiceAct;
     indiceAntMes.periodo = fechaRestarMeses(&indiceAntMes.periodo, 1);
 

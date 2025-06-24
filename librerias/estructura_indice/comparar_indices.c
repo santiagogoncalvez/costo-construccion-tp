@@ -1,5 +1,5 @@
-#include "modificar-estructura.h"
-#include "../TDA-fecha/fecha.h"
+#include "estructura_indice.h"
+#include "../TDA_fecha/fecha.h"
 
 int compararIndices(const void *a, const void *b)
 {

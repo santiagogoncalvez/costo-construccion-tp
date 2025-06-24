@@ -1,5 +1,5 @@
-#include "modificar-estructura.h"
-#include "../TDA-vector/vector.h"
+#include "estructura_indice.h"
+#include "../TDA_vector/vector.h"
 
 #include "math.h"
 
@@ -17,7 +17,7 @@ void calcVarInteranual(void* ind, void* vInd)
     // Para variacion anual, el primer anio no se calcula
     if(indiceAct->periodo.a <= menorAnioIndice.periodo.a) return;
 
-    // Buscar el elemento Indice correspondiente a 12 meses atrás
+    // Buscar el elemento Indice correspondiente a 12 meses atrï¿½s
     indiceAntAnio = *indiceAct;
     indiceAntAnio.periodo = fechaRestarMeses(&indiceAntAnio.periodo, 12);
 

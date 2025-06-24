@@ -2,12 +2,12 @@
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="6" />
 	<Project>
-		<Option title="modificar-estructura" />
+		<Option title="estructura_indice" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug">
-				<Option output="bin/Debug/modificar-estructura" prefix_auto="0" extension_auto="1" />
+				<Option output="bin/Debug/estructura_indice" prefix_auto="0" extension_auto="1" />
 				<Option working_dir="" />
 				<Option object_output="obj/Debug/" />
 				<Option type="2" />
@@ -19,8 +19,8 @@
 				</Compiler>
 				<Linker>
 					<Add library="../secuencias/bin/Debug/secuencias.a" />
-					<Add library="../TDA-fecha/bin/Debug/libTDA-fecha.a" />
-					<Add library="../TDA-vector/bin/Debug/libTDAVector.a" />
+					<Add library="../TDA_fecha/bin/Debug/TDA_fecha.a" />
+					<Add library="../TDA_vector/bin/Debug/TDA_vector.a" />
 				</Linker>
 			</Target>
 			<Target title="Release">
@@ -39,25 +39,25 @@
 				</Linker>
 			</Target>
 		</Build>
-		<Unit filename="agregar-clasificador-items.c">
+		<Unit filename="agregar_clasificador.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="agregar-clasificador.c">
+		<Unit filename="agregar_clasificador_items.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="calc-var-interanual.c">
+		<Unit filename="calc_var_interanual.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="calc-var-mensual.c">
+		<Unit filename="calc_var_mensual.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="calc-variaciones.c">
+		<Unit filename="calc_variaciones.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="comparar-indices.c">
+		<Unit filename="comparar_indices.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="modificar-estructura.h" />
+		<Unit filename="estructura_indice.h" />
 		<Extensions />
 	</Project>
 </CodeBlocks_project_file>

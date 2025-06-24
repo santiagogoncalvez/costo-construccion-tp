@@ -1,4 +1,4 @@
-#include "modificar-estructura.h"
+#include "estructura_indice.h"
 
 void calcVariaciones(void* ind, void* vInd)
 {

@@ -3,8 +3,8 @@
 #include <string.h>
 #include <assert.h>
 
-#include "../../librerias/modificar-estructura/modificar-estructura.h"
-#include "../../librerias/TDA-fecha/fecha.h"
+#include "../../librerias/modificar_estructura/modificar_estructura.h"
+#include "../../librerias/TDA_fecha/fecha.h"
 #include "../../librerias/secuencias/secuencias.h"
 
 #include <math.h>

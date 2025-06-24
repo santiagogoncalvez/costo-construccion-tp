@@ -38,23 +38,23 @@
 			<Option target="Debug" />
 			<Option target="Release" />
 		</UnitsGlob>
-		<Unit filename="comparar-clasificador.c">
-			<Option compilerVar="CC" />
-			<Option glob="1957770431" />
-		</Unit>
-		<Unit filename="comparar-tipo-variable.c">
-			<Option compilerVar="CC" />
-			<Option glob="1957770431" />
-		</Unit>
 		<Unit filename="comparar.c">
 			<Option compilerVar="CC" />
 			<Option glob="1957770431" />
 		</Unit>
-		<Unit filename="convertir-coma.c">
+		<Unit filename="comparar_clasificador.c">
 			<Option compilerVar="CC" />
 			<Option glob="1957770431" />
 		</Unit>
-		<Unit filename="convertir-fecha.c">
+		<Unit filename="comparar_tipo_variable.c">
+			<Option compilerVar="CC" />
+			<Option glob="1957770431" />
+		</Unit>
+		<Unit filename="convertir_coma.c">
+			<Option compilerVar="CC" />
+			<Option glob="1957770431" />
+		</Unit>
+		<Unit filename="convertir_fecha.c">
 			<Option compilerVar="CC" />
 			<Option glob="1957770431" />
 		</Unit>
@@ -62,15 +62,15 @@
 			<Option compilerVar="CC" />
 			<Option glob="1957770431" />
 		</Unit>
-		<Unit filename="desencriptar-por-caso.c">
+		<Unit filename="desencriptar_por_caso.c">
 			<Option compilerVar="CC" />
 			<Option glob="1957770431" />
 		</Unit>
-		<Unit filename="desencriptar-por-pos.c">
+		<Unit filename="desencriptar_por_pos.c">
 			<Option compilerVar="CC" />
 			<Option glob="1957770431" />
 		</Unit>
-		<Unit filename="eliminar-todas-las-comillas.c">
+		<Unit filename="eliminar_todas_las_comillas.c">
 			<Option compilerVar="CC" />
 			<Option glob="1957770431" />
 		</Unit>
@@ -78,22 +78,22 @@
 			<Option compilerVar="CC" />
 			<Option glob="1957770431" />
 		</Unit>
-		<Unit filename="sacar-ant-y-normalizar.c">
+		<Unit filename="sacar_ant_y_normalizar.c">
 			<Option compilerVar="CC" />
 			<Option glob="1957770431" />
 		</Unit>
 		<Unit filename="secuencias.h">
 			<Option glob="1957770431" />
 		</Unit>
-		<Unit filename="strchr-prop.c">
+		<Unit filename="strchr_prop.c">
 			<Option compilerVar="CC" />
 			<Option glob="1957770431" />
 		</Unit>
-		<Unit filename="to-lower-prop.c">
+		<Unit filename="to_lower_prop.c">
 			<Option compilerVar="CC" />
 			<Option glob="1957770431" />
 		</Unit>
-		<Unit filename="to-upper-prop.c">
+		<Unit filename="to_upper_prop.c">
 			<Option compilerVar="CC" />
 			<Option glob="1957770431" />
 		</Unit>

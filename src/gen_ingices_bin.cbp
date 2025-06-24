@@ -2,12 +2,12 @@
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="6" />
 	<Project>
-		<Option title="costo-construccion" />
+		<Option title="gen_indices_bin" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug">
-				<Option output="bin/Debug/costo-construccion-consola" prefix_auto="1" extension_auto="1" />
+				<Option output="bin/Debug/gen_indices_bin" prefix_auto="0" extension_auto="1" />
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
@@ -16,10 +16,10 @@
 					<Add option="-g" />
 				</Compiler>
 				<Linker>
-					<Add library="../librerias/modificar-estructura/bin/Debug/modificar-estructura.a" />
-					<Add library="../librerias/TDA-fecha/bin/Debug/libTDA-fecha.a" />
+					<Add library="../librerias/estructura_indice/bin/Debug/estructura_indice.a" />
+					<Add library="../librerias/TDA_fecha/bin/Debug/TDA_fecha.a" />
 					<Add library="../librerias/secuencias/bin/Debug/secuencias.a" />
-					<Add library="../librerias/TDA-vector/bin/Debug/libTDAVector.a" />
+					<Add library="../librerias/TDA_vector/bin/Debug/TDA_vector.a" />
 				</Linker>
 			</Target>
 			<Target title="Release">

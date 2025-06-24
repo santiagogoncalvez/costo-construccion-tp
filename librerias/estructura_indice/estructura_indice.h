@@ -2,7 +2,7 @@
 #define MODIFICAR_ESTRUCTURA_H_INCLUDED
 
 #include "../secuencias/secuencias.h"
-#include "../TDA-fecha/fecha.h"
+#include "../TDA_fecha/fecha.h"
 
 #include "stdbool.h"
 #include "string.h"
