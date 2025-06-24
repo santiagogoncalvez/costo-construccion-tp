@@ -13,6 +13,9 @@
 *.save
 *.workspace
 
+#Excepción
+!/gen_indice_bin.workspace
+
 # VSCode
 **/.vscode/
 

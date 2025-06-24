@@ -1,16 +1,22 @@
-# Costo de la Construcción - TP de Tópicos (2025)
+# Indices del costo de la contrucción - TP de Tópicos (2025)
 
 ## Estructura del proyecto
 
-El repositorio va a contener al proyecto 'costo-contruccion' que se encarga de procesar el archivo y la librería 'secuencias'.
+El repositorio va a contener al proyecto 'gen_indices_bin' que se encarga de procesar el archivo y la librería 'secuencias'.
 
-Los archivos de datos del trabajo van a estar dentro de la carpeta `/datos`.
+`/src`: va a contener el proyecto principal encargado de procesar los datos y generar el archivo binario.
 
-Las consignas y documentos van a estar dentro de la carpeta `/documentos`.
+`/librerias`: va a contener las librerías que se utilicen.
 
-La carpeta `/librerias` va a contener las librerías que se utilicen.
+`/datos`: va a contetner los archivos de datos que serán procesados.
 
-La carpeta `/pruebas` va a contener las funciones y códigos que prueben y examinen el proyecto principal y las librerías.
+`/salida`: va a ser la carpeta destino del archivo binario que se va a generar.
+
+`/documentos`: va a contener las consignas y documentos del trabajo.
+
+`/pruebas`: va a contener las funciones y códigos que prueben y examinen el proyecto principal y las librerías.
+
+
 
 ## Qué hace el proyecto
 
@@ -18,7 +24,7 @@ Permite **procesar índices y variaciones** del indicador económico de **Costo 
 
 ## Cómo compilar en Code::Blocks
 
-Abrir `costo-construccion-consola/costo-construccion.cbp` y presionar F9.
+Abrir `src/gen_indices_bin.cbp` y presionar F9.
 
 ## 🚫 Qué no subir al repositorio
 
