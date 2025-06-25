@@ -85,7 +85,7 @@ int main(int argc, char* argv[])
 
 
     // Insertar en un mismo vector
-    // Insertar elementos del primer archivo
+    /* Insertar elementos del primer archivo*/
     printf("\nProcesando archivos base...");
     ret = leerTxtIndices(argv[ARG_TXT], sizeof(Indice), convIndiceTxt, esErrorFatalIndice, &vIndices);
     if (ret != TODO_OK)
@@ -94,15 +94,15 @@ int main(int argc, char* argv[])
         return ret;
     }
 
-    //Insertar elementos del segundo archivo
+    /*Insertar elementos del segundo archivo*/
     ret = leerTxtIndices(argv[ARG_TXT_ITEMS], sizeof(Indice), indiceItemsTxtV, esErrorFatalIndice, &vIndices);
     if (ret != TODO_OK)
     {
         vectorDestruir(&vIndices);
         return ret;
     }
-
     /*vectorMostrar(&vIndices, imprimirIndice);*/
+
 
     // Calcular variaciones.
     vectorRecorrer(&vIndices, calcVariaciones, &vIndices);
@@ -134,7 +134,7 @@ int main(int argc, char* argv[])
     vectorDestruir(&vIndices);
     vectorDestruir(&vIndicesBin);
 
-    return TODO_OK;
+    return ret;
 }
 
 
@@ -685,14 +685,13 @@ void verificarResultadosBin (void* ind, void* dato)
         }
         else
         {
-            /*
-            // En el caso de que se quieran mostrar tambien las coincidencias
-             printf("\n\nVariacion calculada correctamente");
+            /*En el caso de que no se quiera mostrar todas las coincidencias se puede omitir esta salida por consola*/
+            printf("\n\nVariacion calculada correctamente");
             printf("\nEsperado:");
             imprimirIndiceBin(indiceAct);
             printf("\nObtenido:");
             imprimirIndiceBin(&indiceAntMes);
-            */
+
             pruebaIndiceBin->cantCoincidencias++;
         }
     }
