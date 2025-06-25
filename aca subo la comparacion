@@ -1,0 +1,33 @@
+int compararchivos(void* i,void* j)
+{
+    IndiceBin* men=i;
+    IndiceBin* bin=j;
+
+    if(comparar(men->periodo,bin->periodo)!=0)
+    {
+        return 0;
+    }
+    if(comparar(men->tipoVariable,bin->tipoVariable)!=0)
+    {
+        return 0;
+    }
+    if(comparar(men->nivelGeneralAperturas,bin->nivelGeneralAperturas)!=0)
+    {
+        return 0;
+    }
+
+    if(comparar(men->clasificador,bin->clasificador)!=0)
+    {
+        return 0;
+    }
+    float* menf= atof(men->valor);
+    float* binf=atof(bin->valor);
+    float min=*binf-1;
+    float max=*binf+1;
+    if(*menf=>min && *menf<=max)
+    {
+        return 0;
+    }
+    return 1;
+
+}
