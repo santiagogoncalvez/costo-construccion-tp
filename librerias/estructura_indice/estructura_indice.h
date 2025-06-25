@@ -31,6 +31,7 @@ void calcVarInteranual(void* ind, void* vInd);
 void calcVariaciones(void* ind, void* vInd);
 int cmpInd12MesesAntes(const void* a, const void* b);
 int compararIndicesVar(const void *a, const void *b);
+double calcVariacion(double numAct, double numAnt);
 float redondear2decimales(double valor);
 void imprimirIndice(const void* a);
 

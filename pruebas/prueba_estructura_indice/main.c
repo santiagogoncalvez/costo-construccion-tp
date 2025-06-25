@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <assert.h>
 
 #include "../../librerias/estructura_indice/estructura_indice.h"
@@ -27,8 +26,7 @@ bool verificarOrden(const Indice datos[], int ce);
 void pruebaOrdenarPorPerYClas();
 void ordenarIndices(Indice *indices, int ce);
 void mostrarVIndices(const Indice* vector, int ce);
-void pruebaCalcIndVarInteranual();
-void pruebaAgregarVarMensual();
+void pruebaCalcVariacion();
 
 int main()
 {
@@ -37,13 +35,7 @@ int main()
     pruebaAgregarClasificador();
     pruebaAgregarClasificadorItems();
     pruebaOrdenarPorPerYClas();
-
-    // Separar de la funcion calcVarMensual() la parte que hace el c�lculo para poder probarla con esta funci�n y que se aplique ya sabiendo cual es el anterior y el posterior
-    /*pruebaAgregarVarMensual();*/
-
-    // Separar de la funcion calcVarInteranual() la parte que hace el c�lculo para poder probarla con esta funci�n y que se aplique ya sabiendo cual es el anterior y el posterior
-    /*pruebaCalcIndVarInteranual();*/
-
+    pruebaCalcVariacion();
 
     return 0;
 }
@@ -57,7 +49,6 @@ void pruebaAgregarClasificador()
         {{21, 12, 2022}, "Metal", 0.0, "Mano de obra", 0.0, false, 0.0, false},
         {{1, 7, 2020}, "Carpinteria", 0.0, "Gastos generales", 0.0, false, 0.0, false},
     };
-
     Indice esperados[] =
     {
         {{11, 4, 2023}, "Nivel general", 0.0, "Nivel general", 0.0, false, 0.0, false},
@@ -67,32 +58,36 @@ void pruebaAgregarClasificador()
     };
 
     int total = sizeof(indices) / sizeof(indices[0]);
-
+    int errores = 0;
+    int i = 1;
     Indice* p;
     Indice* fin = indices + total;
+    Indice *pInd = indices;
+    Indice *pEsp = esperados;
 
     for (p = indices; p < fin; p++)
     {
         agregarClasificador(p);
     }
 
-    int errores = 0;
-
     printf("\nEjecutando pruebas para agregarClasificador...\n");
 
-
-    for (int i = 0; i < total; i++)
+    while (pInd < indices + total)
     {
-        if (comparar(indices[i].clasificador, esperados[i].clasificador) != 0)
+        if (comparar(pInd->clasificador, pEsp->clasificador) != 0)
         {
             printf("prueba %d fallo: entrada='%s' --> salida='%s' (esperado='%s')\n",
-                   i + 1, "", indices[i].clasificador, esperados[i].clasificador);
+                   i, "", pInd->clasificador, pEsp->clasificador);
             errores++;
         }
         else
         {
-            printf("prueba %d paso: %s --> %s\n", i + 1, "", esperados[i].clasificador);
+            printf("prueba %d paso: %s --> %s\n", i, "", pEsp->clasificador);
         }
+
+        pInd++;
+        pEsp++;
+        i++;
     }
 
     printf("\nResumen: %d pasaron, %d fallaron.\n", total - errores, errores);
@@ -109,9 +104,9 @@ void pruebaAgregarClasificadorItems()
         {{1, 7, 2020}, "", 0.0, "", 0.0, false, 0.0, false},
         {{10, 4, 2023}, "", 0.0, "", 0.0, false, 0.0, false}
     };
-
     int total = sizeof(indices) / sizeof(indices[0]);
-
+    int errores = 0;
+    int i = 1;
     Indice* p;
     Indice* fin = indices + total;
 
@@ -120,21 +115,25 @@ void pruebaAgregarClasificadorItems()
         agregarClasificadorItem(p);
     }
 
-    int errores = 0;
 
     printf("\nEjecutando pruebas para agregarClasificadorItems...\n");
-    for (int i = 0; i < total; i++)
+    p = indices;
+    fin = indices + total;
+    while (p < fin)
     {
-        if (comparar(indices[i].clasificador, "Items") != 0)
+        if (comparar(p->clasificador, "Items") != 0)
         {
             printf("prueba %d fallo: entrada='%s' --> salida='%s' (esperado='%s')\n",
-                   i + 1, "", indices[i].clasificador, "Items");
+                   i, "", p->clasificador, "Items");
             errores++;
         }
         else
         {
-            printf("prueba %d paso: %s --> %s\n", i + 1, "", indices[i].clasificador);
+            printf("prueba %d paso: %s --> %s\n", i, "", p->clasificador);
         }
+
+        p++;
+        i++;
     }
 
     printf("\nResumen: %d pasaron, %d fallaron.\n", total - errores, errores);
@@ -160,23 +159,29 @@ void probarFechaSumarMeses(void)
 
     tFecha fechasPrueba[] =
     {
-        {31, 1, 2023},   // Enero 31 → ver qué pasa en febrero
+        {31, 1, 2023},   // Enero 31 â†’ ver quÃ© pasa en febrero
         {28, 2, 2023},   // Febrero no bisiesto
         {28, 2, 2024},   // Febrero bisiesto
-        {30, 11, 2022},  // Noviembre → suma 3 meses
-        {15, 6, 2021}    // Junio → resta meses
+        {30, 11, 2022},  // Noviembre â†’ suma 3 meses
+        {15, 6, 2021}    // Junio â†’ resta meses
     };
     int cantidades[] = {1, 1, 1, 3, 7};
+    int total = sizeof(fechasPrueba) / sizeof(tFecha);
+    int *pCant = cantidades;
+    tFecha *pFecha = fechasPrueba;
+    tFecha *fin = fechasPrueba + total;
 
-    int n = sizeof(fechasPrueba) / sizeof(fechasPrueba[0]);
-
-    for (int i = 0; i < n; i++)
+    while (pFecha < fin)
     {
-        tFecha nueva = fechaSumarMeses(&fechasPrueba[i], cantidades[i]);
+        tFecha nueva = fechaSumarMeses(pFecha, *pCant);
+
         printf("Original: %02d/%02d/%04d + %d meses → Resultado: %02d/%02d/%04d\n",
-               fechasPrueba[i].d, fechasPrueba[i].m, fechasPrueba[i].a,
-               cantidades[i],
+               pFecha->d, pFecha->m, pFecha->a,
+               *pCant,
                nueva.d, nueva.m, nueva.a);
+
+        pFecha++;
+        pCant++;
     }
 }
 
@@ -185,46 +190,57 @@ void probarFechaRestarMeses(void)
     printf("\n\nRestar meses\n");
     tFecha fechasPrueba[] =
     {
-        {31, 1, 2023},   // Enero 31 → ver qué pasa en febrero
+        {31, 1, 2023},   // Enero 31 â†’ ver quÃ© pasa en febrero
         {28, 2, 2023},   // Febrero no bisiesto
         {28, 2, 2024},   // Febrero bisiesto
-        {30, 11, 2022},  // Noviembre → suma 3 meses
-        {15, 6, 2021}    // Junio → resta meses
+        {30, 11, 2022},  // Noviembre â†’ suma 3 meses
+        {15, 6, 2021}    // Junio â†’ resta meses
     };
     int cantidades[] = {1, 1, 1, 3, 7};
+    int total = sizeof(fechasPrueba) / sizeof(fechasPrueba);
+    tFecha *pFecha = fechasPrueba;
+    int *pCant = cantidades;
+    tFecha *fin = fechasPrueba + total;
 
-    int n = sizeof(fechasPrueba) / sizeof(fechasPrueba[0]);
 
-    for (int i = 0; i < n; i++)
+    while (pFecha < fin)
     {
-        tFecha nueva = fechaRestarMeses(&fechasPrueba[i], cantidades[i]);
-        printf("Original: %02d/%02d/%04d -  %d meses → Resultado: %02d/%02d/%04d\n",
-               fechasPrueba[i].d, fechasPrueba[i].m, fechasPrueba[i].a,
-               cantidades[i],
+        tFecha nueva = fechaRestarMeses(pFecha, *pCant);
+
+        printf("Original: %02d/%02d/%04d - %d meses → Resultado: %02d/%02d/%04d\n",
+               pFecha->d, pFecha->m, pFecha->a,
+               *pCant,
                nueva.d, nueva.m, nueva.a);
+
+        pFecha++;
+        pCant++;
     }
 }
 
-bool verificarOrden(const Indice datos[], int ce)
+bool verificarOrden(const Indice *datos, int ce)
 {
-    printf("\nVerificando orden...");
+    printf("\n\nVerificando orden...");
 
-    for (int i = 0; i < ce - 1; i++)
+    int cmpFecha, cmpClas;
+    const Indice *p = datos;
+    const Indice *fin = datos + ce - 1;
+
+    while (p < fin)
     {
-        int cmpFecha = fechaComparar(&datos[i].periodo, &datos[i + 1].periodo);
+        cmpFecha = fechaComparar(&p->periodo, &(p + 1)->periodo);
 
-        // Periodo desordenado (orden ascendente)
         if (cmpFecha > 0)
             return false;
 
         if (cmpFecha == 0)
         {
-            int cmpClas = compararClasificador(datos[i].clasificador, datos[i + 1].clasificador);
+            cmpClas = compararClasificador(p->clasificador, (p + 1)->clasificador);
 
-            // Mismo periodo, pero clasificador desordenado (orden descendente)
             if (cmpClas < 0)
                 return false;
         }
+
+        p++;
     }
 
     return true;
@@ -234,6 +250,7 @@ void pruebaOrdenarPorPerYClas()
 {
     printf("\nEjecutando pruebas para ordenarPorPerYClas...");
 
+    int total;
     Indice indicesBase[] =
     {
         {{11, 4, 2023}, "", 0.0, "Items", 0.0, false, 0.0, false},
@@ -245,7 +262,7 @@ void pruebaOrdenarPorPerYClas()
         {{6, 10, 2021}, "", 0.0, "Items", 0.0, false, 0.0, false},
     };
 
-    int total = sizeof(indicesBase) / sizeof(indicesBase[0]);
+    total = sizeof(indicesBase) / sizeof(Indice);
 
     printf("\n\nAntes de ordenar");
     mostrarVIndices(indicesBase, total);
@@ -314,258 +331,95 @@ void doubleToStr(double val, char *str, int size)
     snprintf(str, size, "%.2f", val);
 }
 
-void pruebaIndPorInteranual()
+
+// Esta función busca el índice anterior (mes anterior) y calcula la variación mensual
+void buscarIndAnt(Indice *actual, Indice *todos)
 {
-    Indice indices[] =
+    for (Indice *p = todos; p < actual; p++)
     {
-        {{1, 4, 2022}, "", 100.0, "Nivel general", 0.0, false, 0.0, false},  // Base
-        {{1, 4, 2023}, "", 115.5, "Nivel general", 0.0, false, 0.0, false},  // +15.5%
-        {{1, 4, 2022}, "", 200.0, "Items", 0.0, false, 0.0, false},          // Base
-        {{1, 4, 2023}, "", 260.0, "Items", 0.0, false, 0.0, false},          // +30.0%
-        {{1, 4, 2023}, "", 300.0, "Capitulos", 0.0, false, 0.0, false}       // Sin valor base → no se puede calcular
-    };
-
-    Indice esperados[] =
-    {
-        {{1, 4, 2022}, "", 100.0, "Nivel general", 0.0, false, 0.0, false},     // Base, sin variación
-        {{1, 4, 2023}, "", 115.5, "Nivel general", 0.0, 15.50},   // +15.5%
-        {{1, 4, 2022}, "", 200.0, "Items", 0.0, false, 0.0, false},             // Base, sin variación
-        {{1, 4, 2023}, "", 260.0, "Items", 0.0, 30.00},           // +30%
-        {{1, 4, 2023}, "", 300.0, "Capitulos", 0.0, false, 0.0, false}
-    };
-
-    int total = sizeof(indices) / sizeof(indices[0]);
-
-    Indice* p;
-    Indice* fin = indices + total;
-
-    for (p = indices; p < fin; p++)
-    {
-        calcVarInteranual(p, indices);
-    }
-
-    int errores = 0;
-
-    printf("\nEjecutando pruebas para agregarClasificador...\n");
-
-
-    for (int i = 0; i < total; i++)
-    {
-        if (indices[i].varInteranual != esperados[i].varInteranual)
+        if (comparar(actual->nivelGeneralAperturas, p->nivelGeneralAperturas) == 0 &&
+                comparar(actual->clasificador, p->clasificador) == 0 &&
+                ((actual->periodo.m == p->periodo.m + 1 && actual->periodo.a == p->periodo.a) ||
+                 (actual->periodo.m == 1 && p->periodo.m == 12 && actual->periodo.a == p->periodo.a + 1)))
         {
-            printf("prueba %d fallo: entrada='%s' --> salida='%f' (esperado='%f')\n",
-                   i + 1, "", indices[i].varInteranual, esperados[i].varInteranual);
-            errores++;
-        }
-        else
-        {
-            printf("prueba %d paso: %s --> %f\n", i + 1, "", esperados[i].varInteranual);
+            actual->varMensual = roundf(calcVariacion(actual->indice, p->indice) * 10) / 10;
+            actual->varMensualExiste = true;
+            return;
         }
     }
-
-    printf("\nResumen: %d pasaron, %d fallaron.\n", total - errores, errores);
-    assert(errores == 0 && "Al menos un prueba fallo en agregarClasificador.");
+    // Si no se encontró mes anterior, no se calcula
+    actual->varMensualExiste = false;
+    actual->varMensual = 0.0f;
 }
 
-void pruebaCalcIndVarInteranual()
+// Test propuesto
+void pruebaCalcVariacion()
 {
     Indice indicesBase[] =
     {
-        {{1,  1, 2022}, "Nivel general", 100.00f, "Cap�tulos", 0.0f, false, 0.0f, false},
-        {{1,  2, 2022}, "Nivel general", 103.80f, "Cap�tulos", 0.0f, false, 0.0f, false},
-        {{1,  3, 2022}, "Nivel general", 108.99f, "Cap�tulos", 0.0f, false, 0.0f, false},
-        {{1,  4, 2022}, "Nivel general", 111.50f, "Cap�tulos", 0.0f, false, 0.0f, false},
-        {{1,  5, 2022}, "Nivel general", 118.86f, "Cap�tulos", 0.0f, false, 0.0f, false},
-        {{1,  6, 2022}, "Nivel general", 126.70f, "Cap�tulos", 0.0f, false, 0.0f, false},
-        {{1,  7, 2022}, "Nivel general", 135.44f, "Cap�tulos", 0.0f, false, 0.0f, false},
-        {{1,  8, 2022}, "Nivel general", 145.60f, "Cap�tulos", 0.0f, false, 0.0f, false},
-        {{1,  9, 2022}, "Nivel general", 156.37f, "Cap�tulos", 0.0f, false, 0.0f, false},
-        {{1, 10, 2022}, "Nivel general", 167.79f, "Cap�tulos", 0.0f, false, 0.0f, false},
-        {{1, 11, 2022}, "Nivel general", 179.03f, "Cap�tulos", 0.0f, false, 0.0f, false},
-        {{1, 12, 2022}, "Nivel general", 186.73f, "Cap�tulos", 0.0f, false, 0.0f, false},
-        {{1,  1, 2023}, "Nivel general", 199.24f, "Cap�tulos", 0.0f, false, 0.0f, false},
-        {{1,  2, 2023}, "Nivel general", 211.20f, "Cap�tulos", 0.0f, false, 0.0f, false},
-        {{1,  3, 2023}, "Nivel general", 221.12f, "Cap�tulos", 0.0f, false, 0.0f, false},
-        {{1,  4, 2023}, "Nivel general", 239.03f, "Cap�tulos", 0.0f, false, 0.0f, false},
-        {{1,  5, 2023}, "Nivel general", 257.68f, "Cap�tulos", 0.0f, false, 0.0f, false},
-        {{1,  6, 2023}, "Nivel general", 272.62f, "Cap�tulos", 0.0f, false, 0.0f, false},
-        {{1,  7, 2023}, "Nivel general", 295.52f, "Cap�tulos", 0.0f, false, 0.0f, false},
-        {{1,  8, 2023}, "Nivel general", 339.26f, "Cap�tulos", 0.0f, false, 0.0f, false},
-        {{1,  9, 2023}, "Nivel general", 389.13f, "Cap�tulos", 0.0f, false, 0.0f, false},
-        {{1, 10, 2023}, "Nivel general", 416.76f, "Cap�tulos", 0.0f, false, 0.0f, false},
-        {{1, 11, 2023}, "Nivel general", 464.69f, "Cap�tulos", 0.0f, false, 0.0f, false},
-        {{1, 12, 2023}, "Nivel general", 606.88f, "Cap�tulos", 0.0f, false, 0.0f, false}
+        {{1,  1, 2022}, "Nivel general", 100.00f, "Capitulos", 0.0f, false, 0.0f, false},
+        {{1,  2, 2022}, "Nivel general", 103.80f, "Capitulos", 0.0f, false, 0.0f, false},
+        {{1,  3, 2022}, "Nivel general", 108.99f, "Capitulos", 0.0f, false, 0.0f, false},
+        {{1,  4, 2022}, "Nivel general", 111.50f, "Capitulos", 0.0f, false, 0.0f, false},
+        {{1,  5, 2022}, "Nivel general", 118.86f, "Capitulos", 0.0f, false, 0.0f, false},
+        {{1,  6, 2022}, "Nivel general", 126.70f, "Capitulos", 0.0f, false, 0.0f, false},
+        {{1,  7, 2022}, "Nivel general", 135.44f, "Capitulos", 0.0f, false, 0.0f, false},
+        {{1,  8, 2022}, "Nivel general", 145.60f, "Capitulos", 0.0f, false, 0.0f, false},
+        {{1,  9, 2022}, "Nivel general", 156.37f, "Capitulos", 0.0f, false, 0.0f, false},
+        {{1, 10, 2022}, "Nivel general", 167.79f, "Capitulos", 0.0f, false, 0.0f, false},
+        {{1, 11, 2022}, "Nivel general", 179.03f, "Capitulos", 0.0f, false, 0.0f, false},
+        {{1, 12, 2022}, "Nivel general", 186.73f, "Capitulos", 0.0f, false, 0.0f, false},
+        {{1,  1, 2023}, "Nivel general", 199.24f, "Capitulos", 0.0f, false, 0.0f, false},
+        {{1,  2, 2023}, "Nivel general", 211.20f, "Capitulos", 0.0f, false, 0.0f, false},
+        {{1,  3, 2023}, "Nivel general", 221.12f, "Capitulos", 0.0f, false, 0.0f, false},
+        {{1,  4, 2023}, "Nivel general", 239.03f, "Capitulos", 0.0f, false, 0.0f, false},
+        {{1,  5, 2023}, "Nivel general", 257.68f, "Capitulos", 0.0f, false, 0.0f, false},
+        {{1,  6, 2023}, "Nivel general", 272.62f, "Capitulos", 0.0f, false, 0.0f, false},
+        {{1,  7, 2023}, "Nivel general", 295.52f, "Capitulos", 0.0f, false, 0.0f, false},
+        {{1,  8, 2023}, "Nivel general", 339.26f, "Capitulos", 0.0f, false, 0.0f, false},
+        {{1,  9, 2023}, "Nivel general", 389.13f, "Capitulos", 0.0f, false, 0.0f, false},
+        {{1, 10, 2023}, "Nivel general", 416.76f, "Capitulos", 0.0f, false, 0.0f, false},
+        {{1, 11, 2023}, "Nivel general", 464.69f, "Capitulos", 0.0f, false, 0.0f, false},
+        {{1, 12, 2023}, "Nivel general", 606.88f, "Capitulos", 0.0f, false, 0.0f, false}
     };
 
-    Indice indicesEsperados[] =
+    float esperados[] =
     {
-        // A�o 2022
-        {{1,  1, 2022}, "Nivel general", 100.00f, "Cap�tulos", 0.0f, false, 0.0f, false},
-        {{1,  2, 2022}, "Nivel general", 103.80f, "Cap�tulos", 0.0f, false, 0.0f, false},
-        {{1,  3, 2022}, "Nivel general", 108.99f, "Cap�tulos", 0.0f, false, 0.0f, false},
-        {{1,  4, 2022}, "Nivel general", 111.50f, "Cap�tulos", 0.0f, false, 0.0f, false},
-        {{1,  5, 2022}, "Nivel general", 118.86f, "Cap�tulos", 0.0f, false, 0.0f, false},
-        {{1,  6, 2022}, "Nivel general", 126.70f, "Cap�tulos", 0.0f, false, 0.0f, false},
-        {{1,  7, 2022}, "Nivel general", 135.44f, "Cap�tulos", 0.0f, false, 0.0f, false},
-        {{1,  8, 2022}, "Nivel general", 145.60f, "Cap�tulos", 0.0f, false, 0.0f, false},
-        {{1,  9, 2022}, "Nivel general", 156.37f, "Cap�tulos", 0.0f, false, 0.0f, false},
-        {{1, 10, 2022}, "Nivel general", 167.79f, "Cap�tulos", 0.0f, false, 0.0f, false},
-        {{1, 11, 2022}, "Nivel general", 179.03f, "Cap�tulos", 0.0f, false, 0.0f, false},
-        {{1, 12, 2022}, "Nivel general", 186.73f, "Cap�tulos", 0.0f, false, 0.0f, false},
-
-        // A�o 2023 (con valores de variaci�n interanual esperados)
-        {{1,  1, 2023}, "Nivel general", 199.24f, "Cap�tulos", 0.0f, 99.4f},
-        {{1,  2, 2023}, "Nivel general", 211.20f, "Cap�tulos", 0.0f, 103.6f},
-        {{1,  3, 2023}, "Nivel general", 221.12f, "Cap�tulos", 0.0f, 103.1f},
-        {{1,  4, 2023}, "Nivel general", 239.03f, "Cap�tulos", 0.0f, 114.6f},
-        {{1,  5, 2023}, "Nivel general", 257.68f, "Cap�tulos", 0.0f, 116.9f},
-        {{1,  6, 2023}, "Nivel general", 272.62f, "Cap�tulos", 0.0f, 115.3f},
-        {{1,  7, 2023}, "Nivel general", 295.52f, "Cap�tulos", 0.0f, 118.3f},
-        {{1,  8, 2023}, "Nivel general", 339.26f, "Cap�tulos", 0.0f, 133.1f},
-        {{1,  9, 2023}, "Nivel general", 389.13f, "Cap�tulos", 0.0f, 148.8f},
-        {{1, 10, 2023}, "Nivel general", 416.76f, "Cap�tulos", 0.0f, 148.4f},
-        {{1, 11, 2023}, "Nivel general", 464.69f, "Cap�tulos", 0.0f, 159.6f},
-        {{1, 12, 2023}, "Nivel general", 606.88f, "Cap�tulos", 0.0f, 225.2f}
+        0.0f, 3.8f, 5.0f, 2.3f, 6.6f, 6.6f, 6.9f, 7.5f, 7.4f, 7.3f, 6.7f, 4.3f,
+        6.7f, 6.0f, 4.7f, 8.1f, 7.8f, 5.8f, 8.4f, 14.8f, 14.7f, 7.1f, 11.5f, 30.6f
     };
+    int total = sizeof(indicesBase) / sizeof(Indice);
+    int errores = 0;
+    float *pEsp = esperados;
 
-    int total = sizeof(indicesBase) / sizeof(indicesBase[0]);
+    Indice *fin = indicesBase + total;
 
-    // Ejecuta la funci�n a probar
-    Indice* p;
-    Indice* fin = indicesBase + total;
-
-    for (p = indicesBase; p < fin; p++)
+    // Calcular variaciones
+    for (Indice *p = indicesBase; p < fin; p++)
     {
-        calcVarInteranual(p, indicesBase);
+        buscarIndAnt(p, indicesBase);
     }
 
-    printf("\nEjecutando pruebas para pruebaCalcIndVarInteranual...\n");
-    int errores = 0;
+    // Verificar resultados
+    printf("\n\nPrueba de calcVariacion() usando aritmetica de punteros\n");
 
-    for (int i = 0; i < total; i++)
+    for (Indice *p = indicesBase; p < fin; p++, pEsp++)
     {
-        float dif = fabs(indicesBase[i].varInteranual - indicesEsperados[i].varInteranual);
+        float dif = fabs(p->varMensual - *pEsp);
         if (dif > EPSILON)
         {
-            printf("Error en indice %d (%d-%02d): esperado %.2f, obtenido %.2f\n",
-                   i,
-                   indicesBase[i].periodo.a, indicesBase[i].periodo.m,
-                   indicesEsperados[i].varInteranual, indicesBase[i].varInteranual);
+            printf("Error en mes %02d/%d: esperado %.1f, obtenido %.1f\n",
+                   p->periodo.m, p->periodo.a, *pEsp, p->varMensual);
             errores++;
         }
         else
         {
-            printf("Indice %d (%d-%02d) OK: %.2f\n", i, indicesBase[i].periodo.a, indicesBase[i].periodo.m, indicesBase[i].varInteranual);
+            printf("Mes %02d/%d OK: %.1f\n", p->periodo.m, p->periodo.a, p->varMensual);
         }
     }
 
     if (errores == 0)
-    {
-        printf("�Todos los tests pasaron correctamente!\n");
-    }
+        printf("Todos los tests pasaron correctamente.\n");
     else
-    {
-        printf("Cantidad de errores: %d\n", errores);
-    }
-}
-
-void pruebaAgregarVarMensual()
-{
-    Indice indicesBase[] =
-    {
-        {{1,  1, 2022}, "Nivel general", 100.00f, "Cap�tulos", 0.0f, false, 0.0f, false},
-        {{1,  2, 2022}, "Nivel general", 103.80f, "Cap�tulos", 0.0f, false, 0.0f, false},
-        {{1,  3, 2022}, "Nivel general", 108.99f, "Cap�tulos", 0.0f, false, 0.0f, false},
-        {{1,  4, 2022}, "Nivel general", 111.50f, "Cap�tulos", 0.0f, false, 0.0f, false},
-        {{1,  5, 2022}, "Nivel general", 118.86f, "Cap�tulos", 0.0f, false, 0.0f, false},
-        {{1,  6, 2022}, "Nivel general", 126.70f, "Cap�tulos", 0.0f, false, 0.0f, false},
-        {{1,  7, 2022}, "Nivel general", 135.44f, "Cap�tulos", 0.0f, false, 0.0f, false},
-        {{1,  8, 2022}, "Nivel general", 145.60f, "Cap�tulos", 0.0f, false, 0.0f, false},
-        {{1,  9, 2022}, "Nivel general", 156.37f, "Cap�tulos", 0.0f, false, 0.0f, false},
-        {{1, 10, 2022}, "Nivel general", 167.79f, "Cap�tulos", 0.0f, false, 0.0f, false},
-        {{1, 11, 2022}, "Nivel general", 179.03f, "Cap�tulos", 0.0f, false, 0.0f, false},
-        {{1, 12, 2022}, "Nivel general", 186.73f, "Cap�tulos", 0.0f, false, 0.0f, false},
-        {{1,  1, 2023}, "Nivel general", 199.24f, "Cap�tulos", 0.0f, false, 0.0f, false},
-        {{1,  2, 2023}, "Nivel general", 211.20f, "Cap�tulos", 0.0f, false, 0.0f, false},
-        {{1,  3, 2023}, "Nivel general", 221.12f, "Cap�tulos", 0.0f, false, 0.0f, false},
-        {{1,  4, 2023}, "Nivel general", 239.03f, "Cap�tulos", 0.0f, false, 0.0f, false},
-        {{1,  5, 2023}, "Nivel general", 257.68f, "Cap�tulos", 0.0f, false, 0.0f, false},
-        {{1,  6, 2023}, "Nivel general", 272.62f, "Cap�tulos", 0.0f, false, 0.0f, false},
-        {{1,  7, 2023}, "Nivel general", 295.52f, "Cap�tulos", 0.0f, false, 0.0f, false},
-        {{1,  8, 2023}, "Nivel general", 339.26f, "Cap�tulos", 0.0f, false, 0.0f, false},
-        {{1,  9, 2023}, "Nivel general", 389.13f, "Cap�tulos", 0.0f, false, 0.0f, false},
-        {{1, 10, 2023}, "Nivel general", 416.76f, "Cap�tulos", 0.0f, false, 0.0f, false},
-        {{1, 11, 2023}, "Nivel general", 464.69f, "Cap�tulos", 0.0f, false, 0.0f, false},
-        {{1, 12, 2023}, "Nivel general", 606.88f, "Cap�tulos", 0.0f, false, 0.0f, false}
-    };
-
-    Indice indicesEsperados[] =
-    {
-        {{1,  1, 2022}, "Nivel general", 100.00f, "Cap�tulos", 0.0f, false, 0.0f, false},
-        {{1,  2, 2022}, "Nivel general", 103.80f, "Cap�tulos", 3.8f, true, 0.0f, false},
-        {{1,  3, 2022}, "Nivel general", 108.99f, "Cap�tulos", 5.0f, true, 0.0f, false},
-        {{1,  4, 2022}, "Nivel general", 111.50f, "Cap�tulos", 2.3f, true, 0.0f, false},
-        {{1,  5, 2022}, "Nivel general", 118.86f, "Cap�tulos", 6.6f, true, 0.0f, false},
-        {{1,  6, 2022}, "Nivel general", 126.70f, "Cap�tulos", 6.6f, true, 0.0f, false},
-        {{1,  7, 2022}, "Nivel general", 135.44f, "Cap�tulos", 6.9f, true, 0.0f, false},
-        {{1,  8, 2022}, "Nivel general", 145.60f, "Cap�tulos", 7.5f, true, 0.0f, false},
-        {{1,  9, 2022}, "Nivel general", 156.37f, "Cap�tulos", 7.4f, true, 0.0f, false},
-        {{1, 10, 2022}, "Nivel general", 167.79f, "Cap�tulos", 7.3f, true, 0.0f, false},
-        {{1, 11, 2022}, "Nivel general", 179.03f, "Cap�tulos", 6.7f, true, 0.0f, false},
-        {{1, 12, 2022}, "Nivel general", 186.73f, "Cap�tulos", 4.3f, true, 0.0f, false},
-        {{1,  1, 2023}, "Nivel general", 199.24f, "Cap�tulos", 6.7f, true, 0.0f, false},
-        {{1,  2, 2023}, "Nivel general", 211.20f, "Cap�tulos", 6.0f, true, 0.0f, false},
-        {{1,  3, 2023}, "Nivel general", 221.12f, "Cap�tulos", 4.7f, true, 0.0f, false},
-        {{1,  4, 2023}, "Nivel general", 239.03f, "Cap�tulos", 8.1f, true, 0.0f, false},
-        {{1,  5, 2023}, "Nivel general", 257.68f, "Cap�tulos", 7.8f, true, 0.0f, false},
-        {{1,  6, 2023}, "Nivel general", 272.62f, "Cap�tulos", 5.8f, true, 0.0f, false},
-        {{1,  7, 2023}, "Nivel general", 295.52f, "Cap�tulos", 8.4f, true, 0.0f, false},
-        {{1,  8, 2023}, "Nivel general", 339.26f, "Cap�tulos", 14.8f, true, 0.0f, false},
-        {{1,  9, 2023}, "Nivel general", 389.13f, "Cap�tulos", 14.7f, true, 0.0f, false},
-        {{1, 10, 2023}, "Nivel general", 416.76f, "Cap�tulos", 7.1f, true, 0.0f, false},
-        {{1, 11, 2023}, "Nivel general", 464.69f, "Cap�tulos", 11.5f, true, 0.0f, false},
-        {{1, 12, 2023}, "Nivel general", 606.88f, "Cap�tulos", 30.6f, true, 0.0f, false}
-    };
-
-    int total = sizeof(indicesBase) / sizeof(indicesBase[0]);
-
-    // Llamamos a la funci�n que llena varMensual
-    Indice* p;
-    Indice* fin = indicesBase + total;
-
-    for (p = indicesBase; p < fin; p++)
-    {
-        calcVarMensual(p, indicesBase);
-    }
-
-    printf("\nEjecutando pruebas para pruebaAgregarVarMensual...\n");
-    int errores = 0;
-
-    for (int i = 0; i < total; i++)
-    {
-        float dif = fabs(indicesBase[i].varMensual - indicesEsperados[i].varMensual);
-        if (dif > EPSILON)
-        {
-            printf("Error en indice %d (%d-%02d): esperado %.2f, obtenido %.2f\n",
-                   i,
-                   indicesBase[i].periodo.a, indicesBase[i].periodo.m,
-                   indicesEsperados[i].varMensual, indicesBase[i].varMensual);
-            errores++;
-        }
-        else
-        {
-            printf("Indice %d (%d-%02d) OK: %.2f\n", i,
-                   indicesBase[i].periodo.a, indicesBase[i].periodo.m,
-                   indicesBase[i].varMensual);
-        }
-    }
-
-    if (errores == 0)
-    {
-        printf("Todos los tests para varMensual pasaron correctamente!\n");
-    }
-    else
-    {
-        printf("Cantidad de errores: %d\n", errores);
-    }
+        printf("otal de errores: %d\n", errores);
 }

@@ -68,27 +68,17 @@ int compararTipoVariable(const char* cadClas1, const char* cadClas2)
 void convertirComa(char *cad)
 {
     int convertido = 0;
-	char *pCad = cad;
-	char *pDest = cad;
+    char *pCad = cad;
 
-	while (*pCad != '\0')
-	{
-		if (*pCad == ',' && !convertido)
-		{
-			*pDest = '.';
-			convertido = 1;
-			pDest++;
-		}
-		else if (*pCad != ',')
-		{
-			*pDest = *pCad;
-			pDest++;
-		}
-
-		pCad++;
-	}
-
-	*pDest = '\0';
+    while (*pCad != '\0')
+    {
+        if (*pCad == ',' && !convertido)
+        {
+            *pCad = '.';       // Solo reemplaza la primera coma por punto
+            convertido = 1;
+        }
+        pCad++;
+    }
 }
 
 void convertirFecha(char *cadOrigen)
@@ -194,46 +184,47 @@ void desencriptarPorCaso(char *cad)
     char *iCad = cad;
     while(*iCad != '\0')
     {
-        switch(*iCad){
-			case '@':
-			*iCad='a';
-			break;
+        switch(*iCad)
+        {
+        case '@':
+            *iCad='a';
+            break;
 
-			case '8':
-			*iCad='b';
-			break;
+        case '8':
+            *iCad='b';
+            break;
 
-			case '3':
-			*iCad='e';
-			break;
+        case '3':
+            *iCad='e';
+            break;
 
-			case '1':
-			*iCad='i';
-			break;
+        case '1':
+            *iCad='i';
+            break;
 
-			case '0':
-			*iCad='o';
-			break;
+        case '0':
+            *iCad='o';
+            break;
 
-			case '$':
-			*iCad='s';
-			break;
+        case '$':
+            *iCad='s';
+            break;
 
-			case '7':
-			*iCad='t';
-			break;
+        case '7':
+            *iCad='t';
+            break;
 
-			case '|':
-			*iCad='l';
-			break;
+        case '|':
+            *iCad='l';
+            break;
 
-			case '5':
-			*iCad='m';
-			break;
+        case '5':
+            *iCad='m';
+            break;
 
-			case '9':
-			*iCad='n';
-			break;
+        case '9':
+            *iCad='n';
+            break;
         }
 
         iCad++;
@@ -348,7 +339,8 @@ void sacarAntYNormalizar(char *cad)
     int encontrado = 0, lugaresAntesGuion = 0;
     while(*iCad != '\0' && !encontrado)
     {
-        if(*iCad == '_') {
+        if(*iCad == '_')
+        {
             encontrado = 1;
         }
         lugaresAntesGuion++;
@@ -408,8 +400,8 @@ char toLowerProp(char c)//mayuscula en minuscula
 {
     if(c>='A' && c<='Z')
     {
-         c+=32;
-         return c;
+        c+=32;
+        return c;
     }
     return c;
 }
@@ -435,4 +427,105 @@ void eliminarSaltoDeLinea(char* cad)
         }
         cad++; // avanza al siguiente carácter
     }
+}
+
+
+int esDigito(char* c)
+{
+    return (*c >= '0' && *c <= '9');
+}
+
+void reemplazar3ComasPorPuntoYComa(char* cad)
+{
+    char* p = cad;
+    int contador = 0;
+
+    while (*p && contador < 3)
+    {
+        if (*p == ',')
+        {
+            *p = ';';
+            contador++;
+        }
+        p++;
+    }
+}
+
+void expandirFechaConGuion01(char* cad)
+{
+    char* p = cad;
+
+    while (*p)
+    {
+        // Buscar patrC3n: aaaa-mm y detrC!s viene separador
+        if (esDigito(p) && esDigito(p + 1) && esDigito(p + 2) && esDigito(p + 3) &&
+                *(p + 4) == '-' &&
+                esDigito(p + 5) && esDigito(p + 6) &&
+                (*(p + 7) == ';' || *(p + 7) == ',' || *(p + 7) == ' ' || *(p + 7) == '\0'))
+        {
+
+            // Mover todo desde p+7 tres posiciones a la derecha
+            char* fin = p;
+            while (*fin) fin++;
+            while (fin >= p + 7)
+            {
+                *(fin + 3) = *fin;
+                fin--;
+            }
+
+            // Insertar "-01"
+            *(p + 7) = '-';
+            *(p + 8) = '0';
+            *(p + 9) = '1';
+            return;
+        }
+
+        p++;
+    }
+}
+
+void agregarSMovimientoTierra(char* cad)
+{
+    const char* ref = "Movimiento de tierra";
+    char* p = cad;
+
+    while (*p)
+    {
+        char* q = p;
+        const char* r = ref;
+
+        while (*q && *r && *q == *r)
+        {
+            q++;
+            r++;
+        }
+
+        // Si llegamos al final de la palabra buscada
+        if (!*r && (*q == ';' || *q == ',' || *q == '\0' || *q == ' '))
+        {
+            if (*q != 's')
+            {
+                // Mover todo 1 posiciC3n hacia la derecha para insertar 's'
+                char* fin = q;
+                while (*fin) fin++;
+                while (fin >= q)
+                {
+                    *(fin + 1) = *fin;
+                    fin--;
+                }
+                *q = 's';
+            }
+            return;
+        }
+
+        p++;
+    }
+}
+
+void modificarCadenaTxtIndec(char* cad)
+{
+    reemplazar3ComasPorPuntoYComa(cad);
+    expandirFechaConGuion01(cad);
+    agregarSMovimientoTierra(cad);
+    convertirComa(cad);
 }

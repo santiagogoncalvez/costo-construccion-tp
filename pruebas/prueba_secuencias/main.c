@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <assert.h>
 
 #include "../../librerias/secuencias/secuencias.h"
@@ -19,7 +18,6 @@ void pruebaDesencriptarPorPos();
 int main()
 {
     system("chcp 65001");
-
 
     pruebaFormatearFecha();
     pruebaNormalizar();
@@ -43,7 +41,7 @@ void pruebaFormatearFecha()
         {"20/10/2022", "2022-10-20"}
     };
 
-    char salida[100]; // AAAA/MM/DD + '\0'
+    char salida[100];
     int total = sizeof(casos) / sizeof(casos[0]);
     int errores = 0;
 
@@ -51,17 +49,18 @@ void pruebaFormatearFecha()
 
     for (int i = 0; i < total; i++)
     {
-        strcpy(salida, casos[i].entrada);
+        CasoPrueba *caso = casos + i;
+        copiar(salida, caso->entrada);
         convertirFecha(salida);
-        if (strcmp(salida, casos[i].esperado) != 0)
+        if (comparar(salida, caso->esperado) != 0)
         {
             printf("prueba %d fallo: entrada='%s' --> salida='%s' (esperado='%s')\n",
-                   i + 1, casos[i].entrada, salida, casos[i].esperado);
+                   i + 1, caso->entrada, salida, caso->esperado);
             errores++;
         }
         else
         {
-            printf("prueba %d paso: %s --> %s\n", i + 1, casos[i].entrada, salida);
+            printf("prueba %d paso: %s --> %s\n", i + 1, caso->entrada, salida);
         }
     }
 
@@ -96,17 +95,18 @@ void pruebaNormalizar()
 
     for (int i = 0; i < total; i++)
     {
-        strcpy(salida, casos[i].entrada);
+        CasoPrueba *caso = casos + i;
+        copiar(salida, caso->entrada);
         normalizar(salida);
-        if (strcmp(salida, casos[i].esperado) != 0)
+        if (comparar(salida, caso->esperado) != 0)
         {
             printf("prueba %d fallo: entrada='%s' --> salida='%s' (esperado='%s')\n",
-                   i + 1, casos[i].entrada, salida, casos[i].esperado);
+                   i + 1, caso->entrada, salida, caso->esperado);
             errores++;
         }
         else
         {
-            printf("prueba %d paso: %s --> %s\n", i + 1, casos[i].entrada, salida);
+            printf("prueba %d paso: %s --> %s\n", i + 1, caso->entrada, salida);
         }
     }
 
@@ -149,17 +149,18 @@ void pruebaConvertirComa()
 
     for (int i = 0; i < total; i++)
     {
-        strcpy(salida, casos[i].entrada);
+        CasoPrueba *caso = casos + i;
+        copiar(salida, caso->entrada);
         convertirComa(salida);
-        if (strcmp(salida, casos[i].esperado) != 0)
+        if (comparar(salida, caso->esperado) != 0)
         {
             printf("prueba %d fallo: entrada='%s' --> salida='%s' (esperado='%s')\n",
-                   i + 1, casos[i].entrada, salida, casos[i].esperado);
+                   i + 1, caso->entrada, salida, caso->esperado);
             errores++;
         }
         else
         {
-            printf("prueba %d paso: %s --> %s\n", i + 1, casos[i].entrada, salida);
+            printf("prueba %d paso: %s --> %s\n", i + 1, caso->entrada, salida);
         }
     }
 
@@ -208,17 +209,18 @@ void pruebaDesencriptarPorPos()
 
     for (int i = 0; i < total; i++)
     {
-        strcpy(salida, casos[i].entrada);
+        CasoPrueba *caso = casos + i;
+        copiar(salida, caso->entrada);
         desencriptarPorPos(salida);
-        if (strcmp(salida, casos[i].esperado) != 0)
+        if (comparar(salida, caso->esperado) != 0)
         {
             printf("prueba %d fallo: entrada='%s' --> salida='%s' (esperado='%s')\n",
-                   i + 1, casos[i].entrada, salida, casos[i].esperado);
+                   i + 1, caso->entrada, salida, caso->esperado);
             errores++;
         }
         else
         {
-            printf("prueba %d paso: %s --> %s\n", i + 1, casos[i].entrada, salida);
+            printf("prueba %d paso: %s --> %s\n", i + 1, caso->entrada, salida);
         }
     }
 

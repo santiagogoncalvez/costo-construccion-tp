@@ -28,6 +28,16 @@ Permite **procesar índices y variaciones** del indicador económico de **Costo 
 
 -  `TDA_vector`: contiene el TDA para manejo de vectores mediante memoria dinámica.
 
+## Archivos de referencia
+Los archivos que se encuentran en `/datos/referencia` son archivos con los resultados correctos de las variaciones mensuales y anuales de la página del Indec https://shiny.indec.gob.ar/vip/. Para que sea compatible con ANSI C este archivo no contiene caracteres con tilde ni el caracter "ñ". Las demás conversiones de formato se hacen en el código.
+
+`ICC-Capitulos-Items-var-mensual.csv` es un archivo unificado de los valores de las variaciones mensuales de capítulos e ítems juntos con sus niveles de agreagación.
+
+`ICC-Capitulos-Items-var-interanual.csv` es un archivo unificado de los valores de las variaciones interanuales de de capítulos e ítems juntos con sus niveles de agreagación.
+
+## Pruebas
+Los proyectos en `/pruebas` se encargan de probar las funciones del proyecto. Hay un proyecto para probar las principales funiones de la librería `estructura_indice` y otro para la librería `secuencias`.
+
 # Cómo compilar en Code::Blocks
 
 ## Opción recomendada: Usar el workspace

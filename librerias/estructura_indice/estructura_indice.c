@@ -53,7 +53,7 @@ void calcVarInteranual(void* ind, void* vInd)
     }
 
 
-    varInteranual = redondear2decimales(((indiceAct->indice / indiceAntAnio.indice) - 1) * 100);
+    varInteranual = redondear2decimales(calcVariacion(indiceAct->indice, indiceAntAnio.indice));
 
     indiceAct->varInteranual = varInteranual;
     indiceAct->varInteranualExiste = true;
@@ -120,10 +120,15 @@ void calcVarMensual(void* ind, void* vInd)
     }
 
 
-    varMensual = redondear2decimales(((indiceAct->indice / indiceAntMes.indice) - 1) * 100);
+    varMensual = redondear2decimales(calcVariacion(indiceAct->indice, indiceAntMes.indice));
 
     indiceAct->varMensual = varMensual;
     indiceAct->varMensualExiste = true;
+}
+
+double calcVariacion(double numAct, double numAnt)
+{
+    return ((numAct / numAnt) - 1) * 100;
 }
 
 float redondear2decimales(double valor)

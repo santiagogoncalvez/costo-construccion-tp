@@ -25,6 +25,10 @@ void eliminarTodasLasComillas(char *cad);
 char *strrchrProp(const char *str, int c);
 char *strchrProp(const char *str, int c);
 void eliminarSaltoDeLinea(char* cad);
-
+int esDigito(char* c);
+void reemplazar3ComasPorPuntoYComa(char* cad);
+void expandirFechaConGuion01(char* cad);
+void agregarSMovimientoTierra(char* cad);
+void modificarCadenaTxtIndec(char* cad);
 
 #endif // SECUENCIAS_H_INCLUDED

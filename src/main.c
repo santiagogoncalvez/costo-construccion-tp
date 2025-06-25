@@ -16,7 +16,7 @@
 #define ARG_REF_MEN 4
 #define ARG_REF_INT 5
 #define TAM_LINEA 501
-#define MARGEN_VAR 1
+#define MARGEN_VAR 0.9
 
 typedef struct
 {
@@ -31,6 +31,7 @@ typedef struct
 {
     Vector *indicesBin;
     Vector *indicesVariaciones;
+    int elemNoEncontrados;
     int cantCoincidencias;
     int cantDiferencias;
 } PruebaIndiceBin;
@@ -67,34 +68,55 @@ void agregarClasificadorBin(IndiceBin *indice);
 int compararIndicesValor(const void *a, const void *b);
 
 
+/*
+Argumentos enviados a main desde el proyecto:
+Archivo base indices general-capitulos, Archivo base indices items, Ruta del archivo binario de salida, Archivo referencia variaciones mensuales, Archivo referencia variaciones interanuales
 
-// Argumentos enviados a main desde el proyecto:
-// Archivo base indices general-capitulos, Archivo base indices items, Ruta del archivo binario de salida, Archivo referencia variaciones mensuales, Archivo referencia variaciones interanuales
-// '../datos/entrada/indices-icc-general-capitulos.csv' '../datos/entrada/Indices_items_obra.csv' '../salida/indices-procesados.bin' '../datos/referencia/ICC-Capitulos-Items-var-mensual.csv' '../datos/referencia/ICC-Capitulos-Items-var-interanual.csv'
+'../datos/entrada/indices-icc-general-capitulos.csv' '../datos/entrada/Indices_items_obra.csv'
+'../salida/indices-procesados.bin' '../datos/referencia/ICC-Capitulos-Items-var-mensual.csv' '../datos/referencia/ICC-Capitulos-Items-var-interanual.csv'
+*/
+
 int main(int argc, char* argv[])
 {
     Vector vIndices, vIndicesBin;
+    int ret;
 
     vectorCrear(&vIndices, sizeof(Indice));
 
-    printf("\nProcesando archivos base...");
+
     // Insertar en un mismo vector
-    leerTxtIndices(argv[ARG_TXT], sizeof(Indice), convIndiceTxt, esErrorFatalIndice, &vIndices);
-    leerTxtIndices(argv[ARG_TXT_ITEMS], sizeof(Indice), indiceItemsTxtV, esErrorFatalIndice, &vIndices);
+    // Insertar elementos del primer archivo
+    printf("\nProcesando archivos base...");
+    ret = leerTxtIndices(argv[ARG_TXT], sizeof(Indice), convIndiceTxt, esErrorFatalIndice, &vIndices);
+    if (ret != TODO_OK)
+    {
+        vectorDestruir(&vIndices);
+        return ret;
+    }
+
+    //Insertar elementos del segundo archivo
+    ret = leerTxtIndices(argv[ARG_TXT_ITEMS], sizeof(Indice), indiceItemsTxtV, esErrorFatalIndice, &vIndices);
+    if (ret != TODO_OK)
+    {
+        vectorDestruir(&vIndices);
+        return ret;
+    }
+
+    /*vectorMostrar(&vIndices, imprimirIndice);*/
 
     // Calcular variaciones.
     vectorRecorrer(&vIndices, calcVariaciones, &vIndices);
-
     printf("\nArchivos procesados.");
-    //printf("\n\nVector union de los 2 archivos base:\n");
-    //vectorMostrar(&vIndices, imprimirIndice);
+    /*printf("\n\nVector union de los 2 archivos base:\n");
+    vectorMostrar(&vIndices, imprimirIndice);*/
     printf("\nCantidad de elementos: %d \n", vIndices.ce);
 
+
     // Creacionn del vector final que se va a grabar en el archivo binario
-    printf("\n\nCreacion y procesamiento del vector final que se va a exportar a un archivo binario.\n");
+    printf("\nCreacion y procesamiento del vector final que se va a exportar a un archivo binario...\n");
     vectorCrear(&vIndicesBin, sizeof(IndiceBin));
     vectorRecorrer(&vIndices, genVIndicesBin, &vIndicesBin);
-    //vectorMostrar(&vIndicesBin, imprimirIndiceBin);
+    /*vectorMostrar(&vIndicesBin, imprimirIndiceBin);*/
     printf("\n\nVector creado y procesado.");
     printf("\nCantidad de elementos: %d \n", vIndicesBin.ce);
 
@@ -103,13 +125,16 @@ int main(int argc, char* argv[])
     convVIndBinABin(argv[ARG_SALIDA_BIN], &vIndicesBin);
     mostrarArchivoBinario(argv[ARG_SALIDA_BIN]);
 
+
     // Prueba de los datos del archivo binario
     pruebaVariaciones(argv[ARG_SALIDA_BIN], argv[ARG_REF_MEN], argv[ARG_REF_INT]);
+
 
     //DESTRUIR VECTORES AL FINAL PARA LIBERAR MEMORIA
     vectorDestruir(&vIndices);
     vectorDestruir(&vIndicesBin);
-    return 0;
+
+    return TODO_OK;
 }
 
 
@@ -127,6 +152,7 @@ int leerTxtIndices(const char* nomArchTxt, size_t tamReg, IndiceTxt convIndiceTx
 
     if(!archTxt)
     {
+        printf("\n\nError al abrir archivo de texto.");
         free(reg);
         return ERR_ARCHIVO;
     }
@@ -369,6 +395,7 @@ int convVIndBinABin(const char* nomArchBin, Vector *vIndBin)
     FILE* arch = fopen(nomArchBin, "wb");
     if (!arch)
     {
+        printf("\n\nError al crear archivo binario.");
         return ERR_ARCHIVO;
     }
 
@@ -385,7 +412,7 @@ int mostrarArchivoBinario(const char* nomArchBin)
     FILE* arch = fopen(nomArchBin, "rb");
     if (!arch)
     {
-        perror("Error al abrir archivo binario");
+        perror("\n\nError al abrir archivo binario");
         return ERR_ARCHIVO;
     }
 
@@ -435,6 +462,7 @@ int leerTxtIndicesBin(const char* nomArchTxt, size_t tamReg, IndiceTxt convIndic
 
     if(!archTxt)
     {
+        printf("\n\nError al abrir archivo de texto.");
         free(reg);
         return ERR_ARCHIVO;
     }
@@ -462,12 +490,14 @@ int leerTxtIndicesBin(const char* nomArchTxt, size_t tamReg, IndiceTxt convIndic
 /*Los archivos de referencia no tienen tildes, estan separados por ";", los numeros ya tienen el "." como separcion de decimales, las fechas se transformaron a formato "aaaa-mm-01" */
 void pruebaVariaciones(const char* nomArchBin, const char* nomArchVarMens, const char* nomArchVarInt)
 {
-    printf("\n\n\nPrueba de los resultados de las variaciones mensuales y anuales del archivo binario final.");
-    printf("\nMargen de error: %d", MARGEN_VAR);
+    printf("\n\n\nPRUEBAS");
+    printf("\nPrueba de los resultados de las variaciones mensuales y anuales del archivo binario final.");
+    printf("\nMargen de error: %.1f", MARGEN_VAR);
+    printf("\n\nEjecutando prueba...");
 
     Vector indicesBin;
     Vector indicesVariaciones;
-    PruebaIndiceBin pruebaIndiceBin = {&indicesBin, &indicesVariaciones, 0, 0};
+    PruebaIndiceBin pruebaIndiceBin = {&indicesBin, &indicesVariaciones, 0, 0, 0};
 
 
     // Leer el binario y grabar los datos en un vector
@@ -481,13 +511,31 @@ void pruebaVariaciones(const char* nomArchBin, const char* nomArchVarMens, const
     // Leer el txt referencia de variaciones interanuales y guardarlo en un vector
     leerTxtIndicesBin(nomArchVarInt, sizeof(IndiceBin), convIndiceVarIntTxt, esErrorFatalIndice, &indicesVariaciones);
 
-    //vectorMostrar(&indicesVariaciones, imprimirIndiceBin);
-
     // Recorrer el vector indicesVarMens y comparar los resultados con los elementos del vector indicesBin
     vectorRecorrer(&indicesVariaciones, verificarResultadosBin, &pruebaIndiceBin);
 
-    printf("\n\n\nCantidad de coincidencias: %d", pruebaIndiceBin.cantCoincidencias);
+    printf("\n\n\nCantidad de elementos no encontrados: %d", pruebaIndiceBin.elemNoEncontrados);
+    printf("\nCantidad de coincidencias: %d", pruebaIndiceBin.cantCoincidencias);
     printf("\nCantidad de diferencias: %d\n", pruebaIndiceBin.cantDiferencias);
+
+    if(pruebaIndiceBin.elemNoEncontrados == 0)
+    {
+        printf("\n\nTodos los elementos de los archivos del Indec existen en el archivo binario.");
+        if(pruebaIndiceBin.cantDiferencias == 0)
+        {
+            printf("\nTodos los valores fueron calculados correctamente.\nPrueba exitosa.\n");
+        }
+        else
+        {
+            printf("\nHubo valores que no se calcularon correctamente.\nPrueba fallida.\n");
+        }
+    }
+    else
+    {
+        printf("\nHay elementos de los archivos del Indec que no existen en el archivo binario.\nPrueba fallida.\n");
+    }
+
+
 
     // Destruir vectores
     vectorDestruir(&indicesBin);
@@ -497,7 +545,12 @@ void pruebaVariaciones(const char* nomArchBin, const char* nomArchVarMens, const
 int convIndiceVarMensTxt(char* linea, void* reg)
 {
     IndiceBin* indice = reg;
-    char* act = strchrProp(linea, '\n');
+    char* act;
+
+    eliminarTodasLasComillas(linea);
+    modificarCadenaTxtIndec(linea);
+
+    act = strchrProp(linea, '\n');
 
     if(!act)
     {
@@ -505,6 +558,7 @@ int convIndiceVarMensTxt(char* linea, void* reg)
     }
 
     eliminarTodasLasComillas(linea);
+    modificarCadenaTxtIndec(linea);
 
     *act = '\0';
     act = strrchrProp(linea, ';');
@@ -534,14 +588,17 @@ int convIndiceVarMensTxt(char* linea, void* reg)
 int convIndiceVarIntTxt(char* linea, void* reg)
 {
     IndiceBin* indice = reg;
-    char* act = strchrProp(linea, '\n');
+    char* act;
+
+    eliminarTodasLasComillas(linea);
+    modificarCadenaTxtIndec(linea);
+
+    act = strchrProp(linea, '\n');
 
     if(!act)
     {
         return ERR_LINEA_LARGA;
     }
-
-    eliminarTodasLasComillas(linea);
 
     *act = '\0';
     act = strrchrProp(linea, ';');
@@ -614,21 +671,11 @@ void verificarResultadosBin (void* ind, void* dato)
         printf("\nElemento no encontrado");
         imprimirIndiceBin(indiceAct);
 
-        pruebaIndiceBin->cantDiferencias++;
+        pruebaIndiceBin->elemNoEncontrados++;
     }
     else
     {
-
-        if(compararIndicesValor(indiceAct, &indiceAntMes) == 0)
-        {
-            printf("\n\nVariacion calculada correctamente");
-            printf("\nEsperado:");
-            imprimirIndiceBin(indiceAct);
-            printf("\nObtenido:");
-            imprimirIndiceBin(&indiceAntMes);
-            pruebaIndiceBin->cantCoincidencias++;
-        }
-        else
+        if(compararIndicesValor(indiceAct, &indiceAntMes) != 0)
         {
             printf("\n\n\nVariacion calculada INCORRECTAMENTE");
             imprimirIndiceBin(indiceAct);
@@ -636,7 +683,18 @@ void verificarResultadosBin (void* ind, void* dato)
             imprimirIndiceBin(&indiceAntMes);
             pruebaIndiceBin->cantDiferencias++;
         }
-
+        else
+        {
+            /*
+            // En el caso de que se quieran mostrar tambien las coincidencias
+             printf("\n\nVariacion calculada correctamente");
+            printf("\nEsperado:");
+            imprimirIndiceBin(indiceAct);
+            printf("\nObtenido:");
+            imprimirIndiceBin(&indiceAntMes);
+            */
+            pruebaIndiceBin->cantCoincidencias++;
+        }
     }
 }
 
@@ -679,7 +737,7 @@ int compararIndicesValor(const void *a, const void *b)
     valorA = atof(indA->valor);
     valorB = atof(indB->valor);
 
-    // Con margen de calculo ya que los indices base del trabajo con los oficiales son levemente distintos
+    // Se evalua con margen de error ya que los indices base del trabajo con respecto a los oficiales son levemente distintos
     cmpValor = (fabs(valorA - valorB) <= MARGEN_VAR) ? 0 : 1;
 
     if(cmpValor == 0) return 0;
