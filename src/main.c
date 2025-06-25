@@ -406,6 +406,8 @@ int mostrarArchivoBinario(const char* nomArchBin)
 
 
 // Prueba de archivo binario final
+
+/*Los archivos de referencia no tienen tildes, estan separados por ";", los numeros ya tienen el "." como separcion de decimales, las fechas se transformaron a formato "aaaa-mm-01" */
 void pruebaVarMensuales(const char* nomArchBin, const char* nomArchVarMens )
 {
     printf("\n\n\nPrueba de datos del archivo binario final...\n");
