@@ -30,6 +30,7 @@ void calcVarInteranual(void* ind, void* vInd)
     Vector *vIndices = (Vector *)vInd;
     Indice indiceAntAnio, menorAnioIndice;
     float varInteranual;
+    int pos;
 
     // Fecha inicio del archivo
     vectorBuscarPorPos(vInd,  &menorAnioIndice, 0);
@@ -42,7 +43,16 @@ void calcVarInteranual(void* ind, void* vInd)
     indiceAntAnio.periodo = fechaRestarMeses(&indiceAntAnio.periodo, 12);
 
     // Calcular variacion
-    vectorBuscarSecuencial(vIndices, &indiceAntAnio, cmpInd12MesesAntes);
+    pos = vectorBuscarSecuencial(vIndices, &indiceAntAnio, cmpInd12MesesAntes);
+    if(pos < 0)
+    {
+        printf("\n\nNO SE ENCONTRO ELEMENTO\n\n");
+        indiceAct->varInteranual = 0.0;
+        indiceAct->varInteranual = false;
+        return;
+    }
+
+
     varInteranual = redondear2decimales(((indiceAct->indice / indiceAntAnio.indice) - 1) * 100);
 
     indiceAct->varInteranual = varInteranual;
@@ -64,16 +74,17 @@ int compararIndicesVar(const void *a, const void *b)
 {
     const Indice *indA = (const Indice *)a;
     const Indice *indB = (const Indice *)b;
+    int cmpPer, cmpClas, cmpNivel;
 
-    int cmpPer = fechaComparar(&indA->periodo, &indB->periodo);
+    cmpPer = fechaComparar(&indA->periodo, &indB->periodo);
     if (cmpPer != 0)
         return cmpPer;  // Fecha ascendente
 
-    int cmpClas = compararClasificador(indA->clasificador, indB->clasificador);
+    cmpClas = compararClasificador(indA->clasificador, indB->clasificador);
     if (cmpClas != 0)
         return -cmpClas;  // Clasificador descendente
 
-    int cmpNivel = comparar(indA->nivelGeneralAperturas, indB->nivelGeneralAperturas);
+    cmpNivel = comparar(indA->nivelGeneralAperturas, indB->nivelGeneralAperturas);
     if (cmpNivel != 0)
         return cmpNivel;
 
@@ -86,6 +97,7 @@ void calcVarMensual(void* ind, void* vInd)
     Vector *vIndices = (Vector *)vInd;
     Indice indiceAntMes, menorMesIndice;
     float varMensual;
+    int pos;
 
     // Fecha inicio del archivo
     vectorBuscarPorPos(vInd,  &menorMesIndice, 0);
@@ -98,7 +110,16 @@ void calcVarMensual(void* ind, void* vInd)
     indiceAntMes.periodo = fechaRestarMeses(&indiceAntMes.periodo, 1);
 
     // Calcular variacion
-    vectorBuscarSecuencial(vIndices, &indiceAntMes, cmpInd12MesesAntes);
+    pos = vectorBuscarSecuencial(vIndices, &indiceAntMes, cmpInd12MesesAntes);
+    if(pos < 0)
+    {
+        printf("\n\nNO SE ENCONTRO ELEMENTO\n\n");
+        indiceAct->varMensual = 0.0;
+        indiceAct->varMensualExiste = false;
+        return;
+    }
+
+
     varMensual = redondear2decimales(((indiceAct->indice / indiceAntMes.indice) - 1) * 100);
 
     indiceAct->varMensual = varMensual;
@@ -141,11 +162,12 @@ int compararIndicesIgualdad(const void *a, const void *b)
 {
     const Indice *indA = (const Indice *)a;
     const Indice *indB = (const Indice *)b;
+    int cmpPer, cmpNivGen, cmpIndice, cmpClas;
 
-    int cmpPer = fechaComparar(&indA->periodo, &indB->periodo);
-    int cmpNivGen = comparar(indA->nivelGeneralAperturas, indB->nivelGeneralAperturas);
-    int cmpIndice = ((indA->indice) == (indB->indice));
-    int cmpClas = compararClasificador(indA->clasificador, indB->clasificador);
+    cmpPer = fechaComparar(&indA->periodo, &indB->periodo);
+    cmpNivGen = comparar(indA->nivelGeneralAperturas, indB->nivelGeneralAperturas);
+    cmpIndice = ((indA->indice) == (indB->indice));
+    cmpClas = compararClasificador(indA->clasificador, indB->clasificador);
 
     if(cmpPer == 0 && cmpNivGen == 0 && cmpIndice == 0 && cmpClas == 0) return 0;
 

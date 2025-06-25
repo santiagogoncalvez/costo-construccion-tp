@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stddef.h>
+#include <math.h>
 
 #include "../librerias/Comun/codigos_ret.h"
 #include "../librerias/secuencias/secuencias.h"
@@ -15,16 +16,24 @@
 #define ARG_REF_MEN 4
 #define ARG_REF_INT 5
 #define TAM_LINEA 501
+#define MARGEN_VAR 1
 
 typedef struct
 {
-    //tFecha periodo;
     char periodo[11];
     char clasificador[20];
     char nivelGeneralAperturas[40];
     char tipoVariable[15];
     char valor[20];
 } IndiceBin;
+
+typedef struct
+{
+    Vector *indicesBin;
+    Vector *indicesVariaciones;
+    int cantCoincidencias;
+    int cantDiferencias;
+} PruebaIndiceBin;
 
 typedef int (*IndiceTxt)(char *linea, void *reg);
 typedef bool (*EsErrorFatal)(int cod);
@@ -48,14 +57,20 @@ int convVIndBinABin(const char* nomArchBin, Vector *vIndBin);
 int mostrarArchivoBinario(const char* nomArchBin);
 
 //Pruebas de archivo binario
-void pruebaVarMensuales(const char* nomArchBin, const char* nomArchVarMens );
+int leerTxtIndicesBin(const char* nomArchTxt, size_t tamReg, IndiceTxt convIndiceTxt, EsErrorFatal esErrorFatal, Vector *vIndices);
+void pruebaVariaciones(const char* nomArchBin, const char* nomArchVarMens, const char* nomArchVarInt);
 int convIndiceVarMensTxt(char* linea, void* reg);
+int convIndiceVarIntTxt(char* linea, void* reg);
+void verificarResultadosBin (void* ind, void* dato);
+int compararIndicesBinIgualdadVar(const void *a, const void *b);
+void agregarClasificadorBin(IndiceBin *indice);
+int compararIndicesValor(const void *a, const void *b);
 
 
 
 // Argumentos enviados a main desde el proyecto:
-// Archivo base indices general-capitulos, Archivo base indices items, Ruta del archivo binario de salida, Archivo referencia variaciones mensuales
-// '../datos/entrada/indices-icc-general-capitulos.csv' '../datos/entrada/Indices_items_obra.csv' '../salida/indices-procesados.bin' '../datos/referencia/ICC-Capitulos-Items-var-mensual.csv'
+// Archivo base indices general-capitulos, Archivo base indices items, Ruta del archivo binario de salida, Archivo referencia variaciones mensuales, Archivo referencia variaciones interanuales
+// '../datos/entrada/indices-icc-general-capitulos.csv' '../datos/entrada/Indices_items_obra.csv' '../salida/indices-procesados.bin' '../datos/referencia/ICC-Capitulos-Items-var-mensual.csv' '../datos/referencia/ICC-Capitulos-Items-var-interanual.csv'
 int main(int argc, char* argv[])
 {
     Vector vIndices, vIndicesBin;
@@ -88,7 +103,7 @@ int main(int argc, char* argv[])
     mostrarArchivoBinario(argv[ARG_SALIDA_BIN]);
 
     // Prueba de los datos del archivo binario
-    pruebaVarMensuales(argv[ARG_SALIDA_BIN], argv[ARG_REF_MEN]);
+    pruebaVariaciones(argv[ARG_SALIDA_BIN], argv[ARG_REF_MEN], argv[ARG_REF_INT]);
 
     //DESTRUIR VECTORES AL FINAL PARA LIBERAR MEMORIA
     vectorDestruir(&vIndices);
@@ -127,7 +142,6 @@ int leerTxtIndices(const char* nomArchTxt, size_t tamReg, IndiceTxt convIndiceTx
 
         // Guardar el registro de forma ordenada en el vector de indices
         vectorOrdInsertar(vIndices, reg, compararIndices, compararIndicesIgualdad);
-        //vectorInsertarAlFinal(vIndices, reg);
     }
 
     fclose(archTxt);
@@ -407,27 +421,76 @@ int mostrarArchivoBinario(const char* nomArchBin)
 
 // Prueba de archivo binario final
 
-/*Los archivos de referencia no tienen tildes, estan separados por ";", los numeros ya tienen el "." como separcion de decimales, las fechas se transformaron a formato "aaaa-mm-01" */
-void pruebaVarMensuales(const char* nomArchBin, const char* nomArchVarMens )
+int leerTxtIndicesBin(const char* nomArchTxt, size_t tamReg, IndiceTxt convIndiceTxt, EsErrorFatal esErrorFatal, Vector *vIndices)
 {
-    printf("\n\n\nPrueba de datos del archivo binario final...\n");
+    void *reg = malloc(tamReg);
+
+    if(!reg)
+    {
+        return ERR_MEMORIA;
+    }
+
+    FILE* archTxt = fopen(nomArchTxt, "rt");
+
+    if(!archTxt)
+    {
+        free(reg);
+        return ERR_ARCHIVO;
+    }
+
+    char linea[TAM_LINEA];
+    int ret = TODO_OK;
+
+    fgets(linea, TAM_LINEA, archTxt);
+
+    while(!esErrorFatal(ret) && fgets(linea, TAM_LINEA, archTxt))
+    {
+        // Procesar un registro
+        ret = convIndiceTxt(linea, reg);
+
+        // Guardar el registro de forma ordenada en el vector de indices
+        vectorOrdInsertar(vIndices, reg, compararIndicesBin, compararIndicesBinIgualdad);
+    }
+
+    fclose(archTxt);
+    free(reg);
+
+    return ret;
+}
+
+/*Los archivos de referencia no tienen tildes, estan separados por ";", los numeros ya tienen el "." como separcion de decimales, las fechas se transformaron a formato "aaaa-mm-01" */
+void pruebaVariaciones(const char* nomArchBin, const char* nomArchVarMens, const char* nomArchVarInt)
+{
+    printf("\n\n\nPrueba de datos del archivo binario final");
+    printf("\nMargen de error: %d", MARGEN_VAR);
 
     Vector indicesBin;
-    Vector indicesVarMens;
+    Vector indicesVariaciones;
+    PruebaIndiceBin pruebaIndiceBin = {&indicesBin, &indicesVariaciones, 0, 0};
 
-    vectorCrear(&indicesVarMens, sizeof(IndiceBin));
 
     // Leer el binario y grabar los datos en un vector
     vectorCrearDeArchivo(&indicesBin, sizeof(IndiceBin), nomArchBin);
 
-    // Leer el txt referencia de variaciones mensuales y guardarlo en un vector
-    leerTxtIndices(nomArchVarMens, sizeof(IndiceBin), convIndiceVarMensTxt, esErrorFatalIndice, &indicesVarMens);
+    vectorCrear(&indicesVariaciones, sizeof(IndiceBin));
 
-    vectorMostrar(&indicesVarMens, imprimirIndiceBin);
+    // Leer el txt referencia de variaciones mensuales y guardarlo en un vector
+    leerTxtIndicesBin(nomArchVarMens, sizeof(IndiceBin), convIndiceVarMensTxt, esErrorFatalIndice, &indicesVariaciones);
+
+    // Leer el txt referencia de variaciones interanuales y guardarlo en un vector
+    leerTxtIndicesBin(nomArchVarInt, sizeof(IndiceBin), convIndiceVarIntTxt, esErrorFatalIndice, &indicesVariaciones);
+
+    //vectorMostrar(&indicesVariaciones, imprimirIndiceBin);
 
     // Recorrer el vector indicesVarMens y comparar los resultados con los elementos del vector indicesBin
+    vectorRecorrer(&indicesVariaciones, verificarResultadosBin, &pruebaIndiceBin);
 
+    printf("\n\n\nCantidad de coincidencias: %d", pruebaIndiceBin.cantCoincidencias);
+    printf("\nCantidad de diferencias: %d\n", pruebaIndiceBin.cantDiferencias);
 
+    // Destruir vectores
+    vectorDestruir(&indicesBin);
+    vectorDestruir(&indicesVariaciones);
 }
 
 int convIndiceVarMensTxt(char* linea, void* reg)
@@ -445,6 +508,7 @@ int convIndiceVarMensTxt(char* linea, void* reg)
     *act = '\0';
     act = strrchrProp(linea, ';');
     copiar(indice->valor, act + 1);
+    eliminarSaltoDeLinea(indice->valor);
 
     *act = '\0';
     act = strrchrProp(linea, ';');
@@ -460,15 +524,177 @@ int convIndiceVarMensTxt(char* linea, void* reg)
 
     copiar(indice->tipoVariable, "var_mensual");
 
+    //Procesar item
+    agregarClasificadorBin(indice);
+
     return TODO_OK;
 }
 
+int convIndiceVarIntTxt(char* linea, void* reg)
+{
+    IndiceBin* indice = reg;
+    char* act = strchrProp(linea, '\n');
+
+    if(!act)
+    {
+        return ERR_LINEA_LARGA;
+    }
+
+    eliminarTodasLasComillas(linea);
+
+    *act = '\0';
+    act = strrchrProp(linea, ';');
+    copiar(indice->valor, act + 1);
+    eliminarSaltoDeLinea(indice->valor);
+
+    *act = '\0';
+    act = strrchrProp(linea, ';');
+    copiar(indice->nivelGeneralAperturas, act + 1);
+
+    *act = '\0';
+    act = strrchrProp(linea, ';');
+    copiar(indice->clasificador, act + 1);
+
+    //Procesar campo
+    *act = '\0';
+    copiar(indice->periodo, linea);
+
+    copiar(indice->tipoVariable, "var_interanual");
+
+    //Procesar item
+    /*No todos los elementos de los archivos de referencia tienen el mismo formato que los elementos del archivo binario*/
+    agregarClasificadorBin(indice);
+
+    return TODO_OK;
+}
+
+// Los vectores estan ordenados
+void verificarResultadosBin (void* ind, void* dato)
+{
+    IndiceBin *indiceAct = (IndiceBin *)ind;
+    PruebaIndiceBin *pruebaIndiceBin = (PruebaIndiceBin *)dato;
+    IndiceBin indiceAntMes, menorMesIndice;
+    tFecha periodoAct, periodoMenorMes, periodoAnt;
+    int pos;
+
+    // Fecha inicio del archivo
+    vectorBuscarPorPos(pruebaIndiceBin->indicesVariaciones,  &menorMesIndice, 0);
+
+    // Para variacion mensual, el primer mes no se calcula
+    fechaSetDesdeString(&periodoAct, indiceAct->periodo);
+    fechaSetDesdeString(&periodoMenorMes, menorMesIndice.periodo);
+    /*Saltear en comparaciones primer mes y primer anio*/
+
+    if(comparar(indiceAct->tipoVariable, "var_mensual") == 0)
+    {
+        if(periodoAct.m <= periodoMenorMes.m && periodoAct.a <= periodoMenorMes.a) return;
+    }
+
+    if(comparar(indiceAct->tipoVariable, "var_interanual") == 0)
+
+    {
+        if(periodoAct.a <= periodoMenorMes.a) return;
+    }
 
 
+    // Buscar el elemento Indice correspondiente a 1 mes atrï¿½s
+    indiceAntMes = *indiceAct;
+    periodoAnt = periodoAct;
+    // Modificación de dato que creo en esta función
+    fechaRestarMeses(&periodoAnt, 1);
+    fechaAString(&periodoAct, indiceAntMes.periodo);
 
 
+    // Comparar variaciones
+    pos = vectorBuscarSecuencial(pruebaIndiceBin->indicesBin, &indiceAntMes, compararIndicesBinIgualdadVar);
+    if(pos < 0)
+    {
+        printf("\n\nNO SE ENCUENTRA ELEMENTO EN EL BINARIO");
+        printf("\nElemento no encontrado");
+        imprimirIndiceBin(indiceAct);
+
+        pruebaIndiceBin->cantDiferencias++;
+    }
+    else
+    {
+
+        if(compararIndicesValor(indiceAct, &indiceAntMes) == 0)
+        {
+            printf("\n\nVariacion calculada correctamente");
+            printf("\nEsperado:");
+            imprimirIndiceBin(indiceAct);
+            printf("\nObtenido:");
+            imprimirIndiceBin(&indiceAntMes);
+            pruebaIndiceBin->cantCoincidencias++;
+        }
+        else
+        {
+            printf("\n\n\nVariacion calculada INCORRECTAMENTE");
+            imprimirIndiceBin(indiceAct);
+            printf("\nElemento variacion calculado");
+            imprimirIndiceBin(&indiceAntMes);
+            pruebaIndiceBin->cantDiferencias++;
+        }
+
+    }
+}
+
+int compararIndicesBinIgualdadVar(const void *a, const void *b)
+{
+    const IndiceBin *indA = (const IndiceBin *)a;
+    const IndiceBin *indB = (const IndiceBin *)b;
+    int cmpPer, cmpClas, cmpNivGen, cmpTipoVar; //cmpValor
+    tFecha periodoA, periodoB;
+
+    fechaSetDesdeString(&periodoA, indA->periodo);
+    fechaSetDesdeString(&periodoB, indB->periodo);
+
+    cmpPer = fechaComparar(&periodoA, &periodoB);
+    cmpClas = compararClasificador(indA->clasificador, indB->clasificador);
+    cmpNivGen = comparar(indA->nivelGeneralAperturas, indB->nivelGeneralAperturas);
+    cmpTipoVar = compararTipoVariable(indA->tipoVariable, indB->tipoVariable);
+
+    /*
+    // Convertir los valores string a float y comparar con margen de error
+    float valorA = atof(indA->valor);
+    float valorB = atof(indB->valor);
+    cmpValor = (fabs(valorA - valorB) <= 0.5) ? 0 : 1;
+    */
+
+    if(cmpPer == 0 && cmpNivGen == 0 && cmpTipoVar == 0 && cmpClas == 0) return 0;
+
+    return 1;
+}
+
+int compararIndicesValor(const void *a, const void *b)
+{
+    const IndiceBin *indA = (const IndiceBin *)a;
+    const IndiceBin *indB = (const IndiceBin *)b;
+    int cmpValor;
+    float valorA, valorB;
 
 
+    // Convertir los valores string a float y comparar con margen de error
+    valorA = atof(indA->valor);
+    valorB = atof(indB->valor);
+
+    // Con margen de calculo ya que los indices base del trabajo con los oficiales son levemente distintos
+    cmpValor = (fabs(valorA - valorB) <= MARGEN_VAR) ? 0 : 1;
+
+    if(cmpValor == 0) return 0;
+
+    return 1;
+}
+
+void agregarClasificadorBin(IndiceBin *indice)
+{
+    char text[]="Nivel general";
+
+    if(comparar(indice->nivelGeneralAperturas, text) == 0)
+    {
+        copiar(indice->clasificador, text);
+    }
+}
 
 
 

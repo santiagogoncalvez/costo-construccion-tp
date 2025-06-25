@@ -423,3 +423,16 @@ char toUpperProp(char c)
     }
     return c;
 }
+
+void eliminarSaltoDeLinea(char* cad)
+{
+    while (*cad) // mientras no sea el caracter nulo '\0'
+    {
+        if (*cad == '\n')
+        {
+            *cad = '\0'; // lo reemplaza por fin de cadena
+            return;
+        }
+        cad++; // avanza al siguiente carácter
+    }
+}
