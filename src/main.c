@@ -12,6 +12,8 @@
 #define ARG_TXT_ITEMS 2
 #define ARG_SALIDA_BIN 3
 #define ARG_BIN 3
+#define ARG_REF_MEN 4
+#define ARG_REF_INT 5
 #define TAM_LINEA 501
 
 typedef struct
@@ -45,10 +47,15 @@ void imprimirIndiceBin(const void* a);
 int convVIndBinABin(const char* nomArchBin, Vector *vIndBin);
 int mostrarArchivoBinario(const char* nomArchBin);
 
+//Pruebas de archivo binario
+void pruebaVarMensuales(const char* nomArchBin, const char* nomArchVarMens );
+int convIndiceVarMensTxt(char* linea, void* reg);
+
+
 
 // Argumentos enviados a main desde el proyecto:
-// Archivo base indices general-capitulos, Archivo base indices items, Ruta del archivo binario de salida
-// '../datos/entrada/indices-icc-general-capitulos.csv' '../datos/entrada/Indices_items_obra.csv' '../salida/indices-procesados.bin'
+// Archivo base indices general-capitulos, Archivo base indices items, Ruta del archivo binario de salida, Archivo referencia variaciones mensuales
+// '../datos/entrada/indices-icc-general-capitulos.csv' '../datos/entrada/Indices_items_obra.csv' '../salida/indices-procesados.bin' '../datos/referencia/ICC-Capitulos-Items-var-mensual.csv'
 int main(int argc, char* argv[])
 {
     Vector vIndices, vIndicesBin;
@@ -79,6 +86,9 @@ int main(int argc, char* argv[])
     // Exportar datos a un archivo binario
     convVIndBinABin(argv[ARG_SALIDA_BIN], &vIndicesBin);
     mostrarArchivoBinario(argv[ARG_SALIDA_BIN]);
+
+    // Prueba de los datos del archivo binario
+    pruebaVarMensuales(argv[ARG_SALIDA_BIN], argv[ARG_REF_MEN]);
 
     //DESTRUIR VECTORES AL FINAL PARA LIBERAR MEMORIA
     vectorDestruir(&vIndices);
@@ -216,27 +226,6 @@ bool esErrorFatalIndice(int cod)
     default:
         return false;
     }
-}
-
-void imprimirIndice(const void* a)
-{
-    const Indice* indice = (const Indice *)a;
-    // Se muestra la estructura Indice
-
-    printf("\n%02d-%02d-%4d",
-           indice->periodo.d,
-           indice->periodo.m,
-           indice->periodo.a
-          );
-    printf("\t%-38s", indice->nivelGeneralAperturas);
-    printf("\t%-.4f", indice->indice);
-    printf("\t%-13s", indice->clasificador);
-
-    if(indice->varMensualExiste) printf("\t%-.2f", indice->varMensual);
-    else printf("\tNA");
-
-    if(indice->varInteranualExiste) printf("\t%-.2f", indice->varInteranual);
-    else printf("\tNA");
 }
 
 // IndiceBin
@@ -412,6 +401,78 @@ int mostrarArchivoBinario(const char* nomArchBin)
 
     return TODO_OK;
 }
+
+
+
+
+// Prueba de archivo binario final
+void pruebaVarMensuales(const char* nomArchBin, const char* nomArchVarMens )
+{
+    printf("\n\n\nPrueba de datos del archivo binario final...\n");
+
+    Vector indicesBin;
+    Vector indicesVarMens;
+
+    vectorCrear(&indicesVarMens, sizeof(IndiceBin));
+
+    // Leer el binario y grabar los datos en un vector
+    vectorCrearDeArchivo(&indicesBin, sizeof(IndiceBin), nomArchBin);
+
+    // Leer el txt referencia de variaciones mensuales y guardarlo en un vector
+    leerTxtIndices(nomArchVarMens, sizeof(IndiceBin), convIndiceVarMensTxt, esErrorFatalIndice, &indicesVarMens);
+
+    vectorMostrar(&indicesVarMens, imprimirIndiceBin);
+
+    // Recorrer el vector indicesVarMens y comparar los resultados con los elementos del vector indicesBin
+
+
+}
+
+int convIndiceVarMensTxt(char* linea, void* reg)
+{
+    IndiceBin* indice = reg;
+    char* act = strchrProp(linea, '\n');
+
+    if(!act)
+    {
+        return ERR_LINEA_LARGA;
+    }
+
+    eliminarTodasLasComillas(linea);
+
+    *act = '\0';
+    act = strrchrProp(linea, ';');
+    copiar(indice->valor, act + 1);
+
+    *act = '\0';
+    act = strrchrProp(linea, ';');
+    copiar(indice->nivelGeneralAperturas, act + 1);
+
+    *act = '\0';
+    act = strrchrProp(linea, ';');
+    copiar(indice->clasificador, act + 1);
+
+    //Procesar campo
+    *act = '\0';
+    copiar(indice->periodo, linea);
+
+    copiar(indice->tipoVariable, "var_mensual");
+
+    return TODO_OK;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

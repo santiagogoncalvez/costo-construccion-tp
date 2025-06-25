@@ -11,7 +11,7 @@
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
-				<Option parameters="../datos/entrada/indices_icc_general_capitulos.csv ../datos/entrada/Indices_items_obra.csv  ../salida/indices-procesados.bin" />
+				<Option parameters="../datos/entrada/indices_icc_general_capitulos.csv ../datos/entrada/Indices_items_obra.csv  ../salida/indices-procesados.bin ../datos/referencia/ICC-Capitulos-Items-var-mensual.csv" />
 				<Compiler>
 					<Add option="-g" />
 				</Compiler>

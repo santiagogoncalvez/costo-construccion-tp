@@ -32,5 +32,6 @@ void calcVariaciones(void* ind, void* vInd);
 int cmpInd12MesesAntes(const void* a, const void* b);
 int compararIndicesVar(const void *a, const void *b);
 float redondear2decimales(double valor);
+void imprimirIndice(const void* a);
 
 #endif // ESTRUCTURA_INDICE_H_INCLUDED

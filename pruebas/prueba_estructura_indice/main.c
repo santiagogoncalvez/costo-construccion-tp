@@ -5,6 +5,7 @@
 
 #include "../../librerias/estructura_indice/estructura_indice.h"
 #include "../../librerias/TDA_fecha/fecha.h"
+#include "../../librerias/TDA_vector/vector.h"
 #include "../../librerias/secuencias/secuencias.h"
 
 #include <math.h>
@@ -24,6 +25,8 @@ void pruebaAgregarClasificadorItems();
 bool verificarOrden(const Indice datos[], int ce);
 bool verificarOrden(const Indice datos[], int ce);
 void pruebaOrdenarPorPerYClas();
+void ordenarIndices(Indice *indices, int ce);
+void mostrarVIndices(const Indice* vector, int ce);
 void pruebaCalcIndVarInteranual();
 void pruebaAgregarVarMensual();
 
@@ -33,6 +36,14 @@ int main()
 
     pruebaAgregarClasificador();
     pruebaAgregarClasificadorItems();
+    pruebaOrdenarPorPerYClas();
+
+    // Separar de la funcion calcVarMensual() la parte que hace el cálculo para poder probarla con esta función y que se aplique ya sabiendo cual es el anterior y el posterior
+    /*pruebaAgregarVarMensual();*/
+
+    // Separar de la funcion calcVarInteranual() la parte que hace el cálculo para poder probarla con esta función y que se aplique ya sabiendo cual es el anterior y el posterior
+    /*pruebaCalcIndVarInteranual();*/
+
 
     return 0;
 }
@@ -41,18 +52,18 @@ void pruebaAgregarClasificador()
 {
     Indice indices[] =
     {
-        {{11, 4, 2023}, "Nivel general", 0.0, "Nivel general", 0.0, 0.0},
-        {{6, 10, 2025}, "Vidrio", 0.0, "Materiales", 0.0, 0.0},
-        {{21, 12, 2022}, "Metal", 0.0, "Mano de obra", 0.0, 0.0},
-        {{1, 7, 2020}, "Carpinteria", 0.0, "Gastos generales", 0.0, 0.0},
+        {{11, 4, 2023}, "Nivel general", 0.0, "Nivel general", 0.0, false, 0.0, false},
+        {{6, 10, 2025}, "Vidrio", 0.0, "Materiales", 0.0, false, 0.0, false},
+        {{21, 12, 2022}, "Metal", 0.0, "Mano de obra", 0.0, false, 0.0, false},
+        {{1, 7, 2020}, "Carpinteria", 0.0, "Gastos generales", 0.0, false, 0.0, false},
     };
 
     Indice esperados[] =
     {
-        {{11, 4, 2023}, "Nivel general", 0.0, "Nivel general", 0.0, 0.0},
-        {{6, 10, 2025}, "Vidrio", 0.0, "Capitulos", 0.0, 0.0},
-        {{21, 12, 2022}, "Metal", 0.0, "Capitulos", 0.0, 0.0},
-        {{1, 7, 2020}, "Carpinteria", 0.0, "Capitulos", 0.0, 0.0},
+        {{11, 4, 2023}, "Nivel general", 0.0, "Nivel general", 0.0, false, 0.0, false},
+        {{6, 10, 2025}, "Vidrio", 0.0, "Capitulos", 0.0, false, 0.0, false},
+        {{21, 12, 2022}, "Metal", 0.0, "Capitulos", 0.0, false, 0.0, false},
+        {{1, 7, 2020}, "Carpinteria", 0.0, "Capitulos", 0.0, false, 0.0, false},
     };
 
     int total = sizeof(indices) / sizeof(indices[0]);
@@ -62,7 +73,7 @@ void pruebaAgregarClasificador()
 
     for (p = indices; p < fin; p++)
     {
-       agregarClasificador(p);
+        agregarClasificador(p);
     }
 
     int errores = 0;
@@ -92,11 +103,11 @@ void pruebaAgregarClasificadorItems()
 {
     Indice indices[] =
     {
-        {{11, 4, 2023}, "", 0.0, "", 0.0, 0.0},
-        {{6, 10, 2025}, "", 0.0, "", 0.0, 0.0},
-        {{21, 12, 2022}, "", 0.0, "", 0.0, 0.0},
-        {{1, 7, 2020}, "", 0.0, "", 0.0, 0.0},
-        {{10, 4, 2023}, "", 0.0, "", 0.0, 0.0}
+        {{11, 4, 2023}, "", 0.0, "", 0.0, false, 0.0, false},
+        {{6, 10, 2025}, "", 0.0, "", 0.0, false, 0.0, false},
+        {{21, 12, 2022}, "", 0.0, "", 0.0, false, 0.0, false},
+        {{1, 7, 2020}, "", 0.0, "", 0.0, false, 0.0, false},
+        {{10, 4, 2023}, "", 0.0, "", 0.0, false, 0.0, false}
     };
 
     int total = sizeof(indices) / sizeof(indices[0]);
@@ -106,7 +117,7 @@ void pruebaAgregarClasificadorItems()
 
     for (p = indices; p < fin; p++)
     {
-       agregarClasificadorItem(p);
+        agregarClasificadorItem(p);
     }
 
     int errores = 0;
@@ -200,18 +211,18 @@ bool verificarOrden(const Indice datos[], int ce)
 
     for (int i = 0; i < ce - 1; i++)
     {
-        int cmpClas = compararClasificador(datos[i].clasificador, datos[i + 1].clasificador);
+        int cmpFecha = fechaComparar(&datos[i].periodo, &datos[i + 1].periodo);
 
-        // Clasificador desordenado
-        if (cmpClas < 0)
+        // Periodo desordenado (orden ascendente)
+        if (cmpFecha > 0)
             return false;
 
-        if (cmpClas == 0)
+        if (cmpFecha == 0)
         {
-            int cmpFecha = fechaComparar(&datos[i].periodo, &datos[i + 1].periodo);
+            int cmpClas = compararClasificador(datos[i].clasificador, datos[i + 1].clasificador);
 
-            // Mismo clasificador, pero fechas desordenadas
-            if (cmpFecha > 0)
+            // Mismo periodo, pero clasificador desordenado (orden descendente)
+            if (cmpClas < 0)
                 return false;
         }
     }
@@ -223,35 +234,28 @@ void pruebaOrdenarPorPerYClas()
 {
     printf("\nEjecutando pruebas para ordenarPorPerYClas...");
 
-    Indice indices[] =
+    Indice indicesBase[] =
     {
-        {{11, 4, 2023}, "", 0.0, "Items", 0.0, 0.0},
-        {{6, 10, 2025}, "", 0.0, "Capitulos", 0.0, 0.0},
-        {{21, 12, 2022}, "", 0.0, "Nivel general", 0.0, 0.0},
-        {{1, 7, 2020}, "", 0.0, "Capitulos", 0.0, 0.0},
-        {{10, 4, 2023}, "", 0.0, "Items", 0.0, 0.0}
+        {{11, 4, 2023}, "", 0.0, "Items", 0.0, false, 0.0, false},
+        {{6, 10, 2021}, "", 0.0, "Capitulos", 0.0, false, 0.0, false},
+        {{21, 12, 2022}, "", 0.0, "Nivel general", 0.0, false, 0.0, false},
+        {{6, 10, 2021}, "", 0.0, "Items", 0.0, false, 0.0, false},
+        {{10, 4, 2023}, "", 0.0, "Items", 0.0, false, 0.0, false},
+        {{6, 10, 2021}, "", 0.0, "Nivel general", 0.0, false, 0.0, false},
+        {{6, 10, 2021}, "", 0.0, "Items", 0.0, false, 0.0, false},
     };
 
-    int total = sizeof(indices) / sizeof(indices[0]);
+    int total = sizeof(indicesBase) / sizeof(indicesBase[0]);
 
-    printf("\nAntes de orden\n");
-    for(int i = 0; i < total; i++)
-    {
-        printf("%02d-%02d-%4d\t", indices[i].periodo.d, indices[i].periodo.m, indices[i].periodo.a);
-        printf("%-20s\n",indices[i].clasificador);
-    }
+    printf("\n\nAntes de ordenar");
+    mostrarVIndices(indicesBase, total);
 
-    //ordenarPorPerYClas(indices, total);
+    ordenarIndices(indicesBase, total);
 
-    printf("\nDespues de orden\n");
-    for(int i = 0; i < total; i++)
-    {
-        printf("%02d-%02d-%4d\t", indices[i].periodo.d, indices[i].periodo.m, indices[i].periodo.a);
-        printf("%-20s\n",indices[i].clasificador);
-    }
+    printf("\n\nDespues de ordenar");
+    mostrarVIndices(indicesBase, total);
 
-
-    if (verificarOrden(indices, total))
+    if (verificarOrden(indicesBase, total))
     {
         printf("\nOrden correcto\n");
     }
@@ -260,6 +264,50 @@ void pruebaOrdenarPorPerYClas()
         printf("\nOrden incorrecto\n");
     }
 }
+
+void ordenarIndices(Indice *indices, int ce)
+{
+    int i, j;
+    Indice *minPtr;
+    Indice *currPtr;
+    Indice temp;
+
+    for (i = 0; i < ce - 1; i++)
+    {
+        minPtr = indices + i;
+
+        for (j = i + 1; j < ce; j++)
+        {
+            currPtr = indices + j;
+
+            if (compararIndices(currPtr, minPtr) < 0)
+            {
+                minPtr = currPtr;
+            }
+        }
+
+        if (minPtr != indices + i)
+        {
+            temp = *(indices + i);
+            *(indices + i) = *minPtr;
+            *minPtr = temp;
+        }
+    }
+}
+
+void mostrarVIndices(const Indice* vector, int ce)
+{
+    const Indice* ptr;
+    const Indice* fin;
+
+    fin = vector + ce;
+
+    for (ptr = vector; ptr < fin; ptr++)
+    {
+        imprimirIndice(ptr);
+    }
+}
+
 
 void doubleToStr(double val, char *str, int size)
 {
@@ -270,20 +318,20 @@ void pruebaIndPorInteranual()
 {
     Indice indices[] =
     {
-        {{1, 4, 2022}, "", 100.0, "Nivel general", 0.0, 0.0},  // Base
-        {{1, 4, 2023}, "", 115.5, "Nivel general", 0.0, 0.0},  // +15.5%
-        {{1, 4, 2022}, "", 200.0, "Items", 0.0, 0.0},          // Base
-        {{1, 4, 2023}, "", 260.0, "Items", 0.0, 0.0},          // +30.0%
-        {{1, 4, 2023}, "", 300.0, "Capitulos", 0.0, 0.0}       // Sin valor base â†’ no se puede calcular
+        {{1, 4, 2022}, "", 100.0, "Nivel general", 0.0, false, 0.0, false},  // Base
+        {{1, 4, 2023}, "", 115.5, "Nivel general", 0.0, false, 0.0, false},  // +15.5%
+        {{1, 4, 2022}, "", 200.0, "Items", 0.0, false, 0.0, false},          // Base
+        {{1, 4, 2023}, "", 260.0, "Items", 0.0, false, 0.0, false},          // +30.0%
+        {{1, 4, 2023}, "", 300.0, "Capitulos", 0.0, false, 0.0, false}       // Sin valor base â†’ no se puede calcular
     };
 
     Indice esperados[] =
     {
-        {{1, 4, 2022}, "", 100.0, "Nivel general", 0.0, 0.0},     // Base, sin variaciÃ³n
+        {{1, 4, 2022}, "", 100.0, "Nivel general", 0.0, false, 0.0, false},     // Base, sin variaciÃ³n
         {{1, 4, 2023}, "", 115.5, "Nivel general", 0.0, 15.50},   // +15.5%
-        {{1, 4, 2022}, "", 200.0, "Items", 0.0, 0.0},             // Base, sin variaciÃ³n
+        {{1, 4, 2022}, "", 200.0, "Items", 0.0, false, 0.0, false},             // Base, sin variaciÃ³n
         {{1, 4, 2023}, "", 260.0, "Items", 0.0, 30.00},           // +30%
-        {{1, 4, 2023}, "", 300.0, "Capitulos", 0.0, 0.0}
+        {{1, 4, 2023}, "", 300.0, "Capitulos", 0.0, false, 0.0, false}
     };
 
     int total = sizeof(indices) / sizeof(indices[0]);
@@ -293,7 +341,7 @@ void pruebaIndPorInteranual()
 
     for (p = indices; p < fin; p++)
     {
-       calcVarInteranual(p, indices);
+        calcVarInteranual(p, indices);
     }
 
     int errores = 0;
@@ -323,47 +371,47 @@ void pruebaCalcIndVarInteranual()
 {
     Indice indicesBase[] =
     {
-        {{1,  1, 2022}, "Nivel general", 100.00f, "Capï¿½tulos", 0.0f, 0.0f},
-        {{1,  2, 2022}, "Nivel general", 103.80f, "Capï¿½tulos", 0.0f, 0.0f},
-        {{1,  3, 2022}, "Nivel general", 108.99f, "Capï¿½tulos", 0.0f, 0.0f},
-        {{1,  4, 2022}, "Nivel general", 111.50f, "Capï¿½tulos", 0.0f, 0.0f},
-        {{1,  5, 2022}, "Nivel general", 118.86f, "Capï¿½tulos", 0.0f, 0.0f},
-        {{1,  6, 2022}, "Nivel general", 126.70f, "Capï¿½tulos", 0.0f, 0.0f},
-        {{1,  7, 2022}, "Nivel general", 135.44f, "Capï¿½tulos", 0.0f, 0.0f},
-        {{1,  8, 2022}, "Nivel general", 145.60f, "Capï¿½tulos", 0.0f, 0.0f},
-        {{1,  9, 2022}, "Nivel general", 156.37f, "Capï¿½tulos", 0.0f, 0.0f},
-        {{1, 10, 2022}, "Nivel general", 167.79f, "Capï¿½tulos", 0.0f, 0.0f},
-        {{1, 11, 2022}, "Nivel general", 179.03f, "Capï¿½tulos", 0.0f, 0.0f},
-        {{1, 12, 2022}, "Nivel general", 186.73f, "Capï¿½tulos", 0.0f, 0.0f},
-        {{1,  1, 2023}, "Nivel general", 199.24f, "Capï¿½tulos", 0.0f, 0.0f},
-        {{1,  2, 2023}, "Nivel general", 211.20f, "Capï¿½tulos", 0.0f, 0.0f},
-        {{1,  3, 2023}, "Nivel general", 221.12f, "Capï¿½tulos", 0.0f, 0.0f},
-        {{1,  4, 2023}, "Nivel general", 239.03f, "Capï¿½tulos", 0.0f, 0.0f},
-        {{1,  5, 2023}, "Nivel general", 257.68f, "Capï¿½tulos", 0.0f, 0.0f},
-        {{1,  6, 2023}, "Nivel general", 272.62f, "Capï¿½tulos", 0.0f, 0.0f},
-        {{1,  7, 2023}, "Nivel general", 295.52f, "Capï¿½tulos", 0.0f, 0.0f},
-        {{1,  8, 2023}, "Nivel general", 339.26f, "Capï¿½tulos", 0.0f, 0.0f},
-        {{1,  9, 2023}, "Nivel general", 389.13f, "Capï¿½tulos", 0.0f, 0.0f},
-        {{1, 10, 2023}, "Nivel general", 416.76f, "Capï¿½tulos", 0.0f, 0.0f},
-        {{1, 11, 2023}, "Nivel general", 464.69f, "Capï¿½tulos", 0.0f, 0.0f},
-        {{1, 12, 2023}, "Nivel general", 606.88f, "Capï¿½tulos", 0.0f, 0.0f}
+        {{1,  1, 2022}, "Nivel general", 100.00f, "Capï¿½tulos", 0.0f, false, 0.0f, false},
+        {{1,  2, 2022}, "Nivel general", 103.80f, "Capï¿½tulos", 0.0f, false, 0.0f, false},
+        {{1,  3, 2022}, "Nivel general", 108.99f, "Capï¿½tulos", 0.0f, false, 0.0f, false},
+        {{1,  4, 2022}, "Nivel general", 111.50f, "Capï¿½tulos", 0.0f, false, 0.0f, false},
+        {{1,  5, 2022}, "Nivel general", 118.86f, "Capï¿½tulos", 0.0f, false, 0.0f, false},
+        {{1,  6, 2022}, "Nivel general", 126.70f, "Capï¿½tulos", 0.0f, false, 0.0f, false},
+        {{1,  7, 2022}, "Nivel general", 135.44f, "Capï¿½tulos", 0.0f, false, 0.0f, false},
+        {{1,  8, 2022}, "Nivel general", 145.60f, "Capï¿½tulos", 0.0f, false, 0.0f, false},
+        {{1,  9, 2022}, "Nivel general", 156.37f, "Capï¿½tulos", 0.0f, false, 0.0f, false},
+        {{1, 10, 2022}, "Nivel general", 167.79f, "Capï¿½tulos", 0.0f, false, 0.0f, false},
+        {{1, 11, 2022}, "Nivel general", 179.03f, "Capï¿½tulos", 0.0f, false, 0.0f, false},
+        {{1, 12, 2022}, "Nivel general", 186.73f, "Capï¿½tulos", 0.0f, false, 0.0f, false},
+        {{1,  1, 2023}, "Nivel general", 199.24f, "Capï¿½tulos", 0.0f, false, 0.0f, false},
+        {{1,  2, 2023}, "Nivel general", 211.20f, "Capï¿½tulos", 0.0f, false, 0.0f, false},
+        {{1,  3, 2023}, "Nivel general", 221.12f, "Capï¿½tulos", 0.0f, false, 0.0f, false},
+        {{1,  4, 2023}, "Nivel general", 239.03f, "Capï¿½tulos", 0.0f, false, 0.0f, false},
+        {{1,  5, 2023}, "Nivel general", 257.68f, "Capï¿½tulos", 0.0f, false, 0.0f, false},
+        {{1,  6, 2023}, "Nivel general", 272.62f, "Capï¿½tulos", 0.0f, false, 0.0f, false},
+        {{1,  7, 2023}, "Nivel general", 295.52f, "Capï¿½tulos", 0.0f, false, 0.0f, false},
+        {{1,  8, 2023}, "Nivel general", 339.26f, "Capï¿½tulos", 0.0f, false, 0.0f, false},
+        {{1,  9, 2023}, "Nivel general", 389.13f, "Capï¿½tulos", 0.0f, false, 0.0f, false},
+        {{1, 10, 2023}, "Nivel general", 416.76f, "Capï¿½tulos", 0.0f, false, 0.0f, false},
+        {{1, 11, 2023}, "Nivel general", 464.69f, "Capï¿½tulos", 0.0f, false, 0.0f, false},
+        {{1, 12, 2023}, "Nivel general", 606.88f, "Capï¿½tulos", 0.0f, false, 0.0f, false}
     };
 
     Indice indicesEsperados[] =
     {
         // Aï¿½o 2022
-        {{1,  1, 2022}, "Nivel general", 100.00f, "Capï¿½tulos", 0.0f, 0.0f},
-        {{1,  2, 2022}, "Nivel general", 103.80f, "Capï¿½tulos", 0.0f, 0.0f},
-        {{1,  3, 2022}, "Nivel general", 108.99f, "Capï¿½tulos", 0.0f, 0.0f},
-        {{1,  4, 2022}, "Nivel general", 111.50f, "Capï¿½tulos", 0.0f, 0.0f},
-        {{1,  5, 2022}, "Nivel general", 118.86f, "Capï¿½tulos", 0.0f, 0.0f},
-        {{1,  6, 2022}, "Nivel general", 126.70f, "Capï¿½tulos", 0.0f, 0.0f},
-        {{1,  7, 2022}, "Nivel general", 135.44f, "Capï¿½tulos", 0.0f, 0.0f},
-        {{1,  8, 2022}, "Nivel general", 145.60f, "Capï¿½tulos", 0.0f, 0.0f},
-        {{1,  9, 2022}, "Nivel general", 156.37f, "Capï¿½tulos", 0.0f, 0.0f},
-        {{1, 10, 2022}, "Nivel general", 167.79f, "Capï¿½tulos", 0.0f, 0.0f},
-        {{1, 11, 2022}, "Nivel general", 179.03f, "Capï¿½tulos", 0.0f, 0.0f},
-        {{1, 12, 2022}, "Nivel general", 186.73f, "Capï¿½tulos", 0.0f, 0.0f},
+        {{1,  1, 2022}, "Nivel general", 100.00f, "Capï¿½tulos", 0.0f, false, 0.0f, false},
+        {{1,  2, 2022}, "Nivel general", 103.80f, "Capï¿½tulos", 0.0f, false, 0.0f, false},
+        {{1,  3, 2022}, "Nivel general", 108.99f, "Capï¿½tulos", 0.0f, false, 0.0f, false},
+        {{1,  4, 2022}, "Nivel general", 111.50f, "Capï¿½tulos", 0.0f, false, 0.0f, false},
+        {{1,  5, 2022}, "Nivel general", 118.86f, "Capï¿½tulos", 0.0f, false, 0.0f, false},
+        {{1,  6, 2022}, "Nivel general", 126.70f, "Capï¿½tulos", 0.0f, false, 0.0f, false},
+        {{1,  7, 2022}, "Nivel general", 135.44f, "Capï¿½tulos", 0.0f, false, 0.0f, false},
+        {{1,  8, 2022}, "Nivel general", 145.60f, "Capï¿½tulos", 0.0f, false, 0.0f, false},
+        {{1,  9, 2022}, "Nivel general", 156.37f, "Capï¿½tulos", 0.0f, false, 0.0f, false},
+        {{1, 10, 2022}, "Nivel general", 167.79f, "Capï¿½tulos", 0.0f, false, 0.0f, false},
+        {{1, 11, 2022}, "Nivel general", 179.03f, "Capï¿½tulos", 0.0f, false, 0.0f, false},
+        {{1, 12, 2022}, "Nivel general", 186.73f, "Capï¿½tulos", 0.0f, false, 0.0f, false},
 
         // Aï¿½o 2023 (con valores de variaciï¿½n interanual esperados)
         {{1,  1, 2023}, "Nivel general", 199.24f, "Capï¿½tulos", 0.0f, 99.4f},
@@ -388,7 +436,7 @@ void pruebaCalcIndVarInteranual()
 
     for (p = indicesBase; p < fin; p++)
     {
-       calcVarInteranual(p, indicesBase);
+        calcVarInteranual(p, indicesBase);
     }
 
     printf("\nEjecutando pruebas para pruebaCalcIndVarInteranual...\n");
@@ -425,58 +473,58 @@ void pruebaAgregarVarMensual()
 {
     Indice indicesBase[] =
     {
-        {{1,  1, 2022}, "Nivel general", 100.00f, "Capï¿½tulos", 0.0f, 0.0f},
-        {{1,  2, 2022}, "Nivel general", 103.80f, "Capï¿½tulos", 0.0f, 0.0f},
-        {{1,  3, 2022}, "Nivel general", 108.99f, "Capï¿½tulos", 0.0f, 0.0f},
-        {{1,  4, 2022}, "Nivel general", 111.50f, "Capï¿½tulos", 0.0f, 0.0f},
-        {{1,  5, 2022}, "Nivel general", 118.86f, "Capï¿½tulos", 0.0f, 0.0f},
-        {{1,  6, 2022}, "Nivel general", 126.70f, "Capï¿½tulos", 0.0f, 0.0f},
-        {{1,  7, 2022}, "Nivel general", 135.44f, "Capï¿½tulos", 0.0f, 0.0f},
-        {{1,  8, 2022}, "Nivel general", 145.60f, "Capï¿½tulos", 0.0f, 0.0f},
-        {{1,  9, 2022}, "Nivel general", 156.37f, "Capï¿½tulos", 0.0f, 0.0f},
-        {{1, 10, 2022}, "Nivel general", 167.79f, "Capï¿½tulos", 0.0f, 0.0f},
-        {{1, 11, 2022}, "Nivel general", 179.03f, "Capï¿½tulos", 0.0f, 0.0f},
-        {{1, 12, 2022}, "Nivel general", 186.73f, "Capï¿½tulos", 0.0f, 0.0f},
-        {{1,  1, 2023}, "Nivel general", 199.24f, "Capï¿½tulos", 0.0f, 0.0f},
-        {{1,  2, 2023}, "Nivel general", 211.20f, "Capï¿½tulos", 0.0f, 0.0f},
-        {{1,  3, 2023}, "Nivel general", 221.12f, "Capï¿½tulos", 0.0f, 0.0f},
-        {{1,  4, 2023}, "Nivel general", 239.03f, "Capï¿½tulos", 0.0f, 0.0f},
-        {{1,  5, 2023}, "Nivel general", 257.68f, "Capï¿½tulos", 0.0f, 0.0f},
-        {{1,  6, 2023}, "Nivel general", 272.62f, "Capï¿½tulos", 0.0f, 0.0f},
-        {{1,  7, 2023}, "Nivel general", 295.52f, "Capï¿½tulos", 0.0f, 0.0f},
-        {{1,  8, 2023}, "Nivel general", 339.26f, "Capï¿½tulos", 0.0f, 0.0f},
-        {{1,  9, 2023}, "Nivel general", 389.13f, "Capï¿½tulos", 0.0f, 0.0f},
-        {{1, 10, 2023}, "Nivel general", 416.76f, "Capï¿½tulos", 0.0f, 0.0f},
-        {{1, 11, 2023}, "Nivel general", 464.69f, "Capï¿½tulos", 0.0f, 0.0f},
-        {{1, 12, 2023}, "Nivel general", 606.88f, "Capï¿½tulos", 0.0f, 0.0f}
+        {{1,  1, 2022}, "Nivel general", 100.00f, "Capï¿½tulos", 0.0f, false, 0.0f, false},
+        {{1,  2, 2022}, "Nivel general", 103.80f, "Capï¿½tulos", 0.0f, false, 0.0f, false},
+        {{1,  3, 2022}, "Nivel general", 108.99f, "Capï¿½tulos", 0.0f, false, 0.0f, false},
+        {{1,  4, 2022}, "Nivel general", 111.50f, "Capï¿½tulos", 0.0f, false, 0.0f, false},
+        {{1,  5, 2022}, "Nivel general", 118.86f, "Capï¿½tulos", 0.0f, false, 0.0f, false},
+        {{1,  6, 2022}, "Nivel general", 126.70f, "Capï¿½tulos", 0.0f, false, 0.0f, false},
+        {{1,  7, 2022}, "Nivel general", 135.44f, "Capï¿½tulos", 0.0f, false, 0.0f, false},
+        {{1,  8, 2022}, "Nivel general", 145.60f, "Capï¿½tulos", 0.0f, false, 0.0f, false},
+        {{1,  9, 2022}, "Nivel general", 156.37f, "Capï¿½tulos", 0.0f, false, 0.0f, false},
+        {{1, 10, 2022}, "Nivel general", 167.79f, "Capï¿½tulos", 0.0f, false, 0.0f, false},
+        {{1, 11, 2022}, "Nivel general", 179.03f, "Capï¿½tulos", 0.0f, false, 0.0f, false},
+        {{1, 12, 2022}, "Nivel general", 186.73f, "Capï¿½tulos", 0.0f, false, 0.0f, false},
+        {{1,  1, 2023}, "Nivel general", 199.24f, "Capï¿½tulos", 0.0f, false, 0.0f, false},
+        {{1,  2, 2023}, "Nivel general", 211.20f, "Capï¿½tulos", 0.0f, false, 0.0f, false},
+        {{1,  3, 2023}, "Nivel general", 221.12f, "Capï¿½tulos", 0.0f, false, 0.0f, false},
+        {{1,  4, 2023}, "Nivel general", 239.03f, "Capï¿½tulos", 0.0f, false, 0.0f, false},
+        {{1,  5, 2023}, "Nivel general", 257.68f, "Capï¿½tulos", 0.0f, false, 0.0f, false},
+        {{1,  6, 2023}, "Nivel general", 272.62f, "Capï¿½tulos", 0.0f, false, 0.0f, false},
+        {{1,  7, 2023}, "Nivel general", 295.52f, "Capï¿½tulos", 0.0f, false, 0.0f, false},
+        {{1,  8, 2023}, "Nivel general", 339.26f, "Capï¿½tulos", 0.0f, false, 0.0f, false},
+        {{1,  9, 2023}, "Nivel general", 389.13f, "Capï¿½tulos", 0.0f, false, 0.0f, false},
+        {{1, 10, 2023}, "Nivel general", 416.76f, "Capï¿½tulos", 0.0f, false, 0.0f, false},
+        {{1, 11, 2023}, "Nivel general", 464.69f, "Capï¿½tulos", 0.0f, false, 0.0f, false},
+        {{1, 12, 2023}, "Nivel general", 606.88f, "Capï¿½tulos", 0.0f, false, 0.0f, false}
     };
 
     Indice indicesEsperados[] =
     {
-        {{1,  1, 2022}, "Nivel general", 100.00f, "Capï¿½tulos", 0.0f, 0.0f},
-        {{1,  2, 2022}, "Nivel general", 103.80f, "Capï¿½tulos", 3.8f, 0.0f},
-        {{1,  3, 2022}, "Nivel general", 108.99f, "Capï¿½tulos", 5.0f, 0.0f},
-        {{1,  4, 2022}, "Nivel general", 111.50f, "Capï¿½tulos", 2.3f, 0.0f},
-        {{1,  5, 2022}, "Nivel general", 118.86f, "Capï¿½tulos", 6.6f, 0.0f},
-        {{1,  6, 2022}, "Nivel general", 126.70f, "Capï¿½tulos", 6.6f, 0.0f},
-        {{1,  7, 2022}, "Nivel general", 135.44f, "Capï¿½tulos", 6.9f, 0.0f},
-        {{1,  8, 2022}, "Nivel general", 145.60f, "Capï¿½tulos", 7.5f, 0.0f},
-        {{1,  9, 2022}, "Nivel general", 156.37f, "Capï¿½tulos", 7.4f, 0.0f},
-        {{1, 10, 2022}, "Nivel general", 167.79f, "Capï¿½tulos", 7.3f, 0.0f},
-        {{1, 11, 2022}, "Nivel general", 179.03f, "Capï¿½tulos", 6.7f, 0.0f},
-        {{1, 12, 2022}, "Nivel general", 186.73f, "Capï¿½tulos", 4.3f, 0.0f},
-        {{1,  1, 2023}, "Nivel general", 199.24f, "Capï¿½tulos", 6.7f, 0.0f},
-        {{1,  2, 2023}, "Nivel general", 211.20f, "Capï¿½tulos", 6.0f, 0.0f},
-        {{1,  3, 2023}, "Nivel general", 221.12f, "Capï¿½tulos", 4.7f, 0.0f},
-        {{1,  4, 2023}, "Nivel general", 239.03f, "Capï¿½tulos", 8.1f, 0.0f},
-        {{1,  5, 2023}, "Nivel general", 257.68f, "Capï¿½tulos", 7.8f, 0.0f},
-        {{1,  6, 2023}, "Nivel general", 272.62f, "Capï¿½tulos", 5.8f, 0.0f},
-        {{1,  7, 2023}, "Nivel general", 295.52f, "Capï¿½tulos", 8.4f, 0.0f},
-        {{1,  8, 2023}, "Nivel general", 339.26f, "Capï¿½tulos", 14.8f, 0.0f},
-        {{1,  9, 2023}, "Nivel general", 389.13f, "Capï¿½tulos", 14.7f, 0.0f},
-        {{1, 10, 2023}, "Nivel general", 416.76f, "Capï¿½tulos", 7.1f, 0.0f},
-        {{1, 11, 2023}, "Nivel general", 464.69f, "Capï¿½tulos", 11.5f, 0.0f},
-        {{1, 12, 2023}, "Nivel general", 606.88f, "Capï¿½tulos", 30.6f, 0.0f}
+        {{1,  1, 2022}, "Nivel general", 100.00f, "Capï¿½tulos", 0.0f, false, 0.0f, false},
+        {{1,  2, 2022}, "Nivel general", 103.80f, "Capï¿½tulos", 3.8f, true, 0.0f, false},
+        {{1,  3, 2022}, "Nivel general", 108.99f, "Capï¿½tulos", 5.0f, true, 0.0f, false},
+        {{1,  4, 2022}, "Nivel general", 111.50f, "Capï¿½tulos", 2.3f, true, 0.0f, false},
+        {{1,  5, 2022}, "Nivel general", 118.86f, "Capï¿½tulos", 6.6f, true, 0.0f, false},
+        {{1,  6, 2022}, "Nivel general", 126.70f, "Capï¿½tulos", 6.6f, true, 0.0f, false},
+        {{1,  7, 2022}, "Nivel general", 135.44f, "Capï¿½tulos", 6.9f, true, 0.0f, false},
+        {{1,  8, 2022}, "Nivel general", 145.60f, "Capï¿½tulos", 7.5f, true, 0.0f, false},
+        {{1,  9, 2022}, "Nivel general", 156.37f, "Capï¿½tulos", 7.4f, true, 0.0f, false},
+        {{1, 10, 2022}, "Nivel general", 167.79f, "Capï¿½tulos", 7.3f, true, 0.0f, false},
+        {{1, 11, 2022}, "Nivel general", 179.03f, "Capï¿½tulos", 6.7f, true, 0.0f, false},
+        {{1, 12, 2022}, "Nivel general", 186.73f, "Capï¿½tulos", 4.3f, true, 0.0f, false},
+        {{1,  1, 2023}, "Nivel general", 199.24f, "Capï¿½tulos", 6.7f, true, 0.0f, false},
+        {{1,  2, 2023}, "Nivel general", 211.20f, "Capï¿½tulos", 6.0f, true, 0.0f, false},
+        {{1,  3, 2023}, "Nivel general", 221.12f, "Capï¿½tulos", 4.7f, true, 0.0f, false},
+        {{1,  4, 2023}, "Nivel general", 239.03f, "Capï¿½tulos", 8.1f, true, 0.0f, false},
+        {{1,  5, 2023}, "Nivel general", 257.68f, "Capï¿½tulos", 7.8f, true, 0.0f, false},
+        {{1,  6, 2023}, "Nivel general", 272.62f, "Capï¿½tulos", 5.8f, true, 0.0f, false},
+        {{1,  7, 2023}, "Nivel general", 295.52f, "Capï¿½tulos", 8.4f, true, 0.0f, false},
+        {{1,  8, 2023}, "Nivel general", 339.26f, "Capï¿½tulos", 14.8f, true, 0.0f, false},
+        {{1,  9, 2023}, "Nivel general", 389.13f, "Capï¿½tulos", 14.7f, true, 0.0f, false},
+        {{1, 10, 2023}, "Nivel general", 416.76f, "Capï¿½tulos", 7.1f, true, 0.0f, false},
+        {{1, 11, 2023}, "Nivel general", 464.69f, "Capï¿½tulos", 11.5f, true, 0.0f, false},
+        {{1, 12, 2023}, "Nivel general", 606.88f, "Capï¿½tulos", 30.6f, true, 0.0f, false}
     };
 
     int total = sizeof(indicesBase) / sizeof(indicesBase[0]);
@@ -487,7 +535,7 @@ void pruebaAgregarVarMensual()
 
     for (p = indicesBase; p < fin; p++)
     {
-       calcVarMensual(p, indicesBase);
+        calcVarMensual(p, indicesBase);
     }
 
     printf("\nEjecutando pruebas para pruebaAgregarVarMensual...\n");

@@ -99,7 +99,6 @@ void calcVarMensual(void* ind, void* vInd)
 
     // Calcular variacion
     vectorBuscarSecuencial(vIndices, &indiceAntMes, cmpInd12MesesAntes);
-    //vectorOrdBuscar(vIndices, &indiceAntMes, compararIndicesVar);
     varMensual = redondear2decimales(((indiceAct->indice / indiceAntMes.indice) - 1) * 100);
 
     indiceAct->varMensual = varMensual;
@@ -153,3 +152,23 @@ int compararIndicesIgualdad(const void *a, const void *b)
     return 1;
 }
 
+void imprimirIndice(const void* a)
+{
+    const Indice* indice = (const Indice *)a;
+    // Se muestra la estructura Indice
+
+    printf("\n%02d-%02d-%4d",
+           indice->periodo.d,
+           indice->periodo.m,
+           indice->periodo.a
+          );
+    printf("\t%-38s", indice->nivelGeneralAperturas);
+    printf("\t%-.4f", indice->indice);
+    printf("\t%-13s", indice->clasificador);
+
+    if(indice->varMensualExiste) printf("\t%-.2f", indice->varMensual);
+    else printf("\tNA");
+
+    if(indice->varInteranualExiste) printf("\t%-.2f", indice->varInteranual);
+    else printf("\tNA");
+}
