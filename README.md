@@ -1,26 +1,26 @@
-# Indices del costo de la contrucción - TP de Tópicos (2025)
+# Índices del Costo de la Construcción - TP de Tópicos (2025)
 
 ## Qué hace el proyecto
 
-Permite **procesar índices y variaciones** del indicador económico de **Costo de la Construcción**, generando un archivo binario final con los datos procesados.
+Permite **procesar índices y variaciones** del indicador económico de **Costo de la Construcción**, generando un archivo binario con los datos procesados.
 
 ## Estructura del proyecto
 
-`/src`: va a contener el proyecto principal encargado de procesar los datos y generar el archivo binario.
+`/src`: contiene el proyecto principal encargado de procesar los datos y generar el archivo binario.
 
-`/librerias`: va a contener las librerías que se utilicen.
+`/librerias`: contiene las librerías utilizadas.
 
-`/datos`: va a contetner los archivos de datos que serán procesados.
+`/datos`: contiene los archivos de datos que serán procesados.
 
-`/salida`: va a ser la carpeta destino del archivo binario que se va a generar.
+`/salida`: es la ubicación destino del archivo binario que se va a generar.
 
-`/documentos`: va a contener las consignas y documentos del trabajo.
+`/documentos`: contiene las consignas y documentos del trabajo.
 
-`/pruebas`: va a contener las funciones y códigos que prueben y examinen el proyecto principal y las librerías.
+`/pruebas`: contiene las funciones y código para probar el proyecto principal y las librerías.
 
 ## Librerías
 
--  `estructura_indice`: contiene la estructura Indice y las funciones que se encargan de modificar esta estructura.
+-  `estructura_indice`: contiene la estructura `Indice` y las funciones que se encargan de modificar esta estructura.
 
 -  `secuencias`: contiene funciones de modificación y manejo de cadenas.
 
@@ -29,14 +29,17 @@ Permite **procesar índices y variaciones** del indicador económico de **Costo 
 -  `TDA_vector`: contiene el TDA para manejo de vectores mediante memoria dinámica.
 
 ## Archivos de referencia
-Los archivos que se encuentran en `/datos/referencia` son archivos con los resultados correctos de las variaciones mensuales y anuales de la página del Indec https://shiny.indec.gob.ar/vip/. Para que sea compatible con ANSI C este archivo no contiene caracteres con tilde ni el caracter "ñ". Las demás conversiones de formato se hacen en el código.
 
-`ICC-Capitulos-Items-var-mensual.csv` es un archivo unificado de los valores de las variaciones mensuales de capítulos e ítems juntos con sus niveles de agreagación.
+Los archivos en `/datos/referencia` contienen resultados correctos de variaciones mensuales e interanuales, según el sitio del Indec: https://shiny.indec.gob.ar/vip/.  
+Para garantizar la compatibilidad con ANSI C, estos archivos no incluyen caracteres acentuados ni la letra "ñ". Las conversiones de formato restantes se realizan en el código.
 
-`ICC-Capitulos-Items-var-interanual.csv` es un archivo unificado de los valores de las variaciones interanuales de de capítulos e ítems juntos con sus niveles de agreagación.
+`ICC-Capitulos-Items-var-mensual.csv` es un archivo unificado de los valores de las variaciones mensuales de capítulos e ítems juntos con sus niveles de agregación.
+
+`ICC-Capitulos-Items-var-interanual.csv` es un archivo unificado de los valores de las variaciones interanuales de capítulos e ítems juntos con sus niveles de agregación.
 
 ## Pruebas
-Los proyectos en `/pruebas` se encargan de probar las funciones del proyecto. Hay un proyecto para probar las principales funiones de la librería `estructura_indice` y otro para la librería `secuencias`.
+
+Los proyectos en `/pruebas` se encargan de probar las funciones del proyecto. Hay un proyecto para probar las principales funciones de la librería `estructura_indice` y otro para la librería `secuencias`.
 
 # Cómo compilar en Code::Blocks
 
@@ -54,14 +57,14 @@ Los proyectos en `/pruebas` se encargan de probar las funciones del proyecto. Ha
 
 ## 📌 Reglas y Requerimientos
 
--  Cada función va a tener su propio archivo separado: `nombre-funcion.c`. Estas van a estar incluidas dentro de un archivo `proyecto.h`.
+-  Cada función va a tener su propio archivo separado: `nombre-funcion.c`. Estas estarán incluidas dentro de un archivo `proyecto.h`.
 -  Las funciones tienen que funcionar mínimo para todos los casos de prueba que presentan.
 -  Vectores y cadenas de texto deberán ser manipulados utilizando aritmética de punteros.
 -  Las soluciones tienen que ser eficientes:
    En el uso de memoria: no declarar vectores o matrices auxiliares si no es necesario.
    En cantidad de ciclos de procesador y en el caso de matrices las soluciones deben ser óptimas.
    En recorridos de archivos: estos tienen que ser mínimos.
--  Nunca acceder a memoria que no nos pertenece
+-  Nunca acceder a memoria que no nos pertenece.
 -  Declarar variables al inicio del bloque y no utilizar VLA (Variable length arrays).
 -  Código prolijo y dividido en funciones.
 -  Poner nombres significativos a las variables.
