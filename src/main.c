@@ -85,16 +85,17 @@ int main(int argc, char* argv[])
     // Calcular variaciones.
     vectorRecorrer(&vIndices, calcVariaciones, &vIndices);
 
-    printf("\n\nVector union de los 2 archivos base:\n");
-    vectorMostrar(&vIndices, imprimirIndice);
+    printf("\nArchivos procesados.");
+    //printf("\n\nVector union de los 2 archivos base:\n");
+    //vectorMostrar(&vIndices, imprimirIndice);
     printf("\nCantidad de elementos: %d \n", vIndices.ce);
 
     // Creacionn del vector final que se va a grabar en el archivo binario
+    printf("\n\nCreacion y procesamiento del vector final que se va a exportar a un archivo binario.\n");
     vectorCrear(&vIndicesBin, sizeof(IndiceBin));
     vectorRecorrer(&vIndices, genVIndicesBin, &vIndicesBin);
-
-    printf("\n\nVector final que se va a exportar a un archivo binario:\n");
-    vectorMostrar(&vIndicesBin, imprimirIndiceBin);
+    //vectorMostrar(&vIndicesBin, imprimirIndiceBin);
+    printf("\n\nVector creado y procesado.");
     printf("\nCantidad de elementos: %d \n", vIndicesBin.ce);
 
 
@@ -461,7 +462,7 @@ int leerTxtIndicesBin(const char* nomArchTxt, size_t tamReg, IndiceTxt convIndic
 /*Los archivos de referencia no tienen tildes, estan separados por ";", los numeros ya tienen el "." como separcion de decimales, las fechas se transformaron a formato "aaaa-mm-01" */
 void pruebaVariaciones(const char* nomArchBin, const char* nomArchVarMens, const char* nomArchVarInt)
 {
-    printf("\n\n\nPrueba de datos del archivo binario final");
+    printf("\n\n\nPrueba de los resultados de las variaciones mensuales y anuales del archivo binario final.");
     printf("\nMargen de error: %d", MARGEN_VAR);
 
     Vector indicesBin;
