@@ -6,11 +6,10 @@
 
 typedef struct
 {
-    const char *entrada;
-    const char *esperado;
+    char *entrada;
+    char *esperado;
 } CasoPrueba;
 
-void pruebaFormatearFecha();
 void pruebaNormalizar();
 void pruebaConvertirComa();
 void pruebaDesencriptarPorPos();
@@ -19,53 +18,11 @@ int main()
 {
     system("chcp 65001");
 
-    pruebaFormatearFecha();
     pruebaNormalizar();
     pruebaConvertirComa();
     pruebaDesencriptarPorPos();
 
     return 0;
-}
-
-void pruebaFormatearFecha()
-{
-    CasoPrueba casos[] =
-    {
-        {"1/1/2022", "2022-01-01"},
-        {"1/2/2022", "2022-02-01"},
-        {"1/3/2022", "2022-03-01"},
-        {"1/4/2022", "2022-04-01"},
-        {"1/5/2022", "2022-05-01"},
-        {"10/4/2022", "2022-04-10"},
-        {"1/12/2022", "2022-12-01"},
-        {"20/10/2022", "2022-10-20"}
-    };
-
-    char salida[100];
-    int total = sizeof(casos) / sizeof(casos[0]);
-    int errores = 0;
-
-    printf("\nEjecutando pruebas para formatearFecha...\n");
-
-    for (int i = 0; i < total; i++)
-    {
-        CasoPrueba *caso = casos + i;
-        copiar(salida, caso->entrada);
-        convertirFecha(salida);
-        if (comparar(salida, caso->esperado) != 0)
-        {
-            printf("prueba %d fallo: entrada='%s' --> salida='%s' (esperado='%s')\n",
-                   i + 1, caso->entrada, salida, caso->esperado);
-            errores++;
-        }
-        else
-        {
-            printf("prueba %d paso: %s --> %s\n", i + 1, caso->entrada, salida);
-        }
-    }
-
-    printf("\nResumen: %d pasaron, %d fallaron.\n", total - errores, errores);
-    assert(errores == 0 && "Al menos un prueba fallo en formatear_fecha.");
 }
 
 void pruebaNormalizar()

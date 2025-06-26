@@ -101,14 +101,12 @@ int main(int argc, char* argv[])
         vectorDestruir(&vIndices);
         return ret;
     }
-    /*vectorMostrar(&vIndices, imprimirIndice);*/
 
 
     // Calcular variaciones.
     vectorRecorrer(&vIndices, calcVariaciones, &vIndices);
+
     printf("\nArchivos procesados.");
-    /*printf("\n\nVector union de los 2 archivos base:\n");
-    vectorMostrar(&vIndices, imprimirIndice);*/
     printf("\nCantidad de elementos: %d \n", vIndices.ce);
 
 
@@ -116,7 +114,7 @@ int main(int argc, char* argv[])
     printf("\nCreacion y procesamiento del vector final que se va a exportar a un archivo binario...\n");
     vectorCrear(&vIndicesBin, sizeof(IndiceBin));
     vectorRecorrer(&vIndices, genVIndicesBin, &vIndicesBin);
-    /*vectorMostrar(&vIndicesBin, imprimirIndiceBin);*/
+
     printf("\n\nVector creado y procesado.");
     printf("\nCantidad de elementos: %d \n", vIndicesBin.ce);
 
@@ -711,13 +709,6 @@ int compararIndicesBinIgualdadVar(const void *a, const void *b)
     cmpClas = compararClasificador(indA->clasificador, indB->clasificador);
     cmpNivGen = comparar(indA->nivelGeneralAperturas, indB->nivelGeneralAperturas);
     cmpTipoVar = compararTipoVariable(indA->tipoVariable, indB->tipoVariable);
-
-    /*
-    // Convertir los valores string a float y comparar con margen de error
-    float valorA = atof(indA->valor);
-    float valorB = atof(indB->valor);
-    cmpValor = (fabs(valorA - valorB) <= 0.5) ? 0 : 1;
-    */
 
     if(cmpPer == 0 && cmpNivGen == 0 && cmpTipoVar == 0 && cmpClas == 0) return 0;
 

@@ -146,20 +146,17 @@ int compararIndices(const void *a, const void *b)
 {
     const Indice *indA = (const Indice *)a;
     const Indice *indB = (const Indice *)b;
+    int cmpPer, cmpClas;
 
-    int cmpPer = fechaComparar(&indA->periodo, &indB->periodo);
+    cmpPer = fechaComparar(&indA->periodo, &indB->periodo);
     if (cmpPer != 0)
         return cmpPer;  // Fecha ascendente
 
-    int cmpClas = compararClasificador(indA->clasificador, indB->clasificador);
+    cmpClas = compararClasificador(indA->clasificador, indB->clasificador);
     if (cmpClas != 0)
         return -cmpClas;  // Clasificador descendente
 
-    /*
-    int cmpNivel = comparar(indA->nivelGeneralAperturas, indB->nivelGeneralAperturas);
-    if (cmpNivel != 0)
-        return cmpNivel;
-    */
+
     return 0;  // Son iguales
 }
 
