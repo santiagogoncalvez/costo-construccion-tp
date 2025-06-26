@@ -555,9 +555,6 @@ int convIndiceVarMensTxt(char* linea, void* reg)
         return ERR_LINEA_LARGA;
     }
 
-    eliminarTodasLasComillas(linea);
-    modificarCadenaTxtIndec(linea);
-
     *act = '\0';
     act = strrchrProp(linea, ';');
     copiar(indice->valor, act + 1);
@@ -654,7 +651,7 @@ void verificarResultadosBin (void* ind, void* dato)
     // Buscar el elemento Indice correspondiente a 1 mes atrï¿½s
     indiceAntMes = *indiceAct;
     periodoAnt = periodoAct;
-    // Modificación de dato que creo en esta función
+    // Modificaciï¿½n de dato que creo en esta funciï¿½n
     fechaRestarMeses(&periodoAnt, 1);
     fechaAString(&periodoAct, indiceAntMes.periodo);
 
