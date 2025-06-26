@@ -107,7 +107,7 @@ int main(int argc, char* argv[])
     vectorRecorrer(&vIndices, calcVariaciones, &vIndices);
 
     printf("\nArchivos procesados.");
-    printf("\nCantidad de elementos: %d \n", vIndices.ce);
+    printf("\nCantidad de elementos: %d \n", vectorTamanio(&vIndices));
 
 
     // Creacionn del vector final que se va a grabar en el archivo binario
@@ -116,7 +116,11 @@ int main(int argc, char* argv[])
     vectorRecorrer(&vIndices, genVIndicesBin, &vIndicesBin);
 
     printf("\n\nVector creado y procesado.");
-    printf("\nCantidad de elementos: %d \n", vIndicesBin.ce);
+    printf("\nCantidad de elementos: %d \n", vectorTamanio(&vIndicesBin));
+
+
+    //Destruir vectore para liberar memoria
+    vectorDestruir(&vIndices);
 
 
     // Exportar datos a un archivo binario
@@ -124,13 +128,14 @@ int main(int argc, char* argv[])
     mostrarArchivoBinario(argv[ARG_SALIDA_BIN]);
 
 
+    //Destruir vectore para liberar memoria
+    vectorDestruir(&vIndicesBin);
+
+
     // Prueba de los datos del archivo binario
     pruebaVariaciones(argv[ARG_SALIDA_BIN], argv[ARG_REF_MEN], argv[ARG_REF_INT]);
 
 
-    //DESTRUIR VECTORES AL FINAL PARA LIBERAR MEMORIA
-    vectorDestruir(&vIndices);
-    vectorDestruir(&vIndicesBin);
 
     return ret;
 }

@@ -52,6 +52,7 @@ bool vectorEliminarDePos(Vector* vector, int pos);
 void vectorDestruir(Vector* vector); // free
 void vectorMostrar(const Vector* vector, Imprimir imprimir);
 void vectorRecorrer(const Vector* vector, Accion accion, void* datos);
+int vectorTamanio(Vector *vector);
 
 size_t max(size_t a, size_t b);
 

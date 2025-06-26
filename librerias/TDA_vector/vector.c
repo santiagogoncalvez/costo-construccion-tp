@@ -336,3 +336,7 @@ void intercambiar(void* a, void* b, size_t tamElem)
     memcpy(b, aTemp, tamElem);
     free(aTemp);
 }
+
+int vectorTamanio(Vector *vector){
+    return vector->ce;
+}

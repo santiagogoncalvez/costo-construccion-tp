@@ -162,51 +162,45 @@ bool espalabra(char cadcopia)
     return (cadcopia>='a' && cadcopia<='z') || (cadcopia>='A' && cadcopia<='Z');
 }
 
-char abcdario(char cad,int pos)
+char abcdario(char cad, int pos)
 {
-    char abc[27] = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','\0'};
-    int num=0;
+    char abc[27] =
+    {
+        'a','b','c','d','e','f','g','h','i','j','k','l','m','n',
+        'o','p','q','r','s','t','u','v','w','x','y','z','\0'
+    };
 
-    while(tolower(cad)!=abc[num])
+    int num = 0;
+
+    // Buscar la letra en abc usando punteros
+    while (toLowerProp(cad) != *(abc + num))
     {
         num++;
     }
-    if(pos%2==0)
-    {
-        for(int i=0; i<4; i++)
-        {
-            num++;
-            if(abc[num]=='\0')
-            {
-                num=0;
-            }
 
-        }
-    }
-    else
-    {
-        for(int i=0; i<2; i++)
-        {
-            num++;
-            if(abc[num]=='\0')
-            {
-                num=0;
-            }
+    // Avanzar 4 o 2 posiciones segï¿½n paridad de pos
+    int saltos = (pos % 2 == 0) ? 4 : 2;
 
+    for (int i = 0; i < saltos; i++)
+    {
+        num++;
+        if (*(abc + num) == '\0')
+        {
+            num = 0;
         }
     }
 
-    if(islower(cad))
+    // Devolver en mayï¿½scula si corresponde
+    if (isLowerProp(cad))
     {
-        return abc[num];
-
+        return *(abc + num);
     }
     else
     {
-        return toupper(abc[num]);
+        return toUpperProp(*(abc + num));
     }
-
 }
+
 
 void eliminarTodasLasComillas(char *cad)
 {
@@ -230,7 +224,7 @@ void eliminarTodasLasComillas(char *cad)
 void normalizar(char* cad)
 {
     char* iCad = cad;
-    *iCad=toupper(*iCad);
+    *iCad=toUpperProp(*iCad);
     iCad++;
     while(*iCad!='\0')
     {
@@ -240,7 +234,7 @@ void normalizar(char* cad)
         }
         else
         {
-            *iCad=tolower(*iCad);
+            *iCad=toLowerProp(*iCad);
         }
         iCad++;
     }
@@ -279,7 +273,7 @@ char *strrchrProp(const char *str, int c)
     {
         if (*str == (char)c)
         {
-            ultimo = str;  // Guardamos la dirección actual si hay coincidencia
+            ultimo = str;  // Guardamos la direcciï¿½n actual si hay coincidencia
         }
         str++;  // Avanzamos el puntero
     }
@@ -287,7 +281,7 @@ char *strrchrProp(const char *str, int c)
     // Considerar el caso en que c sea '\0'
     if ((char)c == '\0')
     {
-        return (char *)str;  // str apunta al carácter nulo al salir del while
+        return (char *)str;  // str apunta al carï¿½cter nulo al salir del while
     }
 
     return (char *)ultimo;
@@ -302,7 +296,7 @@ char *strchrProp(const char *str, int c)
         str++;  // avanzar el puntero
     }
 
-    // Si el carácter buscado es el nulo '\0', también se considera válido
+    // Si el carï¿½cter buscado es el nulo '\0', tambiï¿½n se considera vï¿½lido
     if ((char)c == '\0')
         return (char *)str;
 
@@ -328,20 +322,6 @@ char toUpperProp(char c)
     }
     return c;
 }
-
-void eliminarSaltoDeLinea(char* cad)
-{
-    while (*cad) // mientras no sea el caracter nulo '\0'
-    {
-        if (*cad == '\n')
-        {
-            *cad = '\0'; // lo reemplaza por fin de cadena
-            return;
-        }
-        cad++; // avanza al siguiente carácter
-    }
-}
-
 
 int esDigito(char* c)
 {
@@ -441,4 +421,19 @@ void modificarCadenaTxtIndec(char* cad)
     expandirFechaConGuion01(cad);
     agregarSMovimientoTierra(cad);
     convertirComa(cad);
+}
+
+int isLowerProp(char c)
+{
+    const char *letras = "abcdefghijklmnopqrstuvwxyz";
+    const char *p = letras;
+
+    while (*p != '\0') {
+        if (c == *p) {
+            return 1; // Es minï¿½scula
+        }
+        p++;
+    }
+
+    return 0; // No es minï¿½scula
 }
