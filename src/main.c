@@ -561,7 +561,6 @@ int convIndiceVarMensTxt(char* linea, void* reg)
     *act = '\0';
     act = strrchrProp(linea, ';');
     copiar(indice->valor, act + 1);
-    eliminarSaltoDeLinea(indice->valor);
 
     *act = '\0';
     act = strrchrProp(linea, ';');
@@ -601,7 +600,6 @@ int convIndiceVarIntTxt(char* linea, void* reg)
     *act = '\0';
     act = strrchrProp(linea, ';');
     copiar(indice->valor, act + 1);
-    eliminarSaltoDeLinea(indice->valor);
 
     *act = '\0';
     act = strrchrProp(linea, ';');
